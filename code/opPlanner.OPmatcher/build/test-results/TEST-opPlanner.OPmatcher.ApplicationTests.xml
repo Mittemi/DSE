@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="opPlanner.OPmatcher.ApplicationTests" tests="1" skipped="0" failures="0" errors="0" timestamp="2015-04-04T12:21:48" hostname="Verleihnix" time="0.005">
+  <properties/>
+  <testcase name="contextLoads" classname="opPlanner.OPmatcher.ApplicationTests" time="0.005"/>
+  <system-out><![CDATA[14:21:47.035 [Test worker] DEBUG o.s.t.c.j.SpringJUnit4ClassRunner - SpringJUnit4ClassRunner constructor called with [class opPlanner.OPmatcher.ApplicationTests].
+14:21:47.045 [Test worker] DEBUG o.s.test.context.BootstrapUtils - Instantiating TestContextBootstrapper from class [org.springframework.test.context.support.DefaultTestContextBootstrapper]
+14:21:47.059 [Test worker] DEBUG o.s.t.c.s.DefaultTestContextBootstrapper - Found explicit ContextLoader class [org.springframework.boot.test.SpringApplicationContextLoader] for context configuration attributes [ContextConfigurationAttributes@4cf16327 declaringClass = 'opPlanner.OPmatcher.ApplicationTests', classes = '{class opPlanner.OPmatcher.Application}', locations = '{}', inheritLocations = true, initializers = '{}', inheritInitializers = true, name = [null], contextLoaderClass = 'org.springframework.boot.test.SpringApplicationContextLoader']
+14:21:47.065 [Test worker] DEBUG o.s.t.c.support.ActiveProfilesUtils - Could not find an 'annotation declaring class' for annotation type [org.springframework.test.context.ActiveProfiles] and class [opPlanner.OPmatcher.ApplicationTests]
+14:21:47.068 [Test worker] DEBUG o.s.t.c.s.DefaultTestContextBootstrapper - @TestExecutionListeners is not present for class [opPlanner.OPmatcher.ApplicationTests]: using defaults.
+14:21:47.078 [Test worker] INFO  o.s.t.c.s.DefaultTestContextBootstrapper - Loaded default TestExecutionListener class names from location [META-INF/spring.factories]: [org.springframework.test.context.web.ServletTestExecutionListener, org.springframework.test.context.support.DependencyInjectionTestExecutionListener, org.springframework.test.context.support.DirtiesContextTestExecutionListener, org.springframework.test.context.transaction.TransactionalTestExecutionListener, org.springframework.test.context.jdbc.SqlScriptsTestExecutionListener]
+14:21:47.096 [Test worker] INFO  o.s.t.c.s.DefaultTestContextBootstrapper - Using TestExecutionListeners: [org.springframework.test.context.web.ServletTestExecutionListener@76b5736b, org.springframework.test.context.support.DependencyInjectionTestExecutionListener@1acc00e3, org.springframework.test.context.support.DirtiesContextTestExecutionListener@72974388, org.springframework.test.context.transaction.TransactionalTestExecutionListener@7671360a, org.springframework.test.context.jdbc.SqlScriptsTestExecutionListener@2b022d84]
+14:21:47.098 [Test worker] DEBUG o.s.t.annotation.ProfileValueUtils - Retrieved @ProfileValueSourceConfiguration [null] for test class [opPlanner.OPmatcher.ApplicationTests]
+14:21:47.099 [Test worker] DEBUG o.s.t.annotation.ProfileValueUtils - Retrieved ProfileValueSource type [class org.springframework.test.annotation.SystemProfileValueSource] for class [opPlanner.OPmatcher.ApplicationTests]
+14:21:47.101 [Test worker] DEBUG o.s.t.annotation.ProfileValueUtils - Retrieved @ProfileValueSourceConfiguration [null] for test class [opPlanner.OPmatcher.ApplicationTests]
+14:21:47.101 [Test worker] DEBUG o.s.t.annotation.ProfileValueUtils - Retrieved ProfileValueSource type [class org.springframework.test.annotation.SystemProfileValueSource] for class [opPlanner.OPmatcher.ApplicationTests]
+14:21:47.102 [Test worker] DEBUG o.s.t.annotation.ProfileValueUtils - Retrieved @ProfileValueSourceConfiguration [null] for test class [opPlanner.OPmatcher.ApplicationTests]
+14:21:47.102 [Test worker] DEBUG o.s.t.annotation.ProfileValueUtils - Retrieved ProfileValueSource type [class org.springframework.test.annotation.SystemProfileValueSource] for class [opPlanner.OPmatcher.ApplicationTests]
+14:21:47.104 [Test worker] DEBUG o.s.t.annotation.ProfileValueUtils - Retrieved @ProfileValueSourceConfiguration [null] for test class [opPlanner.OPmatcher.ApplicationTests]
+14:21:47.104 [Test worker] DEBUG o.s.t.annotation.ProfileValueUtils - Retrieved ProfileValueSource type [class org.springframework.test.annotation.SystemProfileValueSource] for class [opPlanner.OPmatcher.ApplicationTests]
+14:21:47.106 [Test worker] DEBUG o.s.t.c.s.DependencyInjectionTestExecutionListener - Performing dependency injection for test context [[DefaultTestContext@2679c55a testClass = ApplicationTests, testInstance = opPlanner.OPmatcher.ApplicationTests@1194f3fe, testMethod = [null], testException = [null], mergedContextConfiguration = [MergedContextConfiguration@76ee2696 testClass = ApplicationTests, locations = '{}', classes = '{class opPlanner.OPmatcher.Application}', contextInitializerClasses = '[]', activeProfiles = '{}', propertySourceLocations = '{}', propertySourceProperties = '{}', contextLoader = 'org.springframework.boot.test.SpringApplicationContextLoader', parent = [null]]]].
+14:21:47.169 [Test worker] DEBUG o.s.core.env.StandardEnvironment - Adding [systemProperties] PropertySource with lowest search precedence
+14:21:47.171 [Test worker] DEBUG o.s.core.env.StandardEnvironment - Adding [systemEnvironment] PropertySource with lowest search precedence
+14:21:47.171 [Test worker] DEBUG o.s.core.env.StandardEnvironment - Initialized StandardEnvironment with PropertySources [systemProperties,systemEnvironment]
+14:21:47.173 [Test worker] DEBUG o.s.core.env.StandardEnvironment - Adding [integrationTest] PropertySource with search precedence immediately lower than [systemEnvironment]
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+ :: Spring Boot ::        (v1.2.3.RELEASE)
+
+2015-04-04 14:21:47.362  INFO 8540 --- [    Test worker] o.s.boot.SpringApplication               : Starting application on Verleihnix with PID 8540 (C:\Users\Michael\.gradle\caches\modules-2\files-2.1\org.springframework.boot\spring-boot\1.2.3.RELEASE\2601c81786dd8d88fd7e53af1a3950ef45fd5507\spring-boot-1.2.3.RELEASE.jar started by Michael in D:\#TU\DSE\code\opPlanner.OPmatcher)
+2015-04-04 14:21:47.393  INFO 8540 --- [    Test worker] s.c.a.AnnotationConfigApplicationContext : Refreshing org.springframework.context.annotation.AnnotationConfigApplicationContext@610c7c2d: startup date [Sat Apr 04 14:21:47 CEST 2015]; root of context hierarchy
+2015-04-04 14:21:48.826  INFO 8540 --- [    Test worker] o.s.boot.SpringApplication               : Started application in 1.65 seconds (JVM running for 2.642)
+]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>
