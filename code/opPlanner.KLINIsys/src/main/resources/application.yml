@@ -1,0 +1,30 @@
+spring:
+  profiles.active: unit-test
+---
+spring:
+  profiles: default
+  datasource:
+    driverClassName: org.postgresql.Driver
+    url: jdbc:postgresql://192.168.1.33:5432/klinisys
+    username: postgres
+    password: passme
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    generate-ddl: true
+    show-sql: true
+    hibernate:
+      ddl-auto: create
+---
+spring:
+   profiles: unit-test
+   datasource:
+     driverClassName: org.h2.Driver
+     url: jdbc:h2:mem:klinisys
+     username: sa
+     password:
+   jpa:
+     database-platform: org.hibernate.dialect.H2Dialect
+     generate-ddl: true
+     show-sql: true
+     hibernate:
+       ddl-auto: create

@@ -32,8 +32,10 @@ repositories {
 dependencies {
     compile("org.springframework.boot:spring-boot-starter-data-jpa")
     compile("org.springframework.boot:spring-boot-starter-data-rest")
-    runtime("org.postgresql:postgresql:9.4-1201-jdbc41")
-    testCompile("org.springframework.boot:spring-boot-starter-test") 
+    compile("org.postgresql:postgresql:9.4-1201-jdbc41")
+    testCompile("com.h2database:h2")
+    testCompile("org.springframework.boot:spring-boot-starter-test")
+    testCompile('junit:junit:4.10')
 }
 
 
