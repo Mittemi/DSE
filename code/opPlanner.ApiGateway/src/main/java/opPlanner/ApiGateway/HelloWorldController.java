@@ -17,9 +17,9 @@ public class HelloWorldController {
     @RequestMapping(value = "/", method = RequestMethod.GET, produces = "application/json")
     public List<String> SayHallo() {
         final List<String> list = new ArrayList<>();
-        list.add(new CommandHelloWorld("Lukas").execute());
-        list.add(new CommandHelloWorld("Michi").execute());
-        list.add(new CommandHelloWorld("Thomas").execute());
+        list.add(new CommandHelloWorld("Lukas K.").execute());
+        list.add(new CommandHelloWorld("Michi M.").execute());
+        list.add(new CommandHelloWorld("Thomas H.").execute());
         return list;
     }
 
