@@ -1,0 +1,8 @@
+# unit test configuration
+application:
+  klinisys:
+    port : 9000
+    ipOrHostname: localhost
+  opMatcher:
+    port : 9001
+    ipOrHostname: localhost
