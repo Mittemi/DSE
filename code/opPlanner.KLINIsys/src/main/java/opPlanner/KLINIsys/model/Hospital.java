@@ -1,5 +1,6 @@
 package opPlanner.KLINIsys.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.springframework.data.jpa.domain.AbstractPersistable;
 import org.springframework.stereotype.Component;
 
@@ -11,6 +12,7 @@ import javax.persistence.Entity;
  */
 @Entity
 @Component
+@JsonIgnoreProperties({"new"})
 public class Hospital extends AbstractPersistable<Long> {
 
     @Column

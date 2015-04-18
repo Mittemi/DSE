@@ -1,11 +1,13 @@
+server:
+     port: 9000
 spring:
-  profiles.active: unit-test
+  profiles.active: default
 ---
 spring:
   profiles: default
   datasource:
     driverClassName: org.postgresql.Driver
-    url: jdbc:postgresql://192.168.1.33:5432/klinisys
+    url: jdbc:postgresql://192.168.217.129:5432/klinisys
     username: postgres
     password: passme
   jpa:
@@ -13,7 +15,7 @@ spring:
     generate-ddl: true
     show-sql: true
     hibernate:
-      ddl-auto: create
+      ddl-auto: update
 ---
 spring:
    profiles: unit-test
@@ -27,4 +29,4 @@ spring:
      generate-ddl: true
      show-sql: true
      hibernate:
-       ddl-auto: create
+       ddl-auto: create-drop

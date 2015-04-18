@@ -1,5 +1,6 @@
 package opPlanner.KLINIsys;
 
+import opPlanner.KLINIsys.controller.HospitalController;
 import opPlanner.KLINIsys.model.Hospital;
 import opPlanner.KLINIsys.service.HospitalService;
 import org.springframework.boot.SpringApplication;
@@ -18,7 +19,7 @@ import opPlanner.KLINIsys.repository.HospitalRepository;
 @Configuration
 @EntityScan(basePackageClasses = {Hospital.class})
 @EnableJpaRepositories(basePackageClasses = {HospitalRepository.class})
-@ComponentScan(basePackageClasses = {HospitalService.class})
+@ComponentScan(basePackageClasses = {HospitalService.class, HospitalController.class})
 @EnableAutoConfiguration()
 public class Application {
 
