@@ -14,10 +14,13 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
+    private OpPlannerProperties config;
+
+    @Autowired
     public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
         //auth.inMemoryAuthentication().withUser("user").password("password").roles("USER");
         //auth.inMemoryAuthentication().withUser("admin").password("password").roles("ADMIN");
         System.out.println("Security configure called!");
-        auth.authenticationProvider(new CustomAuthenticationProvider());
+        auth.authenticationProvider(new CustomAuthenticationProvider(config));
     }
 }
