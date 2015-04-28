@@ -8,24 +8,21 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 
 /**
- * Created by Michael on 08.04.2015.
+ * Created by Michael on 28.04.2015.
  */
 @Entity
 @Component
-public class Hospital extends LoginUser {
+public class Patient extends LoginUser {
 
     @Column
     private String name;
 
-    private String shortName;
 
-    private String address;
-
-    public Hospital(Long id) {
+    public Patient(Long id) {
         this.setId(id);
     }
 
-    public Hospital() {
+    public Patient() {
         this(null);
     }
 
@@ -35,21 +32,5 @@ public class Hospital extends LoginUser {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public String getShortName() {
-        return shortName;
-    }
-
-    public void setShortName(String shortName) {
-        this.shortName = shortName;
-    }
-
-    public String getAddress() {
-        return address;
-    }
-
-    public void setAddress(String address) {
-        this.address = address;
     }
 }
