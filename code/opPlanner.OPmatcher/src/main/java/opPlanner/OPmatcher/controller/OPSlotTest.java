@@ -29,19 +29,19 @@ public class OPSlotTest {
                 new AnnotationConfigApplicationContext(SpringMongoConfig.class);
         MongoOperations mongoOperation = (MongoOperations) ctx.getBean("mongoTemplate");
 
-        OPSlot slot = new OPSlot(1,new Date(),new Date());
+        OPSlot slot = new OPSlot(1, -0.5, 2.5, new Date(),new Date(), "eye");
         // save
         mongoOperation.save(slot);
 
         // now slot object got the created id.
-        System.out.println("1. slot : " + slot.getId());
+        System.out.println("1. slot : " + slot.getHospitalId());
 
         // query to search slot
         Query searchSlotQuery = new Query(Criteria.where("hospitalId").is(1));
 
         // find the saved slot again.
         OPSlot savedSlot = mongoOperation.findOne(searchSlotQuery, OPSlot.class);
-        System.out.println("2. find - savedSlot : " + savedSlot.getId());
+        System.out.println("2. find - savedSlot : " + savedSlot.getHospitalId());
 
         try {
             Thread.sleep(1000);
@@ -56,7 +56,7 @@ public class OPSlotTest {
         // find the updated user object
         OPSlot updatedSlot = mongoOperation.findOne(searchSlotQuery, OPSlot.class);
 
-        System.out.println("3. updatedOPSlot : " + updatedSlot.getId());
+        System.out.println("3. updatedOPSlot : " + updatedSlot.getHospitalId());
 
         // delete
         mongoOperation.remove(searchSlotQuery, OPSlot.class);
