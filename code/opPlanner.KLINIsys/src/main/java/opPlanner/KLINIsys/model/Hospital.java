@@ -17,8 +17,10 @@ public class Hospital extends LoginUser {
     @Column
     private String name;
 
+    @Column
     private String shortName;
 
+    @Column
     private String address;
 
     public Hospital(Long id) {

@@ -32,6 +32,7 @@ repositories {
 dependencies {
     compile("org.springframework.boot:spring-boot-starter-data-jpa")
     compile("org.springframework.boot:spring-boot-starter-data-rest")
+    compile("org.springframework.security:spring-security-crypto:4.0.0.RELEASE")
     compile("org.postgresql:postgresql:9.4-1201-jdbc41")
     testCompile("com.h2database:h2")
     testCompile("org.springframework.boot:spring-boot-starter-test")

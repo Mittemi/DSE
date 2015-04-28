@@ -6,6 +6,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.Arrays;
@@ -32,6 +33,7 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
 
         String name = authentication.getName();
         String password = authentication.getCredentials().toString();
+
         AuthHystrixCommand authHystrixCommand = new AuthHystrixCommand(name, password);
         AuthResult result = authHystrixCommand.execute();
 
