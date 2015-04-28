@@ -1,13 +1,5 @@
 package opPlanner.ApiGateway;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-import org.codehaus.jackson.map.ObjectMapper;
-import com.netflix.hystrix.HystrixCommandGroupKey;
-import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
-import com.netflix.hystrix.contrib.javanica.command.AbstractHystrixCommand;
-import org.codehaus.jackson.annotate.JsonIgnoreProperties;
-import org.codehaus.jackson.map.JsonSerializer;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -16,9 +8,10 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.web.client.RestTemplate;
 
-import java.io.IOException;
-import java.text.Collator;
-import java.util.*;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
@@ -58,8 +51,6 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
         return authentication.equals(UsernamePasswordAuthenticationToken.class);
     }
 
-
-
     private class AuthHystrixCommand extends com.netflix.hystrix.HystrixCommand<AuthResult> {
 
         private String name;
@@ -92,23 +83,6 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
 
         String url = "http://" + config.getKlinisys().getIpOrHostname() + ":" + config.getKlinisys().getPort() + "/auth/{user}/password/{password}";
         AuthResult result  = restClient.getForObject(url, AuthResult.class, params);
-
-/*
-        ObjectMapper om = new ObjectMapper();
-
-        AuthResult result = null;
-
-        try {
-            result = om.readValue(strResult, AuthResult.class);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }*/
-
-
-//        AuthResult result =
-
-        //AuthResult result = new AuthResult(true);
-
         return result;
     }
 
