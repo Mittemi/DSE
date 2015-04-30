@@ -11,7 +11,7 @@ import java.util.List;
  * Created by Michael on 28.04.2015.
  */
 @Repository
-public interface PatientRepository extends CrudRepository<Patient, Long> {
+public interface PatientRepository extends LoginUserRepository<Patient> {
 
     List<Patient> findByName(String name);
 }
