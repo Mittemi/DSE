@@ -7,9 +7,10 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.cloud.client.circuitbreaker.EnableCircuitBreaker;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 
 @EnableAutoConfiguration
-@ComponentScan(basePackageClasses = { KlinisysController.class})
+@ComponentScan(basePackageClasses = { KlinisysController.class, SecurityConfig.class})
 @SpringBootApplication
 @EnableConfigurationProperties({OpPlannerProperties.class})
 @EnableCircuitBreaker

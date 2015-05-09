@@ -1,18 +1,17 @@
 package opPlanner.KLINIsys.repository;
 
 import opPlanner.KLINIsys.model.Hospital;
-
+import opPlanner.KLINIsys.model.Patient;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
 /**
- * Created by Michael on 08.04.2015.
+ * Created by Michael on 28.04.2015.
  */
 @Repository
-public interface HospitalRepository /*extends CrudRepository<Hospital, Long>*/ extends LoginUserRepository<Hospital> {
+public interface PatientRepository extends LoginUserRepository<Patient> {
 
-    List<Hospital> findByName(String name);
-
+    List<Patient> findByName(String name);
 }
