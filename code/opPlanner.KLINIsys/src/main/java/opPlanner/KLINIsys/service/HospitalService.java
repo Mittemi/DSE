@@ -5,8 +5,6 @@ import opPlanner.KLINIsys.repository.HospitalRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-
 /**
  * Created by Michael on 08.04.2015.
  */
@@ -14,9 +12,9 @@ import java.util.List;
 public class HospitalService {
 
     @Autowired
-    private HospitalRepository repository;
+    private HospitalRepository hospitalRepository;
 
     public Iterable<Hospital> allHospitals() {
-        return repository.findAll();
+        return hospitalRepository.findAll();
     }
 }

@@ -31,6 +31,10 @@ public class OpPlannerProperties {
         public void setIpOrHostname(String ipOrHostname) {
             this.ipOrHostname = ipOrHostname;
         }
+
+        public String getBaseUrl() {
+            return "http://" + getIpOrHostname() + ":" + getPort() + "/";
+        }
     }
 
     @NotNull

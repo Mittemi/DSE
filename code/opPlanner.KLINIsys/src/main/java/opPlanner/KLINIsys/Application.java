@@ -22,9 +22,9 @@ import opPlanner.KLINIsys.repository.HospitalRepository;
 
 @SpringBootApplication
 @Configuration
-@EntityScan(basePackageClasses = {Hospital.class, LoginUser.class})
-@EnableJpaRepositories(basePackageClasses = {HospitalRepository.class, PatientRepository.class})
-@ComponentScan(basePackageClasses = {HospitalService.class, HospitalController.class, AuthService.class})
+@EntityScan(basePackages = { "opPlanner.KLINIsys.model" })
+@EnableJpaRepositories(basePackages = {"opPlanner.KLINIsys.repository"})
+@ComponentScan(basePackages = {"opPlanner.KLINIsys.service", "opPlanner.KLINIsys.controller"})
 @EnableAutoConfiguration()
 public class Application {
 

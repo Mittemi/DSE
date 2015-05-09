@@ -11,7 +11,7 @@ import javax.validation.constraints.NotNull;
  */
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
-@JsonIgnoreProperties({"new"})
+@JsonIgnoreProperties({"new", "password"})
 public class LoginUser extends AbstractPersistable<Long> {
 
     @Column(unique = true)

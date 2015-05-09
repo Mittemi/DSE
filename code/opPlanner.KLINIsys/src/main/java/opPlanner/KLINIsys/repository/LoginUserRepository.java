@@ -5,6 +5,7 @@ import opPlanner.KLINIsys.model.LoginUser;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.NoRepositoryBean;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 /**
@@ -13,6 +14,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface LoginUserRepository<T extends LoginUser> extends CrudRepository<T, Long> {
 
-    @Query("select u from #{#entityName} as u where u.eMail = ?1")
-    LoginUser findByEmail(String eMail);
+    @Query("select u from #{#entityName} as u where u.eMail = :email")
+    T findByEmail(@Param("email")String eMail);
 }

@@ -1,18 +1,18 @@
 package opPlanner.ApiGateway;
 
+import org.springframework.security.authentication.AnonymousAuthenticationProvider;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -42,15 +42,22 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
             List<String> list = Arrays.asList(result.getRoles());
             List<GrantedAuthority> grantedAuths = list.stream().map((x) -> new SimpleGrantedAuthority(x)).collect(Collectors.toList());
             Authentication auth = new UsernamePasswordAuthenticationToken(name, password, grantedAuths);
+            System.out.println("Auth: token");
+            SecurityContextHolder.getContext().setAuthentication(auth);
+            //authentication.setAuthenticated(true);
             return auth;
         }else {
+            System.out.println("Auth: null");
+
+
             return null;
+            //return authentication;
         }
     }
 
     @Override
     public boolean supports(Class<?> authentication) {
-        return authentication.equals(UsernamePasswordAuthenticationToken.class);
+        return authentication.equals(UsernamePasswordAuthenticationToken.class) || authentication.equals(AnonymousAuthenticationToken.class);
     }
 
     private class AuthHystrixCommand extends com.netflix.hystrix.HystrixCommand<AuthResult> {
