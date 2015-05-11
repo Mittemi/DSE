@@ -26,5 +26,6 @@ public class ReservationController {
     public void reserve(Date preferredStart, Date preferredEnd, int preferredPerimeter, String DoctorId, Patient Patient) {
         //TODO thi: implement reserve
         //TODO thi: how to call other REST services?
+        //TODO thi: unique id, in order to avoid duplicates
     }
 }
