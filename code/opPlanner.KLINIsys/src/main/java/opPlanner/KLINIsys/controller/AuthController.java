@@ -16,17 +16,18 @@ import java.util.List;
  * Created by Michael on 28.04.2015.
  */
 @RestController
+@RequestMapping("/auth")
 public class AuthController {
 
     @Autowired
     private AuthService authService;
 
-    @RequestMapping(value = "/auth/{username}/password/{password}", method = RequestMethod.GET, produces = "application/json")
+    @RequestMapping(value = "/{username}/password/{password}", method = RequestMethod.GET, produces = "application/json")
     public AuthResult auth(@PathVariable("username") String username, @PathVariable("password") String password) {
         return authService.authenticate(username, password);
     }
 
-    @RequestMapping(value = "/auth/{username}/roles", method = RequestMethod.GET, produces = "application/json")
+    @RequestMapping(value = "/{username}/roles", method = RequestMethod.GET, produces = "application/json")
     public List<String> getRoles(@PathVariable("username") String username) {
         return authService.roles(username);
     }

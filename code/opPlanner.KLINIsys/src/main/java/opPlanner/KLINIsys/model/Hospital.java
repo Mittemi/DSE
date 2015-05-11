@@ -6,6 +6,9 @@ import org.springframework.stereotype.Component;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.OneToMany;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Michael on 08.04.2015.
@@ -23,12 +26,11 @@ public class Hospital extends LoginUser {
     @Column
     private String address;
 
-    public Hospital(Long id) {
-        this.setId(id);
-    }
+    @OneToMany(mappedBy = "hospital", targetEntity = OpSlot.class)
+    private List<OpSlot> opSlots;
 
     public Hospital() {
-        this(null);
+        opSlots = new ArrayList<>();
     }
 
     public String getName() {
