@@ -96,7 +96,7 @@ public class OPSlot {
     /**
      * [0] = x - longitude
      * [1] = y - latitude
-     * @return
+     * @return geo location of hospital
      */
     public double[] getPosition() {
         return position;
@@ -105,6 +105,7 @@ public class OPSlot {
     public void setPosition(double[] position) {
         this.position = position;
     }
+
     public String getType() {
         return type;
     }
