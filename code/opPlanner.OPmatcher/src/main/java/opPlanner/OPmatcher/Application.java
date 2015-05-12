@@ -7,9 +7,9 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Configuration;
 
 @SpringBootApplication
-//@EnableAutoConfiguration()
-//@EnableConfigurationProperties({OPPlannerProperties.class})
-//@Configuration
+@EnableAutoConfiguration()
+@EnableConfigurationProperties({OPPlannerProperties.class})
+@Configuration
 public class Application {
 
     public static void main(String[] args) {

@@ -55,6 +55,8 @@ public class DemoController {
             patient = new Patient();
             patient.setName("Patient 1");
             patient.seteMail("p1@dse.at");
+            patient.setX(48.208697);
+            patient.setY(16.372265);
             patient.setPassword(authService.encodePassword("password"));
 
             patientRepository.save(patient);

@@ -133,7 +133,7 @@ public class OPMatcherTest {
 	}
 
 	@Test
-	public void testFindDoctorSuitableSlots() {
+	public void testFindDoctorSuitableOpSlots() {
 		List<TimeSlot> slots = new LinkedList<>();
 
 		GregorianCalendar from4 = new GregorianCalendar();
@@ -150,6 +150,12 @@ public class OPMatcherTest {
 		GeoResults<OPSlot> resultSlots = opMatcher.findFreeSlotList(TUWIEN.getX(), TUWIEN.getY(), 500, null, "eye", slots);
 		assertEquals(2, resultSlots.getContent().size());
 
+		TimeSlot preferredTimeWindow = new TimeSlot(from1.getTime(), to2.getTime());
+
+		//add a time window --> s.t. op slot at 25.5 at LKHGraz cancels out.
+		resultSlots = opMatcher.findFreeSlotList(TUWIEN.getX(), TUWIEN.getY(), 500, preferredTimeWindow, "eye", slots);
+		assertEquals(1, resultSlots.getContent().size());
+
 		resultSlots = opMatcher.findFreeSlotList(TUWIEN.getX(), TUWIEN.getY(), 20, null, "eye", slots);
 		assertEquals(1, resultSlots.getContent().size());
 
@@ -161,6 +167,11 @@ public class OPMatcherTest {
 		assertEquals(1, resultSlots.getContent().size());
 		assertTrue(resultSlots.getContent().get(0).getContent().getX() == LKHGRAZ.getX()
 				&& resultSlots.getContent().get(0).getContent().getY() == LKHGRAZ.getY());
+	}
+
+	@Test
+	public void testFindOPSlot() {
+		//TODO
 	}
 
 }

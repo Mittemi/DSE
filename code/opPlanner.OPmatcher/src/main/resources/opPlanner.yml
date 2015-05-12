@@ -3,6 +3,7 @@ application:
   klinisys:
     port : 9000
     ipOrHostname: 127.0.0.1
+    patientUrl: patients/{patientId}
   reservation:
     port : 9002
     ipOrHostname: 127.0.0.1

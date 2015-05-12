@@ -1,5 +1,8 @@
 package opPlanner.OPmatcher.controller;
 
+import com.sun.jndi.toolkit.url.Uri;
+import opPlanner.OPmatcher.OPPlannerProperties;
+import opPlanner.OPmatcher.dto.Patient;
 import opPlanner.OPmatcher.dto.TimeSlot;
 import opPlanner.OPmatcher.model.OPSlot;
 import opPlanner.OPmatcher.repository.OPSlotRepository;
@@ -11,9 +14,12 @@ import org.springframework.data.mongodb.core.index.GeospatialIndex;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.NearQuery;
 import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.client.RestTemplate;
+import org.springframework.web.util.UriComponentsBuilder;
 
 import java.util.*;
 import java.util.Map.*;
@@ -30,20 +36,30 @@ public class OPMatcherController {
     @Autowired
     MongoTemplate template;
 
+    @Autowired
+    private OPPlannerProperties config;
+
+    private RestTemplate restClient;
+
+    public OPMatcherController() {
+        restClient = new RestTemplate();
+    }
+
     /**
      * Tries to find an op slot in a given time range and with a specified geo location
-     *
-     * @param x               - longitude
-     * @param y               - latitude
-     * @param perimeter       - desired perimeter
-     * @param opSlotType      - type of op slot
-     * @param freeDoctorSlots - time list of free slots provided by the doctor
-     * @return matched op slot. If no OPSlot was found null is returned.
+     * @param preferredPerimeter
+     * @param preferredTimeWindow
+     * @param opSlotType
+     * @param doctorId
+     * @param patientId
+     * @return matched op slot, if no one was found null will be returned
      */
     @RequestMapping(value = "/", method = RequestMethod.GET, produces = "application/json")
-    public OPSlot findFreeSlot(double x, double y, int perimeter, TimeSlot preferredTimeWindow, String opSlotType, List<TimeSlot> freeDoctorSlots) {
+    public OPSlot findFreeSlot(int preferredPerimeter, TimeSlot preferredTimeWindow, String opSlotType, String doctorId, String patientId) {
         OPSlot chosenSlot = null;
-        GeoResults<OPSlot> slots = findFreeSlotList(x, y, perimeter, preferredTimeWindow, opSlotType, freeDoctorSlots);
+        List<TimeSlot> freeDoctorSlots = findFreeDoctorSlots(doctorId, preferredTimeWindow.getStartTime(), preferredTimeWindow.getEndTime());
+        Patient patient = findPatient(patientId);
+        GeoResults<OPSlot> slots = findFreeSlotList(patient.getX(), patient.getY(), preferredPerimeter, preferredTimeWindow, opSlotType, freeDoctorSlots);
         if (slots.getContent().size() == 0) {
             return null;
         }
@@ -53,7 +69,31 @@ public class OPMatcherController {
         //TODO thi: test sorting
         //TODO thi: notification, because of successful op slot matching
         return chosenSlot;
-}
+    }
+
+    /**
+     * accesses klinisys to find the free doctor slots by given a doctorId
+     * @param DoctorId
+     * @return
+     */
+    private List<TimeSlot> findFreeDoctorSlots(String DoctorId, Date preferredStart, Date preferredEnd) {
+        return null;
+    }
+
+    private Patient findPatient(String patientId) {
+        Map<String, Object> params = new HashMap<>();
+        params.put("patientId", patientId);
+        String url = "http://" + config.getKlinisys().getIpOrHostname()
+                + ":" + config.getKlinisys().getPort()
+                + "/" + config.getKlinisys().getPatientUrl();
+
+        Patient patient = restClient.getForObject(url, Patient.class, params);
+
+        System.out.println("Retrieved patient: " + patient);
+
+        return patient;
+    }
+
 
     /**
      * Adds a free op slot
@@ -70,7 +110,7 @@ public class OPMatcherController {
      *
      * @param opSlotId - id of op slot to delete
      */
-    @RequestMapping(value = "/", method = RequestMethod.GET, produces = "application/json")
+    @RequestMapping(value = "/", method = RequestMethod.DELETE, produces = "application/json")
     public void deleteFreeOPSlot(String opSlotId) {
         repo.delete(opSlotId);
     }

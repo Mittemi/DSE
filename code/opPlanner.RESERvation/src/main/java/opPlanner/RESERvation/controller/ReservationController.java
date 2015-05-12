@@ -23,7 +23,7 @@ public class ReservationController {
     MongoTemplate template;
 
     @RequestMapping(value = "/", method = RequestMethod.GET, produces = "application/json")
-    public void reserve(Date preferredStart, Date preferredEnd, int preferredPerimeter, String DoctorId, Patient Patient) {
+    public void reserve(Date preferredStart, Date preferredEnd, double preferredPerimeter, String DoctorId, String patientId) {
         //TODO thi: implement reserve
         //TODO thi: how to call other REST services?
         //TODO thi: unique id, in order to avoid duplicates
