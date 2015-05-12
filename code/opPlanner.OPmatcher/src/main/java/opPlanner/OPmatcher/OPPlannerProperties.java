@@ -31,13 +31,13 @@ public class OPPlannerProperties {
     }
 
     @NotNull
-    private MongoDb mongoDBConf;
+    private MongoDb mongoDb;
 
     public MongoDb getMongoDBConf() {
-        return mongoDBConf;
+        return mongoDb;
     }
 
     public void setMongoDBConf(MongoDb mongoDBConf) {
-        this.mongoDBConf = mongoDBConf;
+        this.mongoDb = mongoDBConf;
     }
 }

@@ -21,7 +21,7 @@ public class SpringMongoConfig extends AbstractMongoConfiguration {
     //TODO thi: OPPlannerProperties
 
     //@Autowired
-    //OPPlannerProperties properties;
+    //private OPPlannerProperties properties;
 
     @Override
     @Bean
