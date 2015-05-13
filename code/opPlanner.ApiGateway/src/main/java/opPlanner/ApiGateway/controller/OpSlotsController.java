@@ -39,7 +39,15 @@ public class OpSlotsController {
 
     @RequestMapping(value = "/list", method = RequestMethod.GET, produces = "application/json")
     @HystrixCommand(fallbackMethod = "indexFallback", groupKey = groupKey)
-    public String index(Authentication auth, @PathVariable("from") String from, @PathVariable("to") String to) {
+    public String index(Authentication auth, @RequestParam(value = "from", required = false) String from, @RequestParam(value = "to", required = false) String to) {
+
+        Map<String, Object> param = new HashMap<>();
+        if(from != null) {
+            param.put("from", from);
+        }
+        if(to != null) {
+            param.put("to", to);
+        }
 
         System.out.print("OpSlot-List -- From: " + (from != null ? from : "null") + ", TO: " + (to != null ? to : ""));
         if (auth != null && auth.isAuthenticated()) {
