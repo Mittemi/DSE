@@ -1,6 +1,7 @@
 package opPlanner.ApiGateway.controller;
 
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
+import opPlanner.ApiGateway.AuthResult;
 import opPlanner.ApiGateway.OpPlannerProperties;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
@@ -22,7 +23,7 @@ import java.util.Map;
  */
 @RestController
 @RequestMapping("/opslots")     //important otherwise the security checks won't work
-public class KlinisysController {
+public class OpSlotsController {
 
     // Hystrix group
     private static final String groupKey = "klinisys";
@@ -32,65 +33,71 @@ public class KlinisysController {
     @Autowired
     private OpPlannerProperties config;
 
-
-    public KlinisysController() {
+    public OpSlotsController() {
         client = new RestTemplate();
     }
 
-   // @PreAuthorize("permitAll()")
-    @RequestMapping(value = "/list/", method = RequestMethod.GET, produces = "application/json")
-    @HystrixCommand(fallbackMethod = "fallback", groupKey = groupKey)
-    public String index(Authentication auth) {
+    @RequestMapping(value = "/list", method = RequestMethod.GET, produces = "application/json")
+    @HystrixCommand(fallbackMethod = "indexFallback", groupKey = groupKey)
+    public String index(Authentication auth, @PathVariable("from") String from, @PathVariable("to") String to) {
 
+        System.out.print("OpSlot-List -- From: " + (from != null ? from : "null") + ", TO: " + (to != null ? to : ""));
         if (auth != null && auth.isAuthenticated()) {
             if (auth.getAuthorities().stream().anyMatch(x -> x.getAuthority().equals("Hospital"))) {
+                System.out.println(" Group: Hospital, Mail: " + auth.getCredentials());
                 return "IsHospital";
-
-
             } else if (auth.getAuthorities().stream().anyMatch(x->x.getAuthority().equals("Doctor"))) {
+                System.out.println(" Group: Doctor, Mail: " + auth.getCredentials());
                 return "IsDoctor";
             } else if (auth.getAuthorities().stream().anyMatch(x->x.getAuthority().equals("Patient"))) {
+                System.out.println(" Group: Patient, Mail: " + auth.getCredentials());
                 return "IsPatient";
             }
         } else {
+            System.out.println(" Group: Public");
             return "Public";
         }
         return "501";
     }
 
-    private String request(String relativeUrl, Map<String, Object> params) {
-        if(params == null)
-            params = new HashMap<>();
-        return client.getForObject("http://" + config.getKlinisys().getBaseUrl() + "" + relativeUrl, String.class, params);
+    /* fallback Hystrix */
+    public String indexFallback(Authentication auth, String from, String to) {
+        return "Service currently down! Try again later...";
     }
 
+
     @PreAuthorize("hasRole('Hospital')")
-    @HystrixCommand(fallbackMethod = "fallback", groupKey = groupKey)
+    @HystrixCommand(fallbackMethod = "deleteOpSlotFallback", groupKey = groupKey)
     @RequestMapping(value = "/{id}", method = RequestMethod.DELETE, produces = org.springframework.http.MediaType.APPLICATION_JSON_VALUE)
     public String deleteOpSlot(Authentication auth, @PathVariable("id") Integer slotId){
 
-        //TODO: impl, additional permission check
-        return "DeleteOpSlot: OK" + slotId;
+        client.delete(config.getKlinisys().buildUrl("opslot/{id}"), slotId);
+
+        System.out.println("DeleteOpSlot: OK" + slotId);
+
+        return "OK";
     }
 
+    /* fallback Hystrix */
+    public String deleteOpSlotFallback(Authentication auth, Integer id) {
+        return "That didn't work out! Try again later!";
+    }
+
+
     @PreAuthorize("hasRole('Doctor')")
-    @HystrixCommand(fallbackMethod = "fallback", groupKey = groupKey)
+    @HystrixCommand(fallbackMethod = "deleteReservationFallback", groupKey = groupKey)
     @RequestMapping(value = "/reservation/{id}", method = RequestMethod.DELETE, produces = org.springframework.http.MediaType.APPLICATION_JSON_VALUE)
     public String deleteReservation(Authentication auth, @PathVariable("id") Integer slotId) {
 
-        //TODO: impl, additional permission check
-        return "DeleteReservation: OK " + slotId;
+        client.delete(config.getReservation().buildUrl("reservation/{id}"), slotId);
+
+        System.out.println("Reservation: OK" + slotId);
+
+        return "OK";
     }
 
-    /**
-     * Fallback if service is not available or something fails!
-     * @return
-     */
-    public String fallback(Authentication auth) {
-        return "Klinisys is down, retry later!";
-    }
-
-    public String fallback(Authentication auth, Integer id) {
+    /* fallback Hystrix */
+    public String deleteReservationFallback(Authentication auth, Integer id) {
         return "That didn't work out! Try again later!";
     }
 }

@@ -1,16 +1,15 @@
 package opPlanner.ApiGateway;
 
-import opPlanner.ApiGateway.controller.KlinisysController;
+import opPlanner.ApiGateway.controller.OpSlotsController;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.cloud.client.circuitbreaker.EnableCircuitBreaker;
 import org.springframework.context.annotation.ComponentScan;
-import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 
 @EnableAutoConfiguration
-@ComponentScan(basePackageClasses = { KlinisysController.class, SecurityConfig.class, FilterConfigurationBean.class, SimpleCORSFilter.class})
+@ComponentScan(basePackageClasses = { OpSlotsController.class, SecurityConfig.class, FilterConfigurationBean.class, SimpleCORSFilter.class})
 @SpringBootApplication
 @EnableConfigurationProperties({OpPlannerProperties.class})
 @EnableCircuitBreaker

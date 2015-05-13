@@ -6,3 +6,9 @@ application:
   opMatcher:
     port : 9001
     ipOrHostname: 127.0.0.1
+  reservation:
+    port : 9002
+    ipOrHostname: 127.0.0.1
+  notifier:
+    port : 9003
+    ipOrHostname: 127.0.0.1

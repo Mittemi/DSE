@@ -23,4 +23,14 @@ public class OpSlotService {
 
         return opSlotRepository.findByHospitalAndDoctor(doctor, hospital);
     }
+
+    public void deleteSlot(Long id) {
+        OpSlot slot = opSlotRepository.findOne(id);
+
+        if(slot == null)    return;
+
+        //TODO: check that there is no reservation
+
+        opSlotRepository.delete(slot);
+    }
 }
