@@ -3,7 +3,6 @@ package opPlanner.KLINIsys.model;
 import org.springframework.stereotype.Component;
 
 import javax.persistence.Entity;
-import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import java.util.ArrayList;
 import java.util.List;
@@ -15,11 +14,18 @@ import java.util.List;
 @Component
 public class Doctor extends LoginUser {
 
-    @OneToMany(mappedBy = "doctor", targetEntity = OpSlot.class)
-    private List<OpSlot> opSlots;
+    @OneToMany(mappedBy = "doctor", targetEntity = TimeWindow.class)
+    private List<TimeWindow> workSchedule;
+
+    public List<TimeWindow> getWorkSchedule() {
+        return workSchedule;
+    }
+
+    public void setWorkSchedule(List<TimeWindow> workSchedule) {
+        this.workSchedule = workSchedule;
+    }
 
     public Doctor() {
-
-        opSlots = new ArrayList<>();
+        workSchedule = new ArrayList<>();
     }
 }

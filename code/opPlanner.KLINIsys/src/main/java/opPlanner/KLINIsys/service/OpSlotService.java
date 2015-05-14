@@ -19,8 +19,8 @@ public class OpSlotService {
     @Autowired
     private OpSlotRepository opSlotRepository;
 
-    public List<OpSlot> allOpSlots(Doctor doctor, Patient patient, Hospital hospital) {
+    public List<OpSlot> allOpSlots(Hospital hospital) {
 
-        return opSlotRepository.findByHospitalAndDoctor(doctor, hospital);
+        return opSlotRepository.findByHospital_EMail(hospital.geteMail());
     }
 }

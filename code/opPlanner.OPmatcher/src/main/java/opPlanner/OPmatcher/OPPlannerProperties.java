@@ -34,6 +34,24 @@ public class OPPlannerProperties {
         private int port;
         private String ipOrHostname;
         private String patientUrl;
+        private String timeWindowUrl;
+       private String timeWindowAltUrl;
+
+       public String getTimeWindowAltUrl() {
+           return timeWindowAltUrl;
+       }
+
+       public void setTimeWindowAltUrl(String timeWindowAltUrl) {
+           this.timeWindowAltUrl = timeWindowAltUrl;
+       }
+
+        public String getTimeWindowUrl() {
+           return timeWindowUrl;
+       }
+
+         public void setTimeWindowUrl(String timeWindowUrl) {
+           this.timeWindowUrl = timeWindowUrl;
+       }
 
         public int getPort() {
             return port;

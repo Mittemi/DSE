@@ -1,7 +1,7 @@
 package opPlanner.OPmatcher;
 
 import opPlanner.OPmatcher.controller.OPMatcherController;
-import opPlanner.OPmatcher.dto.TimeSlot;
+import opPlanner.OPmatcher.dto.TimeWindow;
 import opPlanner.OPmatcher.model.OPSlot;
 import opPlanner.OPmatcher.repository.OPSlotRepository;
 import org.junit.After;
@@ -14,10 +14,8 @@ import org.springframework.data.geo.Distance;
 import org.springframework.data.geo.GeoResults;
 import org.springframework.data.geo.Metrics;
 import org.springframework.data.geo.Point;
-import org.springframework.data.mongodb.core.index.GeospatialIndex;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.LinkedList;
 import java.util.List;
@@ -134,15 +132,15 @@ public class OPMatcherTest {
 
 	@Test
 	public void testFindDoctorSuitableOpSlots() {
-		List<TimeSlot> slots = new LinkedList<>();
+		List<TimeWindow> slots = new LinkedList<>();
 
 		GregorianCalendar from4 = new GregorianCalendar();
 		from4.set(2015, 05, 25, 10, 00);
 		GregorianCalendar to4 = new GregorianCalendar();
 		to4.set(2015, 05, 25, 14, 00);
 
-		TimeSlot slot1 = new TimeSlot(from1.getTime(), to1.getTime());
-		TimeSlot slot2 = new TimeSlot(from4.getTime(), to4.getTime());
+		TimeWindow slot1 = new TimeWindow(from1.getTime(), to1.getTime());
+		TimeWindow slot2 = new TimeWindow(from4.getTime(), to4.getTime());
 
 		slots.add(slot1);
 		slots.add(slot2);
@@ -150,7 +148,7 @@ public class OPMatcherTest {
 		GeoResults<OPSlot> resultSlots = opMatcher.findFreeSlotList(TUWIEN.getX(), TUWIEN.getY(), 500, null, "eye", slots);
 		assertEquals(2, resultSlots.getContent().size());
 
-		TimeSlot preferredTimeWindow = new TimeSlot(from1.getTime(), to2.getTime());
+		TimeWindow preferredTimeWindow = new TimeWindow(from1.getTime(), to2.getTime());
 
 		//add a time window --> s.t. op slot at 25.5 at LKHGraz cancels out.
 		resultSlots = opMatcher.findFreeSlotList(TUWIEN.getX(), TUWIEN.getY(), 500, preferredTimeWindow, "eye", slots);

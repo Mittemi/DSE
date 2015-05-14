@@ -4,6 +4,8 @@ application:
     port : 9000
     ipOrHostname: 127.0.0.1
     patientUrl: patients/{patientId}
+    timeWindowUrl: "timeWindows/search/findByDoctorAndTimeWindow?email={email}&from={from}&to={to}"
+    timeWindowAltUrl: "timeWindows/search/findByDoctor_EMail?email={email}"
   reservation:
     port : 9002
     ipOrHostname: 127.0.0.1
