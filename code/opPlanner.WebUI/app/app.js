@@ -18,7 +18,7 @@ angular.module('myApp', [
         templateUrl: 'authentication/views/login.html'
     })
     .when('/',{
-        redirectTo: '/login'
+        redirectTo: '/home'
     })
   .otherwise({redirectTo: '/login'});
 }])
@@ -34,6 +34,9 @@ angular.module('myApp', [
             // redirect to login page if not logged in
             if ($location.path() !== '/login' && !$rootScope.globals.currentUser) {
                 $location.path('/login');
+            }
+            else{
+                $location.path('/home');
             }
         });
     }

@@ -23,8 +23,10 @@ angular.module('Authentication')
             $http.get('http://127.0.0.1:8080/account/details/', {})
                 .success(function (response) {
                     callback(response);
-            });
-
+                })
+                .error(function (response) {
+                    callback(response);
+                })
         };
   
         service.SetCredentials = function (username, password) {
