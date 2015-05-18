@@ -9,13 +9,18 @@ angular.module('Authentication')
   
         $scope.login = function () {
             $scope.dataLoading = true;
-            AuthenticationService.Login($scope.username, $scope.password, function(response) {
-                if(response.success) {
-                    AuthenticationService.SetCredentials($scope.username, $scope.password);
-                    $location.path('/home');
-                } else {
+            AuthenticationService.Login($scope.username, $scope.password,
+
+                function(response) {
+                if(response.error){
                     $scope.error = response.message;
                     $scope.dataLoading = false;
+                }
+                else {
+                    $scope.error = response.message;
+                    console.log(response);
+                    AuthenticationService.SetCredentials($scope.username, $scope.password, response.roles);
+                    $location.path('/');
                 }
             });
         };

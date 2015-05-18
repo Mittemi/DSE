@@ -17,10 +17,13 @@ angular.module('myApp', [
         controller: 'LoginController',
         templateUrl: 'authentication/views/login.html'
     })
-    .when('/',{
-        redirectTo: '/home'
-    })
-  .otherwise({redirectTo: '/login'});
+  .otherwise({redirectTo: '/home'});
+}])
+.config(['$logProvider', function($logProvider){
+    $logProvider.debugEnabled(true);
+}])
+.controller('MainCtrl', ['$log', function($log){
+    $log.debug('Hello Debug!');
 }])
 .run(['$rootScope', '$location', '$cookieStore', '$http',
     function ($rootScope, $location, $cookieStore, $http) {

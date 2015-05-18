@@ -1,48 +1,40 @@
 'use strict';
   
 angular.module('Authentication')
-  
+
 .factory('AuthenticationService',
     ['Base64', '$http', '$cookieStore', '$rootScope', '$timeout',
     function (Base64, $http, $cookieStore, $rootScope, $timeout) {
         var service = {};
- 
+
         service.Login = function (username, password, callback) {
+
             var authdata = Base64.encode(username + ':' + password);
-
-            $rootScope.globals = {
-                currentUser: {
-                    username: username,
-                    authdata: authdata
-                }
-            };
-
             $http.defaults.headers.common['Authorization'] = 'Basic ' + authdata;
-            $cookieStore.put('globals', $rootScope.globals);
-
             $http.get('http://127.0.0.1:8080/account/details/', {})
-                .success(function (response) {
+                .success(function( response ) {
                     callback(response);
                 })
-                .error(function (response) {
+                .error(function( response ){
                     callback(response);
-                })
+            });
         };
   
-        service.SetCredentials = function (username, password) {
+        service.SetCredentials = function (username, password, role) {
             var authdata = Base64.encode(username + ':' + password);
   
             $rootScope.globals = {
                 currentUser: {
                     username: username,
-                    authdata: authdata
+                    authdata: authdata,
+                    role: role
                 }
             };
   
             $http.defaults.headers.common['Authorization'] = 'Basic ' + authdata;
             $cookieStore.put('globals', $rootScope.globals);
         };
-  
+
         service.ClearCredentials = function () {
             $rootScope.globals = {};
             $cookieStore.remove('globals');
