@@ -9,17 +9,15 @@ angular.module('myApp', [
     'ngRoute',
     'Authentication',
     'ngCookies',
-    'myApp.view1',
-    'myApp.view2',
+    'myApp.listop',
+    'myApp.notifications',
+    'myApp.slot',
     'myApp.home',
     'myApp.version'
 ])
 .config(function($routeProvider, $locationProvider) {
   $routeProvider
-      .when('/home', {
-          controller: 'homeCtrl',
-          templateUrl: 'home/home.html'
-      })
+
     .when('/login', {
         controller: 'LoginController',
         templateUrl: 'authentication/views/login.html'
@@ -40,6 +38,24 @@ angular.module('myApp', [
         if ($rootScope.globals.currentUser) {
             $http.defaults.headers.common['Authorization'] = 'Basic ' + $rootScope.globals.currentUser.authdata;
         }
+
+
+        /**
+         * Highlighting of Menue Items in Bootstrap`s navbar
+         * See also http://stackoverflow.com/questions/12592472/how-to-highlight-a-current-menu-item
+         * @param path
+         * @returns {*}
+         */
+        $rootScope.getClass = function (path) {
+            if ($location.path().substr(0, path.length) == path) {
+                return "active"
+            } else {
+                return ""
+            }
+        }
+        /**
+         * Forces Login before entering any other page -> because of
+         */
         /*
             $rootScope.$on('$locationChangeStart', function (event, next, current) {
             // redirect to login page if not logged in
@@ -49,5 +65,7 @@ angular.module('myApp', [
         });*/
     }
 ]);
+
+
 
 
