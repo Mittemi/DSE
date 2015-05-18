@@ -24,4 +24,10 @@ angular.module('Authentication')
                 }
             });
         };
-    }]);
+    }])
+
+.controller('LogoutController',
+    ['$scope', '$rootScope', '$location', 'AuthenticationService',
+        function ($scope, $rootScope, $location, AuthenticationService) {
+            AuthenticationService.ClearCredentials();
+}]);
