@@ -12,6 +12,8 @@
     "angular-mocks": "~1.2.x",
     "html5-boilerplate": "~4.3.0",
     "angular-cookies": "1.2.x",
-    "bootstrap" : "3.3.x"
+    "bootstrap" : "3.3.x",
+
+    "idangerous-swiper" : "2.x.x"
   }
 }
