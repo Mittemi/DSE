@@ -1,20 +1,14 @@
 package opPlanner.ApiGateway.controller;
 
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
-import opPlanner.ApiGateway.AuthResult;
+import opPlanner.ApiGateway.Constants;
 import opPlanner.ApiGateway.OpPlannerProperties;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.Cacheable;
-import org.springframework.data.repository.query.Param;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
-import javax.websocket.server.PathParam;
-import java.beans.Statement;
-import java.security.Principal;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -24,9 +18,6 @@ import java.util.Map;
 @RestController
 @RequestMapping("/opslots")     //important otherwise the security checks won't work
 public class OpSlotsController {
-
-    // Hystrix group
-    private static final String groupKey = "klinisys";
 
     private RestTemplate client;
 
@@ -38,7 +29,7 @@ public class OpSlotsController {
     }
 
     @RequestMapping(value = "/list", method = RequestMethod.GET, produces = "application/json")
-    @HystrixCommand(fallbackMethod = "indexFallback", groupKey = groupKey)
+    @HystrixCommand(fallbackMethod = "indexFallback", groupKey = Constants.GROUP_KEY_KLINISYS)
     public String index(Authentication auth, @RequestParam(value = "from", required = false) String from, @RequestParam(value = "to", required = false) String to) {
 
         Map<String, Object> param = new HashMap<>();
@@ -82,7 +73,7 @@ public class OpSlotsController {
 
 
     @PreAuthorize("hasRole('Hospital')")
-    @HystrixCommand(fallbackMethod = "deleteOpSlotFallback", groupKey = groupKey)
+    @HystrixCommand(fallbackMethod = "deleteOpSlotFallback", groupKey = Constants.GROUP_KEY_KLINISYS)
     @RequestMapping(value = "/{id}", method = RequestMethod.DELETE, produces = org.springframework.http.MediaType.APPLICATION_JSON_VALUE)
     public String deleteOpSlot(Authentication auth, @PathVariable("id") Integer slotId){
 
@@ -100,7 +91,7 @@ public class OpSlotsController {
 
 
     @PreAuthorize("hasRole('Doctor')")
-    @HystrixCommand(fallbackMethod = "deleteReservationFallback", groupKey = groupKey)
+    @HystrixCommand(fallbackMethod = "deleteReservationFallback", groupKey = Constants.GROUP_KEY_RESERVATION)
     @RequestMapping(value = "/reservation/{id}", method = RequestMethod.DELETE, produces = org.springframework.http.MediaType.APPLICATION_JSON_VALUE)
     public String deleteReservation(Authentication auth, @PathVariable("id") Integer slotId) {
 

@@ -28,9 +28,6 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
 
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
-
-        System.out.println("Auth user!!!");
-
         String name = authentication.getName();
         String password = authentication.getCredentials().toString();
 
@@ -42,17 +39,10 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
             List<String> list = Arrays.asList(result.getRoles());
             List<GrantedAuthority> grantedAuths = list.stream().map((x) -> new SimpleGrantedAuthority(x)).collect(Collectors.toList());
             Authentication auth = new UsernamePasswordAuthenticationToken(name, password, grantedAuths);
-            System.out.println("Auth: token");
             SecurityContextHolder.getContext().setAuthentication(auth);
-            //authentication.setAuthenticated(true);
             return auth;
-        }else {
-            System.out.println("Auth: null");
-
-
-            return null;
-            //return authentication;
         }
+        return null;
     }
 
     @Override
@@ -66,7 +56,7 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
         private String password;
 
         protected AuthHystrixCommand(String name, String password) {
-            super(() -> "auth");
+            super(() -> Constants.GROUP_KEY_AUTH);
             this.name = name;
             this.password = password;
         }
@@ -90,7 +80,7 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
         params.put("user", username);
         params.put("password", password);
 
-        String url = "http://" + config.getKlinisys().getIpOrHostname() + ":" + config.getKlinisys().getPort() + "/auth/{user}/password/{password}";
+        String url = config.getKlinisys().buildUrl("/auth/{user}/password/{password}");
         AuthResult result  = restClient.getForObject(url, AuthResult.class, params);
         return result;
     }
