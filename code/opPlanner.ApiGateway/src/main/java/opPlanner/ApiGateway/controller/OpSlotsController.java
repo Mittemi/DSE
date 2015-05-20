@@ -42,30 +42,37 @@ public class OpSlotsController {
     public String index(Authentication auth, @RequestParam(value = "from", required = false) String from, @RequestParam(value = "to", required = false) String to) {
 
         Map<String, Object> param = new HashMap<>();
-        if(from != null) {
-            param.put("from", from);
+        Map<String, Object> request = new HashMap<>();
+        if (from != null) {
+            request.put("from", from);
         }
-        if(to != null) {
-            param.put("to", to);
+        if (to != null) {
+            request.put("to", to);
         }
-
+        String url = null;
         System.out.print("OpSlot-List -- From: " + (from != null ? from : "null") + ", TO: " + (to != null ? to : ""));
         if (auth != null && auth.isAuthenticated()) {
+
+            param.put("mail", auth.getPrincipal());
+            url = config.getKlinisys().buildUrl("{type}/{mail}/");
+
             if (auth.getAuthorities().stream().anyMatch(x -> x.getAuthority().equals("Hospital"))) {
-                System.out.println(" Group: Hospital, Mail: " + auth.getCredentials());
-                return "IsHospital";
-            } else if (auth.getAuthorities().stream().anyMatch(x->x.getAuthority().equals("Doctor"))) {
-                System.out.println(" Group: Doctor, Mail: " + auth.getCredentials());
-                return "IsDoctor";
-            } else if (auth.getAuthorities().stream().anyMatch(x->x.getAuthority().equals("Patient"))) {
-                System.out.println(" Group: Patient, Mail: " + auth.getCredentials());
-                return "IsPatient";
+                System.out.println(" Group: Hospital, Mail: " + auth.getPrincipal());
+                param.put("type", "hospital");
+            } else if (auth.getAuthorities().stream().anyMatch(x -> x.getAuthority().equals("Doctor"))) {
+                System.out.println(" Group: Doctor, Mail: " + auth.getPrincipal());
+                param.put("type", "doctor");
+            } else if (auth.getAuthorities().stream().anyMatch(x -> x.getAuthority().equals("Patient"))) {
+                System.out.println(" Group: Patient, Mail: " + auth.getPrincipal());
+                param.put("type", "patient");
+            } else {
+                return "501";
             }
         } else {
-            System.out.println(" Group: Public");
-            return "Public";
+            url = config.getKlinisys().buildUrl("public/");
         }
-        return "501";
+
+        return client.postForObject(url, request, String.class, param);
     }
 
     /* fallback Hystrix */

@@ -21,6 +21,7 @@ public class OpSlotController  {
     @RequestMapping(value = "/{id}", method = RequestMethod.GET, produces = "application/json")
     public void deleteSlot(@PathVariable("id") Long id) {
         opSlotService.deleteSlot(id);
+        // todo: check if we can delete this slot
     }
 
 }
