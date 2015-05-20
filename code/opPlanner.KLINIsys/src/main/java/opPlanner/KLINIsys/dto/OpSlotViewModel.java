@@ -13,8 +13,6 @@ import java.util.Date;
  */
 public class OpSlotViewModel {
 
-    /*Datum von bis Typ KH Arzt/Ärztin*/
-
     private Long id;
 
     private String type;
