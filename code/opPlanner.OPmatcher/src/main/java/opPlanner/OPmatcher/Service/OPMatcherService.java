@@ -261,6 +261,19 @@ public class OPMatcherService {
         return patient;
     }
 
+    public void addFreeOPSlotById(String opSlotId) {
+        Map<String, Object> params = new HashMap<>();
+        params.put("id", opSlotId);
+        String url = "http://" + config.getKlinisys().getIpOrHostname()
+                + ":" + config.getKlinisys().getPort()
+                + "/" + config.getKlinisys().getOpSlotUrl();
+
+        //TODO thi: retrieve opslot in right format
+        //Patient patient = restClient.getForObject(url, Patient.class, params);
+
+        //TODO thi: add op slot
+    }
+
     private boolean isSlotAlreadyReserved(Date slotStart, Date slotEnd, List<Reservation> reservations) {
         for (Reservation reservation : reservations) {
             if (overlap(slotStart, slotEnd, reservation.getStart(), reservation.getEnd())) {

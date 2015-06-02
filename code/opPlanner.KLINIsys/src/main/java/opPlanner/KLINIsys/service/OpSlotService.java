@@ -63,4 +63,10 @@ public class OpSlotService {
 
         return opSlotRepository.findByHospital_EMail(hospital.geteMail());
     }
+
+    public OpSlot getOPSlotById(Long id) {
+        return opSlotRepository.findOne(id);
+    }
+
+
 }

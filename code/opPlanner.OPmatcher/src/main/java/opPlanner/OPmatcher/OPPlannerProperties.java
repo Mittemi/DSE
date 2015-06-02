@@ -36,6 +36,15 @@ public class OPPlannerProperties {
         private String patientUrl;
         private String timeWindowUrl;
        private String timeWindowAltUrl;
+       private String opSlotUrl;
+
+       public String getOpSlotUrl() {
+           return opSlotUrl;
+       }
+
+       public void setOpSlotUrl(String opSlotUrl) {
+           this.opSlotUrl = opSlotUrl;
+       }
 
        public String getTimeWindowAltUrl() {
            return timeWindowAltUrl;
