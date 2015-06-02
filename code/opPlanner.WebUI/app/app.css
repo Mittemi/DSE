@@ -1,5 +1,7 @@
 /* app css stylesheet */
-
+*{
+  font-family: 'Droid Sans', sans-serif;
+}
 .menu {
   list-style: none;
   border-bottom: 0.1em solid black;
@@ -27,4 +29,37 @@
 .menu > li:nth-child(1):before {
   content: "";
   padding: 0;
+}
+
+/**
+* Clear for div-cleaning
+**/
+.clear {
+  clear: both;
+}
+
+
+/**
+* Slider CSS Settings
+*/
+.swiper-container {
+  height:610px;
+}
+.swiper-wrapper {
+  text-align: center;
+  font-size: 18px;
+  background: #fff;
+  /* Center slide text vertically */
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: -webkit-flex;
+  display: flex;
+  -webkit-box-pack: center;
+  -ms-flex-pack: center;
+  -webkit-justify-content: center;
+  justify-content: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  -webkit-align-items: center;
+  align-items: center;
 }

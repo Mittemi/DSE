@@ -22,6 +22,11 @@ public class AccountController {
 
     @RequestMapping(value = "/details", method = RequestMethod.GET, produces = "application/json")
     public AuthResult details(Authentication auth) {
+
+        if(auth == null || !auth.isAuthenticated()) {
+            return new AuthResult(false);
+        }
+
         List<String> roles = auth.getAuthorities().stream().map(x -> x.getAuthority()).collect(Collectors.toList());
         return new AuthResult(auth.isAuthenticated(), roles.toArray(new String[roles.size()]));
     }

@@ -14,11 +14,21 @@ import java.util.List;
 @Component
 public class Doctor extends LoginUser {
 
+    private String name;
+    
     @OneToMany(mappedBy = "doctor", targetEntity = TimeWindow.class)
     private List<TimeWindow> workSchedule;
 
     public List<TimeWindow> getWorkSchedule() {
         return workSchedule;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public void setWorkSchedule(List<TimeWindow> workSchedule) {

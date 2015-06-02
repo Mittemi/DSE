@@ -35,10 +35,94 @@ public class OpPlannerProperties {
         public String getBaseUrl() {
             return "http://" + getIpOrHostname() + ":" + getPort() + "/";
         }
+
+        public String buildUrl(String relative) {
+            return getBaseUrl() + relative;
+        }
+    }
+
+    public static class Reservation {
+        private int port;
+        private String ipOrHostname;
+
+        public int getPort() {
+            return port;
+        }
+
+        public void setPort(int port) {
+            this.port = port;
+        }
+
+        public String getIpOrHostname() {
+            return ipOrHostname;
+        }
+
+        public void setIpOrHostname(String ipOrHostname) {
+            this.ipOrHostname = ipOrHostname;
+        }
+
+        public String getBaseUrl() {
+            return "http://" + getIpOrHostname() + ":" + getPort() + "/";
+        }
+
+        public String buildUrl(String relative) {
+            return getBaseUrl() + relative;
+        }
+    }
+
+    public static class Notifier {
+        private int port;
+        private String ipOrHostname;
+
+        public int getPort() {
+            return port;
+        }
+
+        public void setPort(int port) {
+            this.port = port;
+        }
+
+        public String getIpOrHostname() {
+            return ipOrHostname;
+        }
+
+        public void setIpOrHostname(String ipOrHostname) {
+            this.ipOrHostname = ipOrHostname;
+        }
+
+        public String getBaseUrl() {
+            return "http://" + getIpOrHostname() + ":" + getPort() + "/";
+        }
+
+        public String buildUrl(String relative) {
+            return getBaseUrl() + relative;
+        }
     }
 
     @NotNull
     private Klinisys klinisys;
+
+    @NotNull
+    private Reservation reservation;
+
+    @NotNull
+    private Notifier notifier;
+
+    public Notifier getNotifier() {
+        return notifier;
+    }
+
+    public void setNotifier(Notifier notifier) {
+        this.notifier = notifier;
+    }
+
+    public Reservation getReservation() {
+        return reservation;
+    }
+
+    public void setReservation(Reservation reservation) {
+        this.reservation = reservation;
+    }
 
     public Klinisys getKlinisys() {
         return klinisys;
