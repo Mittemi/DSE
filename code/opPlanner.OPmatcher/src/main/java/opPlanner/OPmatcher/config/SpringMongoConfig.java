@@ -18,15 +18,12 @@ public class SpringMongoConfig extends AbstractMongoConfiguration {
         return "opMatchDB";
     }
 
-    //TODO thi: OPPlannerProperties
-
-    //@Autowired
-    //private OPPlannerProperties properties;
+    @Autowired
+    private OPPlannerProperties properties;
 
     @Override
     @Bean
     public Mongo mongo() throws Exception {
-        //return new MongoClient(properties.getMongoDBConf().getIpOrHostname());
-        return new MongoClient("192.168.59.103");
+        return new MongoClient(properties.getMongoDb().getIpOrHostname());
     }
 }
