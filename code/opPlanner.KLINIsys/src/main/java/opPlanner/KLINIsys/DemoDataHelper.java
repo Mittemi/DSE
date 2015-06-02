@@ -59,17 +59,17 @@ public class DemoDataHelper {
             doctorRepository.save(doctor);
 
             GregorianCalendar from1 = new GregorianCalendar();
-            from1.set(2015, 05, 23, 9, 00);
+            from1.set(2015, 05, 23, 8, 55);
             GregorianCalendar from2 = new GregorianCalendar();
-            from2.set(2015, 05, 24, 10, 00);
+            from2.set(2015, 05, 24, 9, 55);
             GregorianCalendar  from3 = new GregorianCalendar();
-            from3.set(2015, 05, 25, 11, 00);
+            from3.set(2015, 05, 25, 10, 55);
             GregorianCalendar  to1 = new GregorianCalendar();
-            to1.set(2015, 05, 23, 13, 00);
+            to1.set(2015, 05, 23, 13, 05);
             GregorianCalendar  to2 = new GregorianCalendar();
-            to2.set(2015, 05, 24, 14, 00);
+            to2.set(2015, 05, 24, 14, 05);
             GregorianCalendar to3 = new GregorianCalendar();
-            to3.set(2015, 05, 25, 15, 00);
+            to3.set(2015, 05, 25, 15, 05);
 
             TimeWindow slot1 = new TimeWindow(from1.getTime(), to1.getTime());
             slot1.setDoctor(doctor);

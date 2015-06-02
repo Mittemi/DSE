@@ -13,6 +13,7 @@ import org.springframework.data.geo.*;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.index.GeospatialIndex;
 import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.CriteriaDefinition;
 import org.springframework.data.mongodb.core.query.NearQuery;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.hateoas.Link;
@@ -61,7 +62,8 @@ public class OPMatcherController {
      * @param opSlotType
      * @param doctorId
      * @param patientId
-     * @return matched op slot, if no one was found null will be returned
+     * @return matched op slot, if no one was found null will be returned. Null will also be returned if patient or
+     * opSlotType is null or simply if the work schedule of the doctor could not be retrieved.
      */
     @RequestMapping(value = "/findFreeSlot", method = RequestMethod.GET, produces = "application/json")
     public OPSlot findFreeSlot(Integer preferredPerimeter, TimeWindow preferredTimeWindow, String opSlotType,
@@ -69,7 +71,7 @@ public class OPMatcherController {
         OPSlot chosenSlot = null;
        List<TimeWindow> workSchedule = findWorkScheduleByDoctor(doctorId, preferredTimeWindow.getStartTime(), preferredTimeWindow.getEndTime());
         Patient patient = findPatient(patientId);
-        if (patient == null || workSchedule == null) {
+        if (patient == null || workSchedule == null || opSlotType == null) {
             return null;
         }
         GeoResults<OPSlot> slots = findFreeSlotList(patient.getX(), patient.getY(), preferredPerimeter,
@@ -172,29 +174,40 @@ public class OPMatcherController {
         repo.delete(opSlotId);
     }
 
+    private Criteria appendCriteriaWithAND(Criteria mainCriteria, Criteria appendix) {
+        if (mainCriteria == null) {
+            return appendix;
+        }
+        return mainCriteria.andOperator(appendix);
+    }
+
     public GeoResults<OPSlot> findFreeSlotList(double x, double y, int preferredPerimeter, TimeWindow preferredTimeWindow, String opSlotType, List<TimeWindow> freeDoctorSlots) {
         template.indexOps(OPSlot.class).ensureIndex(new GeospatialIndex("position"));
         NearQuery nearQuery = NearQuery.near(x, y).maxDistance(new Distance(preferredPerimeter, Metrics.KILOMETERS));
 
         //filter by opSlotType
-        if (opSlotType != null) {
-            Query filterQuery = new Query(Criteria.where("type").is(opSlotType));
-            nearQuery.query(filterQuery);
-        }
+        Criteria criteria = Criteria.where("type").is(opSlotType);
+        Criteria startTimeCriteria = null;
+        Criteria endTimeCriteria = null;
+
 
         //filter by preferredTimeWindow
         if (preferredTimeWindow != null) {
             if (preferredTimeWindow.getStartTime() != null) {
-                nearQuery.query(new Query(
-                        Criteria.where("start").gte(preferredTimeWindow.getStartTime())));
+              startTimeCriteria = Criteria.where("start").gte(preferredTimeWindow.getStartTime());
+                //nearQuery.query(new Query(
+                       // Criteria.where("start").gte(preferredTimeWindow.getStartTime())));
                 //TODO thi: test if query was not substituted
             }
             if (preferredTimeWindow.getEndTime() != null) {
-                nearQuery.query(new Query(
-                        Criteria.where("end").lte(preferredTimeWindow.getEndTime())));
+                endTimeCriteria = Criteria.where("end").lte(preferredTimeWindow.getEndTime());
+                //nearQuery.query(new Query(
+                //        Criteria.where("end").lte(preferredTimeWindow.getEndTime())));
             }
         }
 
+        criteria = criteria.andOperator(startTimeCriteria, endTimeCriteria);
+        nearQuery.query(new Query(criteria)); //add filter criteria to the geo near query
         GeoResults<OPSlot> slots = template.geoNear(nearQuery, OPSlot.class);
 
         //filter by available doctor slots
