@@ -1,6 +1,7 @@
 package opPlanner.KLINIsys;
 
 import opPlanner.KLINIsys.service.HospitalService;
+import opPlanner.Shared.OpPlannerProperties;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +26,9 @@ public class ApplicationTests {
 	@Autowired
 	private Environment env;
 
+	@Autowired
+	private OpPlannerProperties plannerProperties;
+
 	@Test
 	public void testService() {
 		assertNotNull(service);
@@ -34,5 +38,12 @@ public class ApplicationTests {
 	public void testProfile() {
 		assertEquals(env.getActiveProfiles().length,1);
 		assertTrue(env.getActiveProfiles()[0].equals("unit-test"));
+	}
+
+	@Test
+	public void testConfig() {
+		assertNotNull(plannerProperties);
+		assertNotNull(plannerProperties.getReservation());
+		assertNotNull(plannerProperties.getReservation().getBaseUrl());
 	}
 }

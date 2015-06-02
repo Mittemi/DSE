@@ -1,10 +1,6 @@
-package opPlanner.ApiGateway;
-
+package opPlanner.Shared;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.stereotype.Component;
-
-import javax.validation.constraints.NotNull;
 
 /**
  * Created by Michael on 18.04.2015.
@@ -99,13 +95,10 @@ public class OpPlannerProperties {
         }
     }
 
-    @NotNull
     private Klinisys klinisys;
 
-    @NotNull
     private Reservation reservation;
 
-    @NotNull
     private Notifier notifier;
 
     public Notifier getNotifier() {
