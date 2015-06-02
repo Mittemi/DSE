@@ -7,18 +7,18 @@ buildscript {
     }
     dependencies {
         classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}") 
-        classpath("io.spring.gradle:dependency-management-plugin:0.4.1.RELEASE")
+        classpath("io.spring.gradle:dependency-management-plugin:0.5.1.RELEASE")
     }
 }
 
 apply plugin: 'java'
 apply plugin: 'eclipse'
-apply plugin: 'idea' 
-apply plugin: 'spring-boot'
-apply plugin: 'io.spring.dependency-management'
+apply plugin: 'idea'
+apply plugin: 'spring-boot' 
+apply plugin: 'io.spring.dependency-management' 
 
 jar {
-    baseName = 'opPlanner.KLINIsys'
+    baseName = 'opPlanner.Shared'
     version = '0.0.1-SNAPSHOT'
 }
 sourceCompatibility = 1.8
@@ -30,14 +30,8 @@ repositories {
 
 
 dependencies {
-    compile project(':..:opPlanner.Shared')
-    compile("org.springframework.boot:spring-boot-starter-data-jpa")
-    compile("org.springframework.boot:spring-boot-starter-data-rest")
-    compile("org.springframework.security:spring-security-crypto:4.0.0.RELEASE")
-    compile("org.postgresql:postgresql:9.4-1201-jdbc41")
-    compile("com.h2database:h2")
-    testCompile("org.springframework.boot:spring-boot-starter-test")
-    testCompile('junit:junit:4.10')
+    compile("org.springframework.boot:spring-boot-starter")
+    testCompile("org.springframework.boot:spring-boot-starter-test") 
 }
 
 

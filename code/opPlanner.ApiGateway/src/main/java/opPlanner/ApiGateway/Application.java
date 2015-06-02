@@ -1,5 +1,6 @@
 package opPlanner.ApiGateway;
 
+import opPlanner.Shared.OpPlannerProperties;
 import opPlanner.ApiGateway.controller.OpSlotsController;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
@@ -9,9 +10,9 @@ import org.springframework.cloud.client.circuitbreaker.EnableCircuitBreaker;
 import org.springframework.context.annotation.ComponentScan;
 
 @EnableAutoConfiguration
-@ComponentScan(basePackageClasses = { OpSlotsController.class, SecurityConfig.class, FilterConfigurationBean.class, SimpleCORSFilter.class})
+@ComponentScan(basePackageClasses = { OpPlannerProperties.class,  OpSlotsController.class, SecurityConfig.class, FilterConfigurationBean.class, SimpleCORSFilter.class})
 @SpringBootApplication
-@EnableConfigurationProperties({OpPlannerProperties.class})
+@EnableConfigurationProperties({  OpPlannerProperties.class})
 @EnableCircuitBreaker
 //@EnableHystrixDashboard     //TODO: remove for production ???
 public class Application {

@@ -8,6 +8,7 @@ import opPlanner.KLINIsys.repository.LoginUserRepository;
 import opPlanner.KLINIsys.repository.PatientRepository;
 import opPlanner.KLINIsys.service.AuthService;
 import opPlanner.KLINIsys.service.HospitalService;
+import opPlanner.Shared.OpPlannerProperties;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -26,6 +27,7 @@ import opPlanner.KLINIsys.repository.HospitalRepository;
 @EnableJpaRepositories(basePackages = {"opPlanner.KLINIsys.repository"})
 @ComponentScan(basePackages = {"opPlanner.KLINIsys.service", "opPlanner.KLINIsys.controller"})
 @EnableAutoConfiguration()
+@EnableConfigurationProperties({  OpPlannerProperties.class})
 public class Application {
 
     public static void main(String[] args) {

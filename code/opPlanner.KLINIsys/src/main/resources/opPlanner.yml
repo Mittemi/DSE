@@ -1,0 +1,14 @@
+# application configuration, unit test config may override several properties
+application:
+  klinisys:
+    port : 9000
+    ipOrHostname: 127.0.0.1
+  opMatcher:
+    port : 9001
+    ipOrHostname: 127.0.0.1
+  reservation:
+    port : 9002
+    ipOrHostname: 127.0.0.1
+  notifier:
+    port : 9003
+    ipOrHostname: 127.0.0.1

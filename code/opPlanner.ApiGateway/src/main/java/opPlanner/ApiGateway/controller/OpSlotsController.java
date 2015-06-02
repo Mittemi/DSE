@@ -1,8 +1,8 @@
 package opPlanner.ApiGateway.controller;
 
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
+import opPlanner.Shared.OpPlannerProperties;
 import opPlanner.ApiGateway.Constants;
-import opPlanner.ApiGateway.OpPlannerProperties;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
