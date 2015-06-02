@@ -51,6 +51,9 @@ public class OpSlotsTests {
     @Autowired
     private OpSlotService opSlotService;
 
+    @Autowired
+    private TimeWindowRepository timeWindowRepository;
+
     private Hospital hospital;
 
     private Doctor doctor;
@@ -77,7 +80,7 @@ public class OpSlotsTests {
         doctorRepository.save(doctor);
 
         hospital = DemoDataHelper.createHospital(hospitalRepository, authService);
-        doctor = DemoDataHelper.createDoctor(doctorRepository, authService);
+        doctor = DemoDataHelper.createDoctor(doctorRepository, timeWindowRepository, authService);
         patient = DemoDataHelper.createPatient(patientRepository, authService);
 
         for (int i = 0; i < 10; i++) {

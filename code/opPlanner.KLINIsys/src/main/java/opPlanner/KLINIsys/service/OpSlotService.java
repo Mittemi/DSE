@@ -58,11 +58,6 @@ public class OpSlotService {
 
         opSlotRepository.delete(slot);
     }
-
-    public List<OpSlot> allOpSlots(Doctor doctor, Patient patient, Hospital hospital) {
-
-        return opSlotRepository.findByHospitalAndDoctor(doctor, hospital);
-    }
     
     public List<OpSlot> allOpSlots(Hospital hospital) {
 

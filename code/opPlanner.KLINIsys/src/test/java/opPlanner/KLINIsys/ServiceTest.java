@@ -4,9 +4,7 @@ import opPlanner.KLINIsys.model.AuthResult;
 import opPlanner.KLINIsys.model.Doctor;
 import opPlanner.KLINIsys.model.Hospital;
 import opPlanner.KLINIsys.model.Patient;
-import opPlanner.KLINIsys.repository.DoctorRepository;
-import opPlanner.KLINIsys.repository.LoginUserRepository;
-import opPlanner.KLINIsys.repository.PatientRepository;
+import opPlanner.KLINIsys.repository.*;
 import opPlanner.KLINIsys.service.AuthService;
 import org.junit.Before;
 import org.junit.Test;
@@ -15,7 +13,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
-import opPlanner.KLINIsys.repository.HospitalRepository;
 
 import static org.junit.Assert.*;
 
@@ -36,6 +33,9 @@ public class ServiceTest {
 
     @Autowired
     private DoctorRepository doctorRepository;
+
+    @Autowired
+    private TimeWindowRepository timeWindowRepository;
 
     @Autowired
     private PatientRepository patientRepository;
@@ -62,7 +62,7 @@ public class ServiceTest {
 
 
         hospital = DemoDataHelper.createHospital(hospitalRepository, authService);
-        doctor = DemoDataHelper.createDoctor(doctorRepository, authService);
+        doctor = DemoDataHelper.createDoctor(doctorRepository, timeWindowRepository, authService);
         patient = DemoDataHelper.createPatient(patientRepository, authService);
     }
 

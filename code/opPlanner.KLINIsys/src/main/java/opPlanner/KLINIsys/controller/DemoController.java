@@ -2,10 +2,7 @@ package opPlanner.KLINIsys.controller;
 
 import opPlanner.KLINIsys.DemoDataHelper;
 import opPlanner.KLINIsys.model.*;
-import opPlanner.KLINIsys.repository.DoctorRepository;
-import opPlanner.KLINIsys.repository.HospitalRepository;
-import opPlanner.KLINIsys.repository.OpSlotRepository;
-import opPlanner.KLINIsys.repository.PatientRepository;
+import opPlanner.KLINIsys.repository.*;
 import opPlanner.KLINIsys.service.AuthService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -34,14 +31,17 @@ public class DemoController {
     private OpSlotRepository opSlotRepository;
 
     @Autowired
+    private TimeWindowRepository timeWindowRepository;
+
+    @Autowired
     private AuthService authService;
 
     @RequestMapping(value = "/demo", method = RequestMethod.GET, produces = "application/json")
     public String createDemoData() {
 
-        Doctor doctor = DemoDataHelper.createDoctor(doctorRepository, authService);
+        Doctor doctor = DemoDataHelper.createDoctor(doctorRepository, timeWindowRepository, authService);
         Hospital hospital = DemoDataHelper.createHospital(hospitalRepository, authService);
-
+        Patient patient = DemoDataHelper.createPatient(patientRepository,authService);
         OpSlot opSlot = DemoDataHelper.createOpSlot(opSlotRepository,doctor,hospital);
 
         return "Done";

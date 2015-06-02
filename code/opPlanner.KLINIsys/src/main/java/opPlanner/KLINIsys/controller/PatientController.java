@@ -35,6 +35,9 @@ public class PatientController {
 
     @Autowired
     private OpSlotService opSlotService;
+
+    @Autowired
+    private PatientService patientService;
     
 /*
     @RequestMapping(value = "/", method = RequestMethod.GET, produces = "application/json")
