@@ -1,17 +1,29 @@
 package opPlanner.OPmatcher.controller;
 
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import opPlanner.OPmatcher.OPPlannerProperties;
 import opPlanner.OPmatcher.dto.Patient;
 import opPlanner.OPmatcher.dto.TimeWindow;
 import opPlanner.OPmatcher.model.OPSlot;
 import opPlanner.OPmatcher.repository.OPSlotRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.data.geo.*;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.index.GeospatialIndex;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.NearQuery;
 import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.hateoas.Link;
+import org.springframework.hateoas.Resource;
+import org.springframework.hateoas.hal.Jackson2HalModule;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageConverter;
+import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -51,30 +63,39 @@ public class OPMatcherController {
      * @param patientId
      * @return matched op slot, if no one was found null will be returned
      */
-    @RequestMapping(value = "/", method = RequestMethod.GET, produces = "application/json")
-    public OPSlot findFreeSlot(Integer preferredPerimeter, TimeWindow preferredTimeWindow, String opSlotType, String doctorId, String patientId) {
+    @RequestMapping(value = "/findFreeSlot", method = RequestMethod.GET, produces = "application/json")
+    public OPSlot findFreeSlot(Integer preferredPerimeter, TimeWindow preferredTimeWindow, String opSlotType,
+                                    String doctorId, String patientId) {
         OPSlot chosenSlot = null;
-       /*GregorianCalendar from1 = new GregorianCalendar();
-        from1.set(2015, 04, 20, 11, 00);
-       GregorianCalendar to1 = new GregorianCalendar();
-        to1.set(2015, 07, 28, 12, 00);
-        List<TimeWindow> workSchedule = findWorkScheduleByDoctor("d1@dse.at",from1.getTime(), to1.getTime());*/
-
-        List<TimeWindow> workSchedule = findWorkScheduleByDoctor(doctorId, preferredTimeWindow.getStartTime(), preferredTimeWindow.getEndTime());
+       List<TimeWindow> workSchedule = findWorkScheduleByDoctor(doctorId, preferredTimeWindow.getStartTime(), preferredTimeWindow.getEndTime());
         Patient patient = findPatient(patientId);
-        if (patient == null /*|| workSchedule == null*/) {
+        if (patient == null || workSchedule == null) {
             return null;
         }
-        GeoResults<OPSlot> slots = findFreeSlotList(patient.getX(), patient.getY(), preferredPerimeter, preferredTimeWindow, opSlotType, workSchedule);
+        GeoResults<OPSlot> slots = findFreeSlotList(patient.getX(), patient.getY(), preferredPerimeter,
+                preferredTimeWindow, opSlotType, workSchedule);
         if (slots.getContent().size() == 0) {
             return null;
         }
-        //sort by start date
-        Collections.sort(slots.getContent(),(GeoResult<OPSlot> slot1, GeoResult<OPSlot> slot2) -> slot1.getContent().getStart().compareTo(slot2.getContent().getStart()));
-        chosenSlot = slots.getContent().get(0).getContent();    //choose first OPSlot
-        //TODO thi: test sorting
+        chosenSlot = getEarliestOPSlot(slots);
         //TODO thi: notification, because of successful op slot matching
         return chosenSlot;
+
+    }
+
+    /**
+     * finds the earliest upcoming op slot
+     * @param slots
+     * @return earliest op slot, if {@param slots} was found, null is returned.
+     */
+    private OPSlot getEarliestOPSlot(GeoResults<OPSlot> slots) {
+        OPSlot earliestOPSlot = null;
+        for (GeoResult<OPSlot> slot : slots) {
+            if (earliestOPSlot == null || slot.getContent().getStart().compareTo(earliestOPSlot.getStart()) < 0) {
+                earliestOPSlot = slot.getContent();
+            }
+        }
+        return earliestOPSlot;
     }
 
     /**
@@ -91,8 +112,8 @@ public class OPMatcherController {
         if (doctorId == null) return null;
         if (preferredStart != null && preferredEnd != null) {
             DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm");
-            params.put("from", formatter.format(preferredStart));
-            params.put("to", formatter.format(preferredEnd));
+            params.put("startTime", formatter.format(preferredStart));
+            params.put("endTime", formatter.format(preferredEnd));
 
             //e.g. http://localhost:9000/timeWindows/search/findByDoctorAndTimeWindow?email=d1@dse.at&from=2015-06-23%2009:01&to=2015-06-26%2015:00
             url = "http://" + config.getKlinisys().getIpOrHostname()
@@ -105,20 +126,20 @@ public class OPMatcherController {
                     + "/" + config.getKlinisys().getTimeWindowAltUrl();
         }
 
-        List<TimeWindow> timeWindows = restClient.getForObject(url, List.class, params);
+        TimeWindow[] timeWindows = restClient.getForObject(url, TimeWindow[].class, params);
        // url = "http://127.0.0.1:9000/timeWindows/search/findByDoctorAndTimeWindow?email=d1@dse.at&from=2015-06-24%2015:00&to=2016-05-05%2015:00";
        // String stringRet = restClient.getForObject(url,String.class);
 
         System.out.println("Work schedule of doctor : " + doctorId + " retrieved.");
 
-        return timeWindows;
+        return Arrays.asList(timeWindows);
     }
 
     private Patient findPatient(String patientId) {
         if (patientId == null)
             return null;
         Map<String, Object> params = new HashMap<>();
-        params.put("patientId", patientId);
+        params.put("email", patientId);
         String url = "http://" + config.getKlinisys().getIpOrHostname()
                 + ":" + config.getKlinisys().getPort()
                 + "/" + config.getKlinisys().getPatientUrl();
@@ -136,7 +157,7 @@ public class OPMatcherController {
      *
      * @param opSlot - op slot which should be added to the list of free slots
      */
-    @RequestMapping(value = "", method = RequestMethod.POST, produces = "application/json")
+    @RequestMapping(value = "/add", method = RequestMethod.POST, produces = "application/json")
     public void addFreeOPSlot(OPSlot opSlot) {
         repo.save(opSlot);
     }
@@ -146,8 +167,8 @@ public class OPMatcherController {
      *
      * @param opSlotId - id of op slot to delete
      */
-    @RequestMapping(value = "", method = RequestMethod.DELETE, produces = "application/json")
-    public void deleteFreeOPSlot(String opSlotId) {
+    @RequestMapping(value = "/delete/{opSlotId}", method = RequestMethod.DELETE, produces = "application/json")
+    public void deleteFreeOPSlot(@PathVariable("opSlotId") String opSlotId) {
         repo.delete(opSlotId);
     }
 
@@ -190,7 +211,7 @@ public class OPMatcherController {
                         break;
                     }
                 }
-                //opSlot did not fit together with the doctors' free slots
+                //opSlot did not fit with the doctors' free slots
                 if (!slotOK) {
                     iter.remove();
                 }

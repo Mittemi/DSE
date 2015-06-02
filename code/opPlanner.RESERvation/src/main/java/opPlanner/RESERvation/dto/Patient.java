@@ -8,6 +8,10 @@ public class Patient {
     private double x;
     private double y;
 
+    public Patient() {
+
+    }
+
     public Patient(String patientId, double x, double y) {
         this.patientId = patientId;
         this.x = x;

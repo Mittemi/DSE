@@ -17,4 +17,8 @@ public class PatientService {
     public Iterable<Patient> allPatients() {
         return patientRepository.findAll();
     }
+
+    public Patient getPatientByEmail(String eMail) {
+        return patientRepository.findByEmail(eMail);
+    }
 }

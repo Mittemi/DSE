@@ -15,9 +15,6 @@ public class Patient {
     private double x;
     private double y;
 
-  //  private String password;
-
-
     public double getX() {
         return x;
     }
@@ -36,10 +33,6 @@ public class Patient {
 
    /* public Patient(Long id) {
         this.setId(id);
-    }*/
-
-   /* public Patient() {
-        this(null);
     }*/
 
     public String getName() {
@@ -62,5 +55,16 @@ public class Patient {
     @Override
     public String toString() {
         return "Patient [eMail=" + this.eMail + ", name=" + this.name + ", x="+this.x+", y="+this.y+"]";
+    }
+
+    public Patient(String eMail, double y, String name, double x) {
+        this.eMail = eMail;
+        this.y = y;
+        this.name = name;
+        this.x = x;
+    }
+
+    public Patient() {
+
     }
 }

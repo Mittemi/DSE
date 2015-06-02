@@ -3,8 +3,8 @@ application:
   klinisys:
     port : 9000
     ipOrHostname: 127.0.0.1
-    patientUrl: patients/{patientId}
-    timeWindowUrl: "timeWindows/search/findByDoctorAndTimeWindow?email={email}&from={from}&to={to}"
+    patientUrl: "patient/findPatientByEmail?email={email}"
+    timeWindowUrl: "workSchedule/findWorkScheduleByDoctorAndTimeWindow?email={email}&startTime={startTime}&endTime={endTime}"
     timeWindowAltUrl: "timeWindows/search/findByDoctor_EMail?email={email}"
   reservation:
     port : 9002

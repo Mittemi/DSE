@@ -69,7 +69,7 @@ public class OPMatcherTest {
 
 	@After
 	public void cleanTestData() {
-		repo.deleteAll();
+		//todo thi: repo.deleteAll();
 	}
 
 	@Test

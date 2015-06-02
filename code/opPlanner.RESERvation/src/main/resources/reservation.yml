@@ -9,7 +9,8 @@ application:
   opMatcher:
     port : 9001
     ipOrHostname: 127.0.0.1
-    findOPSlotUrl: "?preferredPerimeter={preferredPerimeter}&startTime={startTime}&endTime={endTime}&opSlotType={opSlotType}&doctorId={doctorId}&patientId={patientId}"
+    findOPSlotUrl: "findFreeSlot?preferredPerimeter={preferredPerimeter}&startTime={startTime}&endTime={endTime}&opSlotType={opSlotType}&doctorId={doctorId}&patientId={patientId}"
+    deleteFreeOPSlotUrl: "delete/{opSlotId}"
   notifier:
     port : 9003
     ipOrHostname: 127.0.0.1

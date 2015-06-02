@@ -86,6 +86,15 @@ public class OPPlannerProperties {
         private int port;
         private String ipOrHostname;
         private String findOPSlotUrl;
+        private String deleteFreeOPSlotUrl;
+
+        public String getDeleteFreeOPSlotUrl() {
+            return deleteFreeOPSlotUrl;
+        }
+
+        public void setDeleteFreeOPSlotUrl(String deleteFreeOPSlotUrl) {
+            this.deleteFreeOPSlotUrl = deleteFreeOPSlotUrl;
+        }
 
         public String getFindOPSlotUrl() {
             return findOPSlotUrl;
