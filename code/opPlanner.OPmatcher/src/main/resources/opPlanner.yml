@@ -6,6 +6,7 @@ application:
     patientUrl: "patient/findPatientByEmail?email={email}"
     timeWindowUrl: "workSchedule/findWorkScheduleByDoctorAndTimeWindow?email={email}&startTime={startTime}&endTime={endTime}"
     timeWindowAltUrl: "timeWindows/search/findByDoctor_EMail?email={email}"
+    opSlotUrl: "/opslot/{id}"
   reservation:
     port : 9002
     ipOrHostname: 127.0.0.1

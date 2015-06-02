@@ -76,6 +76,11 @@ public class OPMatcherController {
         opMatcherService.addFreeOPSlot(opSlot);
     }
 
+    @RequestMapping(value = "/addOPSlotId", method = RequestMethod.POST, produces = "application/json")
+    public void addFreeOPSlot(String opSlotId) {
+       opMatcherService.addFreeOPSlotById(opSlotId);
+    }
+
     /**
      * Deletes an free op slot (e.g. after reservation was made)
      *
