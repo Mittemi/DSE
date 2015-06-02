@@ -100,6 +100,8 @@ public class DemoController {
         repo.save(slotAKHLinz);
         OPSlot slotLKHGraz = new OPSlot(3, LKHGRAZ.getX(), LKHGRAZ.getY() , from3.getTime(), to3.getTime(), "eye");		//lkh graz
         repo.save(slotLKHGraz);
+        OPSlot slotLKHGraz2 = new OPSlot(3, LKHGRAZ.getX(), LKHGRAZ.getY() , from1.getTime(), to1.getTime(), "eye"); //lkh graz
+        repo.save(slotLKHGraz2);
 
         return "OPMatcher demo data init done";
     }

@@ -82,6 +82,48 @@ public class OPPlannerProperties {
         }
     }
 
+    public static class Reservation {
+        private int port;
+        private String ipOrHostname;
+        private String reservationByDoctorUrl;
+        private String findReservationsByDoctorIdAndTWURL;
+
+        public String getFindReservationsByDoctorIdAndTWURL() {
+            return findReservationsByDoctorIdAndTWURL;
+        }
+
+        public void setFindReservationsByDoctorIdAndTWURL(String findReservationsByDoctorIdAndTWURL) {
+            this.findReservationsByDoctorIdAndTWURL = findReservationsByDoctorIdAndTWURL;
+        }
+
+        public String getReservationByDoctorUrl() {
+            return reservationByDoctorUrl;
+        }
+
+        public void setReservationByDoctorUrl(String reservationByDoctorUrl) {
+            this.reservationByDoctorUrl = reservationByDoctorUrl;
+        }
+
+        public int getPort() {
+            return port;
+        }
+
+        public void setPort(int port) {
+            this.port = port;
+        }
+
+        public String getIpOrHostname() {
+            return ipOrHostname;
+        }
+
+        public void setIpOrHostname(String ipOrHostname) {
+            this.ipOrHostname = ipOrHostname;
+        }
+
+        public String getBaseUrl() {
+            return "http://" + getIpOrHostname() + ":" + getPort() + "/";
+        }
+    }
 /*
     @NotNull
     private MongoDb mongoDb;
@@ -96,6 +138,17 @@ public class OPPlannerProperties {
 */
     //TODO thi: mongoDB config
 
+
+    @NotNull
+    private Reservation reservation;
+
+    public Reservation getReservation() {
+        return reservation;
+    }
+
+    public void setReservation(Reservation reservation) {
+        this.reservation = reservation;
+    }
 
     @NotNull
     private Klinisys klinisys;

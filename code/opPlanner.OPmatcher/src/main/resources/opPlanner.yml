@@ -9,6 +9,8 @@ application:
   reservation:
     port : 9002
     ipOrHostname: 127.0.0.1
+    reservationByDoctorUrl: "findReservationsByDoctorId?doctorId={doctorId}"
+    findReservationsByDoctorIdAndTWURL : "findReservationsByDoctorIdAndTW?doctorId={doctorId}&start={start}&end={end}"
   opMatcher:
     port : 9001
     ipOrHostname: 127.0.0.1

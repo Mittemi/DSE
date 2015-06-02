@@ -1,5 +1,6 @@
 package opPlanner.OPmatcher;
 
+import opPlanner.OPmatcher.Service.OPMatcherService;
 import opPlanner.OPmatcher.controller.OPMatcherController;
 import opPlanner.OPmatcher.dto.TimeWindow;
 import opPlanner.OPmatcher.model.OPSlot;
@@ -27,6 +28,9 @@ public class OPMatcherTest {
 
 	@Autowired
 	OPSlotRepository repo;
+
+	@Autowired
+	OPMatcherService opMatcherService;
 
 	@Autowired
 	OPMatcherController opMatcher;
@@ -74,13 +78,15 @@ public class OPMatcherTest {
 
 	@Test
 	public void testFindAll() {
-		GeoResults<OPSlot> slots = opMatcher.findFreeSlotList(TUWIEN.getX(),TUWIEN.getY(),500, null, null, null) ;
+		GeoResults<OPSlot> slots = opMatcherService.findFreeSlotList(TUWIEN.getX(),TUWIEN.getY(),500, null, null,
+				null, null) ;
 		assertEquals(3, slots.getContent().size());
 	}
 
 	@Test
 	 public void testFindAllEyeSlots() {
-		GeoResults<OPSlot> slots = opMatcher.findFreeSlotList(TUWIEN.getX(),TUWIEN.getY(),500, null, "eye", null) ;
+		GeoResults<OPSlot> slots = opMatcherService.findFreeSlotList(TUWIEN.getX(),TUWIEN.getY(),500, null, "eye",
+				null, null) ;
 		assertEquals(2, slots.getContent().size());
 	}
 
@@ -101,7 +107,8 @@ public class OPMatcherTest {
 
 	@Test
 	public void testFindNearestWithController() {
-		GeoResults<OPSlot> slots = opMatcher.findFreeSlotList(TUWIEN.getX(), TUWIEN.getY(), 20, null, null, null);
+		GeoResults<OPSlot> slots = opMatcherService.findFreeSlotList(TUWIEN.getX(), TUWIEN.getY(), 20, null, null,
+				null, null);
 		List<OPSlot> slots2 = repo.findByPositionNear(TUWIEN, new Distance(20, Metrics.KILOMETERS));
 
 		assertTrue(slots.getContent().size() == slots2.size());
@@ -109,7 +116,7 @@ public class OPMatcherTest {
 		assertTrue(AKHWIEN.equals(new Point(slots.getContent().get(0).getContent().getX(),slots.getContent().get(0).getContent().getY())));
 		assertTrue(AKHWIEN.equals(new Point(slots2.get(0).getX(),slots2.get(0).getY())));
 
-		slots = opMatcher.findFreeSlotList(SCHLADMING.getX(), SCHLADMING.getY(), 300,null, null, null);
+		slots = opMatcherService.findFreeSlotList(SCHLADMING.getX(), SCHLADMING.getY(), 300,null, null, null, null);
 		slots2 = repo.findByPositionNear(SCHLADMING, new Distance(300, Metrics.KILOMETERS));
 
 		assertTrue(slots.getContent().size() == slots2.size());
@@ -117,16 +124,16 @@ public class OPMatcherTest {
 
 	@Test
 	public void testFindAnyNearOPSlot() {
-		GeoResults<OPSlot> slots = opMatcher.findFreeSlotList(TUWIEN.getX(), TUWIEN.getY(), 20, null,  null, null);
+		GeoResults<OPSlot> slots = opMatcherService.findFreeSlotList(TUWIEN.getX(), TUWIEN.getY(), 20, null,  null, null, null);
 		assertEquals(1, slots.getContent().size());
 	}
 
 	@Test
 	public void testFindNearestNeuroOPSlot() {
-		GeoResults<OPSlot> slots = opMatcher.findFreeSlotList(TUWIEN.getX(), TUWIEN.getY(), 20, null, "neuro", null);
+		GeoResults<OPSlot> slots = opMatcherService.findFreeSlotList(TUWIEN.getX(), TUWIEN.getY(), 20, null, "neuro", null, null);
 		assertEquals(0, slots.getContent().size());
 
-		slots = opMatcher.findFreeSlotList(TUWIEN.getX(), TUWIEN.getY(), 300, null, "neuro", null);
+		slots = opMatcherService.findFreeSlotList(TUWIEN.getX(), TUWIEN.getY(), 300, null, "neuro", null, null);
 		assertEquals(1, slots.getContent().size());
 	}
 
@@ -145,23 +152,23 @@ public class OPMatcherTest {
 		slots.add(slot1);
 		slots.add(slot2);
 
-		GeoResults<OPSlot> resultSlots = opMatcher.findFreeSlotList(TUWIEN.getX(), TUWIEN.getY(), 500, null, "eye", slots);
+		GeoResults<OPSlot> resultSlots = opMatcherService.findFreeSlotList(TUWIEN.getX(), TUWIEN.getY(), 500, null, "eye", slots, null);
 		assertEquals(2, resultSlots.getContent().size());
 
 		TimeWindow preferredTimeWindow = new TimeWindow(from1.getTime(), to2.getTime());
 
 		//add a time window --> s.t. op slot at 25.5 at LKHGraz cancels out.
-		resultSlots = opMatcher.findFreeSlotList(TUWIEN.getX(), TUWIEN.getY(), 500, preferredTimeWindow, "eye", slots);
+		resultSlots = opMatcherService.findFreeSlotList(TUWIEN.getX(), TUWIEN.getY(), 500, preferredTimeWindow, "eye", slots, null);
 		assertEquals(1, resultSlots.getContent().size());
 
-		resultSlots = opMatcher.findFreeSlotList(TUWIEN.getX(), TUWIEN.getY(), 20, null, "eye", slots);
+		resultSlots = opMatcherService.findFreeSlotList(TUWIEN.getX(), TUWIEN.getY(), 20, null, "eye", slots, null);
 		assertEquals(1, resultSlots.getContent().size());
 
-		resultSlots = opMatcher.findFreeSlotList(TUWIEN.getX(), TUWIEN.getY(), 500, null, "neuro", slots);
+		resultSlots = opMatcherService.findFreeSlotList(TUWIEN.getX(), TUWIEN.getY(), 500, null, "neuro", slots, null);
 		assertEquals(0, resultSlots.getContent().size());
 
 		slots.remove(slot1);
-		resultSlots = opMatcher.findFreeSlotList(TUWIEN.getX(), TUWIEN.getY(), 500, null, "eye", slots);
+		resultSlots = opMatcherService.findFreeSlotList(TUWIEN.getX(), TUWIEN.getY(), 500, null, "eye", slots, null);
 		assertEquals(1, resultSlots.getContent().size());
 		assertTrue(resultSlots.getContent().get(0).getContent().getX() == LKHGRAZ.getX()
 				&& resultSlots.getContent().get(0).getContent().getY() == LKHGRAZ.getY());

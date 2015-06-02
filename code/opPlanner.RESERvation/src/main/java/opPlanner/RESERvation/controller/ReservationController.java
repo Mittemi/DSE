@@ -120,4 +120,12 @@ public class ReservationController {
         List<Reservation> reservations = repo.findByDoctorId(doctorId);
         return reservations;
     }
+
+    @RequestMapping(value = "/findReservationsByDoctorIdAndTW", method = RequestMethod.GET, produces =
+            "application/json")
+    public List<Reservation> findReservationsByDoctorId(@RequestParam(value="doctorId")String doctorId, @RequestParam
+            (value="start")@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm")Date start, @RequestParam(value="end")@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm")Date end) {
+        List<Reservation> reservations = repo.findByDoctorAndTimeWindow(doctorId,start,end);
+        return reservations;
+    }
 }
