@@ -9,7 +9,7 @@ import javax.validation.constraints.NotNull;
  */
 @ConfigurationProperties(locations = "classpath:opPlanner.yml", ignoreUnknownFields = true, prefix = "application")
 public class OPPlannerProperties {
-   /* public static class MongoDb {
+    public static class MongoDb {
         private int port;
         private String ipOrHostname;
 
@@ -29,7 +29,7 @@ public class OPPlannerProperties {
             this.ipOrHostname = ipOrHostname;
         }
     }
-*/
+
     public static class Klinisys {
         private int port;
         private String ipOrHostname;
@@ -127,26 +127,19 @@ public class OPPlannerProperties {
 
         public void setIpOrHostname(String ipOrHostname) {
             this.ipOrHostname = ipOrHostname;
-        }
-
-        public String getBaseUrl() {
-            return "http://" + getIpOrHostname() + ":" + getPort() + "/";
-        }
     }
+
 /*
     @NotNull
     private MongoDb mongoDb;
 
-    public MongoDb getMongoDBConf() {
+    public MongoDb getMongoDb() {
         return mongoDb;
     }
 
-    public void setMongoDBConf(MongoDb mongoDBConf) {
-        this.mongoDb = mongoDBConf;
+    public void setMongoDb(MongoDb mongoDb) {
+        this.mongoDb = mongoDb;
     }
-*/
-    //TODO thi: mongoDB config
-
 
     @NotNull
     private Reservation reservation;
