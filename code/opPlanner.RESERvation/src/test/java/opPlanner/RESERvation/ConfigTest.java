@@ -1,13 +1,12 @@
-package opPlanner.OPmatcher;
+package opPlanner.RESERvation;
 
-import opPlanner.OPmatcher.repository.OPSlotRepository;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertNotNull;
 
 /**
  * Created by Michael on 02.06.2015.
@@ -18,13 +17,6 @@ public class ConfigTest {
 
     @Autowired
     private OPPlannerProperties plannerProperties;
-
-    private OPSlotRepository repository;
-
-    @Test
-    public void testRepository() {
-        assertNotNull(repository);
-    }
 
     @Test
     public void testConfig() {

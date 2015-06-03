@@ -14,6 +14,6 @@ application:
   notifier:
     port : 9003
     ipOrHostname: 127.0.0.1
-  mongodb:
+  mongoDb:
     port : 27017
-    ipOrHostname: 192.168.59.103
+    ipOrHostname: 192.168.85.128

@@ -35,32 +35,32 @@ public class OPPlannerProperties {
         private String ipOrHostname;
         private String patientUrl;
         private String timeWindowUrl;
-       private String timeWindowAltUrl;
-       private String opSlotUrl;
+        private String timeWindowAltUrl;
+        private String opSlotUrl;
 
-       public String getOpSlotUrl() {
-           return opSlotUrl;
-       }
+        public String getOpSlotUrl() {
+            return opSlotUrl;
+        }
 
-       public void setOpSlotUrl(String opSlotUrl) {
-           this.opSlotUrl = opSlotUrl;
-       }
+        public void setOpSlotUrl(String opSlotUrl) {
+            this.opSlotUrl = opSlotUrl;
+        }
 
-       public String getTimeWindowAltUrl() {
-           return timeWindowAltUrl;
-       }
+        public String getTimeWindowAltUrl() {
+            return timeWindowAltUrl;
+        }
 
-       public void setTimeWindowAltUrl(String timeWindowAltUrl) {
-           this.timeWindowAltUrl = timeWindowAltUrl;
-       }
+        public void setTimeWindowAltUrl(String timeWindowAltUrl) {
+            this.timeWindowAltUrl = timeWindowAltUrl;
+        }
 
         public String getTimeWindowUrl() {
-           return timeWindowUrl;
-       }
+            return timeWindowUrl;
+        }
 
-         public void setTimeWindowUrl(String timeWindowUrl) {
-           this.timeWindowUrl = timeWindowUrl;
-       }
+        public void setTimeWindowUrl(String timeWindowUrl) {
+            this.timeWindowUrl = timeWindowUrl;
+        }
 
         public int getPort() {
             return port;
@@ -127,9 +127,10 @@ public class OPPlannerProperties {
 
         public void setIpOrHostname(String ipOrHostname) {
             this.ipOrHostname = ipOrHostname;
+        }
+
     }
 
-/*
     @NotNull
     private MongoDb mongoDb;
 

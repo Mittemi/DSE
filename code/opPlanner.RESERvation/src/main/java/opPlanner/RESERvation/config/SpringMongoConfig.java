@@ -2,6 +2,8 @@ package opPlanner.RESERvation.config;
 
 import com.mongodb.Mongo;
 import com.mongodb.MongoClient;
+import opPlanner.RESERvation.OPPlannerProperties;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.mongodb.config.AbstractMongoConfiguration;
@@ -16,15 +18,12 @@ public class SpringMongoConfig extends AbstractMongoConfiguration {
         return "reservationDB";
     }
 
-    //TODO thi: OPPlannerProperties
-
-    //@Autowired
-    //ReservationProperties properties;
+    @Autowired
+    OPPlannerProperties properties;
 
     @Override
     @Bean
     public Mongo mongo() throws Exception {
-        //return new MongoClient(properties.getMongoDBConf().getIpOrHostname());
-        return new MongoClient("192.168.59.103");
+        return new MongoClient(properties.getMongoDb().getIpOrHostname());
     }
 }
