@@ -1,14 +1,14 @@
 package opPlanner.KLINIsys.controller;
 
 import opPlanner.KLINIsys.dto.OpSlotViewModel;
-import opPlanner.KLINIsys.model.Hospital;
-import opPlanner.KLINIsys.model.OpSlot;
 import opPlanner.KLINIsys.service.OpSlotService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+
+import javax.servlet.http.HttpServletResponse;
 
 /**
  * Created by Michael on 13.05.2015.
@@ -21,9 +21,12 @@ public class OpSlotController  {
     private OpSlotService opSlotService;
 
     @RequestMapping(value = "/{id}", method = RequestMethod.DELETE, produces = "application/json")
-    public void deleteSlot(@PathVariable("id") Long id) {
-        opSlotService.deleteSlot(id);
-        // todo: check if we can delete this slot
+    public void deleteSlot(@PathVariable("id") Long id, HttpServletResponse response) {
+        boolean result = opSlotService.deleteSlot(id);
+
+        if (!result) {
+            response.setStatus(500);
+        }
     }
 
     @RequestMapping(value = "/{id}", method = RequestMethod.GET, produces = "application/json")

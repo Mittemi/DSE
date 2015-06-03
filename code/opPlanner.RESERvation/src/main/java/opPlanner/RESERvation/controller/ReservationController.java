@@ -109,6 +109,8 @@ public class ReservationController {
      * @return
      */
 
+    // todo: a list as get parameter won't work in reality... an url has to be shorter than 2000 chars!!!!
+    // todo: thi
     @RequestMapping(value = "/findReservationsByOPSlots", method = RequestMethod.GET, produces = "application/json")
     public List<Reservation> findReservationsByOPSlots(@RequestParam(value="opSlotId")List<String> opSlotIds) {
         List<Reservation> reservations = repo.findByOpSlotIdIn(opSlotIds);

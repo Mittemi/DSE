@@ -27,6 +27,6 @@ public class PublicController {
     @RequestMapping(value = "/", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
     public List<? extends OpSlotViewModel> getOpSlots(@RequestParam(value = "from", required = false)  @DateTimeFormat(pattern = Constants.DATE_FORMAT_STRING) Date dateFrom,
                                                       @RequestParam(value = "to", required = false)  @DateTimeFormat(pattern = Constants.DATE_FORMAT_STRING)Date dateTo) {
-        return opSlotService.getFilteredOpSlots(null, null, null, dateFrom, dateTo);
+        return opSlotService.getFilteredOpSlots(null, null, null, null, dateFrom, dateTo);
     }
 }

@@ -7,13 +7,8 @@ import opPlanner.KLINIsys.model.Patient;
  * Created by Michael on 20.05.2015.
  */
 public class ExtendedOpSlotViewModel extends OpSlotViewModel {
-    public ExtendedOpSlotViewModel(OpSlot opSlot, Patient patient) {
+    public ExtendedOpSlotViewModel(OpSlot opSlot) {
         super(opSlot);
-        if(patient != null) {
-            this.patientName = patient.getName();
-            this.patientId = patient.getId();
-            setFreeSlot(false);
-        }
     }
 
     private String patientName;

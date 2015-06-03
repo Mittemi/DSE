@@ -14,6 +14,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
+import javax.print.Doc;
 import javax.servlet.http.HttpServletResponse;
 import java.util.Date;
 import java.util.List;
@@ -49,6 +50,6 @@ public class DoctorController {
             return null;
         }
 
-        return opSlotService.getFilteredOpSlots(doctor, null, null, dateFrom, dateTo);
+        return opSlotService.getFilteredOpSlots(Doctor.class, doctor, null, null, dateFrom, dateTo);
     }
 }

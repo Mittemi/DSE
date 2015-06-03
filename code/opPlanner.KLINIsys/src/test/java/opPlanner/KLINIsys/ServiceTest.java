@@ -14,6 +14,9 @@ import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Arrays;
+import java.util.List;
+
 import static org.junit.Assert.*;
 
 /**
@@ -84,6 +87,21 @@ public class ServiceTest {
         assertEquals(hospital, loginUserRepository.findByEmail(hospital.geteMail()));
         assertEquals(doctor, loginUserRepository.findByEmail(doctor.geteMail()));
         assertEquals(patient, loginUserRepository.findByEmail(patient.geteMail()));
+    }
+
+    @Test
+    public void findByEmailIn() {
+
+        List<Hospital> hospitals = hospitalRepository.findByeMailIn(Arrays.asList(new String[]{"kh1@dse.at", "h2@dse.at"}));
+        assertEquals(2, hospitals.size());
+        hospitals = hospitalRepository.findByeMailIn(Arrays.asList(new String[]{}));
+        assertEquals(0, hospitals.size());
+        hospitals = hospitalRepository.findByeMailIn(Arrays.asList(new String[]{"kh1@dse.at"}));
+        assertEquals(1, hospitals.size());
+        hospitals = hospitalRepository.findByeMailIn(Arrays.asList(new String[]{"h2@dse.at"}));
+        assertEquals(1, hospitals.size());
+        hospitals = hospitalRepository.findByeMailIn(Arrays.asList(new String[]{"NOT FOUND"}));
+        assertEquals(0, hospitals.size());
     }
 
     @Test

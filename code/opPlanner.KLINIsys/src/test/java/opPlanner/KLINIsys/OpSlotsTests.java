@@ -86,8 +86,6 @@ public class OpSlotsTests {
         for (int i = 0; i < 10; i++) {
             opSlot = DemoDataHelper.createOpSlot(opSlotRepository, doctor, hospital);
         }
-
-
     }
 
     @Test
@@ -98,7 +96,7 @@ public class OpSlotsTests {
 
     @Test
     public void testServicePublic() {
-        List<?extends OpSlotViewModel> opSlots = opSlotService.getFilteredOpSlots(null,null,null,null,null);
+        List<?extends OpSlotViewModel> opSlots = opSlotService.getFilteredOpSlots(null, null,null,null,null,null);
 
         assertNotNull(opSlots);
         assertEquals(opSlots.size(), 10);
@@ -109,27 +107,27 @@ public class OpSlotsTests {
 
     @Test
     public void testServiceHospital() {
-        List<?extends OpSlotViewModel> opSlots = opSlotService.getFilteredOpSlots(null,null,hospital,null,null);
+        List<?extends OpSlotViewModel> opSlots = opSlotService.getFilteredOpSlots(Hospital.class, null,null,hospital,null,null);
 
         assertNotNull(opSlots);
         assertEquals(opSlots.size(), 10);
 
         hospital = hospitalRepository.findByEmail("h2@dse.at");
 
-        opSlots = opSlotService.getFilteredOpSlots(null,null,hospital,null,null);
+        opSlots = opSlotService.getFilteredOpSlots(Hospital.class, null,null,hospital,null,null);
         assertNotNull(opSlots);
         assertEquals(opSlots.size(), 0);
     }
 
     @Test
     public void testServiceDoctor() {
-        List<?extends OpSlotViewModel> opSlots = opSlotService.getFilteredOpSlots(doctor,null,null,null,null);
+        List<?extends OpSlotViewModel> opSlots = opSlotService.getFilteredOpSlots(Doctor.class, doctor,null,null,null,null);
 
         assertNotNull(opSlots);
         assertEquals(opSlots.size(), 10);
 
         // this doc has no slots
-        opSlots = opSlotService.getFilteredOpSlots(doctorRepository.findByEmail("d2@dse.at"),null,null,null,null);
+        opSlots = opSlotService.getFilteredOpSlots(Doctor.class, doctorRepository.findByEmail("d2@dse.at"),null,null,null,null);
         assertNotNull(opSlots);
         assertEquals(opSlots.size(), 0);
     }
@@ -137,19 +135,19 @@ public class OpSlotsTests {
 
     @Test
     public void testServiceBasicDateFiltering() {
-        List<?extends OpSlotViewModel> opSlots = opSlotService.getFilteredOpSlots(null,null,null,null, new Date());
+        List<?extends OpSlotViewModel> opSlots = opSlotService.getFilteredOpSlots(null, null,null,null,null, new Date());
         assertNotNull(opSlots);
         assertEquals(opSlots.size(), 10);   //later therefore we still get all slots
 
-        opSlots = opSlotService.getFilteredOpSlots(null,null,null, new Date(0),new Date(Long.MAX_VALUE));
+        opSlots = opSlotService.getFilteredOpSlots(null, null,null,null, new Date(0),new Date(Long.MAX_VALUE));
         assertNotNull(opSlots);
         assertEquals(opSlots.size(), 10);   //later therefore we still get all slots
 
-        opSlots = opSlotService.getFilteredOpSlots(null,null,null, new Date(Long.MAX_VALUE),null);
+        opSlots = opSlotService.getFilteredOpSlots(null, null,null,null, new Date(Long.MAX_VALUE),null);
         assertNotNull(opSlots);
         assertEquals(opSlots.size(), 0);   //from = MAX
 
-        opSlots = opSlotService.getFilteredOpSlots(null,null,null, null,new Date(0));
+        opSlots = opSlotService.getFilteredOpSlots(null, null,null,null, null,new Date(0));
         assertNotNull(opSlots);
         assertEquals(opSlots.size(), 0);   //to = 0
     }

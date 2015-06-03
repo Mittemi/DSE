@@ -63,6 +63,6 @@ public class PatientController {
             return null;
         }
 
-        return opSlotService.getFilteredOpSlots(null, patient, null, dateFrom, dateTo);
+        return opSlotService.getFilteredOpSlots(Patient.class, null, patient, null, dateFrom, dateTo);
     }
 }
