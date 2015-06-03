@@ -1,20 +1,11 @@
-package opPlanner.OPmatcher.model;
+package opPlanner.KLINIsys.dto;
 
-import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.Document;
-
-
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
- * Created by Thomas on 18.04.2015.
+ * Created by Thomas on 03.06.2015.
  */
-@Document(collection = "freeOPSlots")
-public class OPSlot {
-
-    @Id
+public class OPSlotDTO {
     private String id;
 
     private long hospitalId;
@@ -29,32 +20,16 @@ public class OPSlot {
 
     /**
      *
-     * @param id
      * @param hospitalId
-     * @param x
-     * @param y
-     * @param start
-     * @param end
-     * @param type
-     */
-    public OPSlot(String id, long hospitalId, double x, double y, Date start, Date end, String type) {
-        this.id = id;
-        this.hospitalId = hospitalId;
-        this.start = start;
-        this.end = end;
-        this.position = new double[] {x,y};
-        this.type = type;
-    }
+     * @param x - longitude (längengrad)
 
-    /**
-     *
-     * @param hospitalId
-     * @param x - longitude (laengengrad)
+
      * @param y - latitude (breitengrad)
      * @param start
      * @param end
      */
-    public OPSlot(long hospitalId, double x, double y, Date start, Date end, String type) {
+    public OPSlotDTO(Long id, Long hospitalId, double x, double y, Date start, Date end, String type) {
+        this.id = id.toString();
         this.hospitalId = hospitalId;
         this.start = start;
         this.end = end;
@@ -70,7 +45,8 @@ public class OPSlot {
      * @param end
      * @param type
      */
-    public OPSlot(long hospitalId, double[] position, Date start, Date end, String type) {
+    public OPSlotDTO(Long id, Long hospitalId, double[] position, Date start, Date end, String type) {
+        this.id = id.toString();
         this.hospitalId = hospitalId;
         this.start = start;
         this.end = end;
@@ -78,23 +54,16 @@ public class OPSlot {
         this.type = type;
     }
 
-    public OPSlot() {
+    public OPSlotDTO() {
 
     }
 
-    public String getId() {
-        return id;
-    }
 
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public long getHospitalId() {
+    public Long getHospitalId() {
         return hospitalId;
     }
 
-    public void setHospitalId(long hospitalId) {
+    public void setHospitalId(Long hospitalId) {
         this.hospitalId = hospitalId;
     }
 
@@ -112,6 +81,10 @@ public class OPSlot {
 
     public void setEnd(Date end) {
         this.end = end;
+    }
+
+    public String getId() {
+        return id;
     }
 
     /**
@@ -142,12 +115,4 @@ public class OPSlot {
     public void setType(String type) {
         this.type = type;
     }
-
-    @Override
-    public String toString() {
-        DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm");
-        return "OPSlot [id=" + id +", start=" + formatter.format(start) + ", end=" + formatter.format(end) + ", x=" +
-                getX() + " y=" + getY()+"]";
-    }
-
 }

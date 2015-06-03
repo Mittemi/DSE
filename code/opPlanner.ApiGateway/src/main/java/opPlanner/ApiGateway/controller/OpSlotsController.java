@@ -4,11 +4,20 @@ import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import opPlanner.Shared.OpPlannerProperties;
 import opPlanner.ApiGateway.Constants;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -89,12 +98,50 @@ public class OpSlotsController {
         return "That didn't work out! Try again later!";
     }
 
+    //http://localhost:9002/reservation/reserve?preferredStart=2014-05-20%2010:00&preferredEnd=2016-06-27%2018:00
+    // &preferredPerimeter=500&opSlotType=Demo&doctorId=d1@dse.at&patientId=p1@dse.at
+
+    @PreAuthorize("hasRole('Doctor')")
+    @HystrixCommand(fallbackMethod = "createReservationFallback", groupKey = Constants.GROUP_KEY_RESERVATION)
+    @RequestMapping(value = "/reservation", method = RequestMethod.POST, produces = org.springframework.http
+            .MediaType.APPLICATION_JSON_VALUE)
+    public String createReservation(Authentication auth, String patientId, Date preferredStart, Date preferredEnd,
+                                    Integer preferredPerimeter, String opSlotType) {
+
+        String doctorMail = (String)auth.getPrincipal();
+        MultiValueMap<String, String> map = new LinkedMultiValueMap<String, String>();
+        DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+        map.add("patientId", patientId);
+        map.add("preferredStart", formatter.format(preferredStart));
+        map.add("preferredEnd", formatter.format(preferredEnd));
+        map.add("preferredPerimeter", preferredPerimeter.toString());
+        map.add("opSlotType", opSlotType);
+        URI reservationURI;
+        ResponseEntity<String> result;
+        try {
+            reservationURI = new URI(config.getReservation().buildUrl("reservation/reserve"));
+            result = client.postForEntity(reservationURI, map, String.class);
+        } catch (URISyntaxException e) {
+            return "NOK (URI Problems)";
+        } catch (HttpClientErrorException e) {
+            return "NOK (Reservation was not sucessful)";
+        }
+
+        System.out.println(result.getBody());
+
+        return "OK";
+    }
+
+    /* fallback Hystrix */
+    public String createReservationFallback(Authentication auth, Integer id) {
+        return "That didn't work out! Try again later!";
+    }
+
 
     @PreAuthorize("hasRole('Doctor')")
     @HystrixCommand(fallbackMethod = "deleteReservationFallback", groupKey = Constants.GROUP_KEY_RESERVATION)
     @RequestMapping(value = "/reservation/{id}", method = RequestMethod.DELETE, produces = org.springframework.http.MediaType.APPLICATION_JSON_VALUE)
     public String deleteReservation(Authentication auth, @PathVariable("id") Integer slotId) {
-
         client.delete(config.getReservation().buildUrl("reservation/{id}"), slotId);
 
         System.out.println("Reservation: OK" + slotId);

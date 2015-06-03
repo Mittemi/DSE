@@ -11,9 +11,10 @@ application:
     ipOrHostname: 127.0.0.1
     findOPSlotUrl: "findFreeSlot?preferredPerimeter={preferredPerimeter}&startTime={startTime}&endTime={endTime}&opSlotType={opSlotType}&doctorId={doctorId}&patientId={patientId}"
     deleteFreeOPSlotUrl: "delete/{opSlotId}"
+    addOPSlotByIdUrl: "addOPSlotById/{opSlotId}"
   notifier:
     port : 9003
     ipOrHostname: 127.0.0.1
   mongoDb:
     port : 27017
-    ipOrHostname: 192.168.85.128
+    ipOrHostname: 192.168.59.103

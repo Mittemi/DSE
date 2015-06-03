@@ -24,4 +24,6 @@ public interface ReservationRepository extends MongoRepository<Reservation, Stri
                                                @Param("start")@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm") Date
                                                        dateFrom,
                                                @Param("end")@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm") Date dateTo);
+
+    List<Reservation> deleteReservationByOpSlotId(String opSlotId);
 }

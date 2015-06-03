@@ -44,6 +44,8 @@ public class DemoController {
         Patient patient = DemoDataHelper.createPatient(patientRepository,authService);
         OpSlot opSlot = DemoDataHelper.createOpSlot(opSlotRepository,doctor,hospital);
 
+        DemoDataHelper.createMoreHospitalsWithOPSlots(hospitalRepository,opSlotRepository,authService);
+
         return "Done";
     }
 }

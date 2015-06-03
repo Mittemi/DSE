@@ -81,6 +81,8 @@ public class DemoController {
 
     @RequestMapping(value = "/demo", method = RequestMethod.GET, produces = "application/json")
     public String createDemoData() {
+        repo.deleteAll();
+
         from1 = new GregorianCalendar();
         from1.set(2015, 05, 23, 11, 00);
         from2 = new GregorianCalendar();
@@ -94,13 +96,16 @@ public class DemoController {
         to3 = new GregorianCalendar();
         to3.set(2015, 05, 25, 12, 00);
 
-        OPSlot slotAKHVienna = new OPSlot(1, AKHWIEN.getX(), AKHWIEN.getY(), from1.getTime(), to1.getTime(), "eye");	//akh wien
+        OPSlot slotAKHVienna = new OPSlot("1", 1, AKHWIEN.getX(), AKHWIEN.getY(), from1.getTime(), to1.getTime(), "eye");
+        	//akh wien
         repo.save(slotAKHVienna);
-        OPSlot slotAKHLinz = new OPSlot(2, AKHLINZ.getX(), AKHLINZ.getY(), from2.getTime(), to2.getTime(), "neuro");	//akh linz
+        OPSlot slotAKHLinz = new OPSlot("2", 2, AKHLINZ.getX(), AKHLINZ.getY(), from2.getTime(), to2.getTime(),
+                "neuro");	//akh linz
         repo.save(slotAKHLinz);
-        OPSlot slotLKHGraz = new OPSlot(3, LKHGRAZ.getX(), LKHGRAZ.getY() , from3.getTime(), to3.getTime(), "eye");		//lkh graz
+        OPSlot slotLKHGraz = new OPSlot("3", 3, LKHGRAZ.getX(), LKHGRAZ.getY() , from3.getTime(), to3.getTime(), "eye");
+        		//lkh graz
         repo.save(slotLKHGraz);
-        OPSlot slotLKHGraz2 = new OPSlot(3, LKHGRAZ.getX(), LKHGRAZ.getY() , from1.getTime(), to1.getTime(), "eye"); //lkh graz
+        OPSlot slotLKHGraz2 = new OPSlot("4", 3, LKHGRAZ.getX(), LKHGRAZ.getY() , from1.getTime(), to1.getTime(), "eye"); //lkh graz
         repo.save(slotLKHGraz2);
 
         return "OPMatcher demo data init done";

@@ -87,6 +87,15 @@ public class OPPlannerProperties {
         private String ipOrHostname;
         private String findOPSlotUrl;
         private String deleteFreeOPSlotUrl;
+        private String addOPSlotByIdUrl;
+
+        public String getAddOPSlotByIdUrl() {
+            return addOPSlotByIdUrl;
+        }
+
+        public void setAddOPSlotByIdUrl(String addOPSlotByIdUrl) {
+            this.addOPSlotByIdUrl = addOPSlotByIdUrl;
+        }
 
         public String getDeleteFreeOPSlotUrl() {
             return deleteFreeOPSlotUrl;

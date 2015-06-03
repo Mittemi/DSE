@@ -22,6 +22,7 @@ import org.springframework.hateoas.Link;
 import org.springframework.hateoas.Resource;
 import org.springframework.hateoas.hal.Jackson2HalModule;
 import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageConverter;
@@ -32,6 +33,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
+import javax.xml.ws.Response;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -76,9 +78,19 @@ public class OPMatcherController {
         opMatcherService.addFreeOPSlot(opSlot);
     }
 
-    @RequestMapping(value = "/addOPSlotId", method = RequestMethod.POST, produces = "application/json")
-    public void addFreeOPSlot(String opSlotId) {
-       opMatcherService.addFreeOPSlotById(opSlotId);
+    /**
+     *
+     * @param opSlotId
+     * @return message
+     */
+    @RequestMapping(value = "/addOPSlotById/{opSlotId}", method = RequestMethod.GET, produces = "application/json")
+    public ResponseEntity<String> addFreeOPSlotById(@PathVariable("opSlotId")String opSlotId) {
+       OPSlot opSlot = opMatcherService.addFreeOPSlotById(opSlotId);
+        if (opSlot == null) {
+            return  new ResponseEntity<String>("no op slot with id " + opSlotId + " could have been found/added.",
+                    HttpStatus.NOT_FOUND);
+        }
+       return new ResponseEntity<String>(opSlot.toString(), HttpStatus.OK);
     }
 
     /**

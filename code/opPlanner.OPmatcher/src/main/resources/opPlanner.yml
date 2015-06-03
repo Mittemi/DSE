@@ -6,12 +6,12 @@ application:
     patientUrl: "patient/findPatientByEmail?email={email}"
     timeWindowUrl: "workSchedule/findWorkScheduleByDoctorAndTimeWindow?email={email}&startTime={startTime}&endTime={endTime}"
     timeWindowAltUrl: "timeWindows/search/findByDoctor_EMail?email={email}"
-    opSlotUrl: "/opslot/{id}"
+    opSlotUrl: "opslot/{id}"
   reservation:
     port : 9002
     ipOrHostname: 127.0.0.1
-    reservationByDoctorUrl: "findReservationsByDoctorId?doctorId={doctorId}"
-    findReservationsByDoctorIdAndTWURL : "findReservationsByDoctorIdAndTW?doctorId={doctorId}&start={start}&end={end}"
+    reservationByDoctorUrl: "reservation/findReservationsByDoctorId?doctorId={doctorId}"
+    findReservationsByDoctorIdAndTWURL : "reservation/findReservationsByDoctorIdAndTW?doctorId={doctorId}&start={start}&end={end}"
   opMatcher:
     port : 9001
     ipOrHostname: 127.0.0.1
@@ -20,4 +20,4 @@ application:
     ipOrHostname: 127.0.0.1
   mongoDb:
     port : 27017
-    ipOrHostname: 192.168.85.128
+    ipOrHostname: 192.168.59.103

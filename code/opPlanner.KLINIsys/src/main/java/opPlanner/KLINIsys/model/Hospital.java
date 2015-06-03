@@ -26,6 +26,14 @@ public class Hospital extends LoginUser {
     @Column
     private String address;
 
+    //longitude
+    @Column
+    private double x;
+
+    //latitude
+    @Column
+    private double y;
+
     @OneToMany(mappedBy = "hospital", targetEntity = OpSlot.class)
     private List<OpSlot> opSlots;
 
@@ -55,5 +63,21 @@ public class Hospital extends LoginUser {
 
     public void setAddress(String address) {
         this.address = address;
+    }
+
+    public double getX() {
+        return x;
+    }
+
+    public void setX(double x) {
+        this.x = x;
+    }
+
+    public double getY() {
+        return y;
+    }
+
+    public void setY(double y) {
+        this.y = y;
     }
 }

@@ -3,6 +3,7 @@ package opPlanner.KLINIsys;
 import opPlanner.KLINIsys.model.*;
 import opPlanner.KLINIsys.repository.*;
 import opPlanner.KLINIsys.service.AuthService;
+import org.springframework.data.geo.Point;
 
 import javax.print.Doc;
 import java.util.ArrayList;
@@ -15,20 +16,111 @@ import java.util.List;
  */
 public class DemoDataHelper {
 
+    private static final Point AKHWIEN = new Point(48.220589, 16.346794);
+    private static final Point AKHLINZ = new Point(48.302743, 14.305328);
+    private static final Point LKHGRAZ = new Point(47.081800, 15.466207);
+
+    public static void createMoreHospitalsWithOPSlots(HospitalRepository hospitalRepository,
+                                                      OpSlotRepository opSlotRepository, AuthService authService) {
+
+        GregorianCalendar from1 = new GregorianCalendar();
+        from1.set(2015, 05, 23, 9, 55);
+        GregorianCalendar   from2 = new GregorianCalendar();
+        from2.set(2015, 05, 24, 10, 55);
+        GregorianCalendar  from3 = new GregorianCalendar();
+        from3.set(2015, 05, 25, 11, 55);
+        GregorianCalendar  to1 = new GregorianCalendar();
+        to1.set(2015, 05, 23, 11, 05);
+        GregorianCalendar  to2 = new GregorianCalendar();
+        to2.set(2015, 05, 24, 12, 05);
+        GregorianCalendar  to3 = new GregorianCalendar();
+        to3.set(2015, 05, 25, 13, 05);
+
+        OpSlot opSlot;
+        Hospital akhWien = hospitalRepository.findByEmail("kh1@dse.at");
+
+        if (akhWien == null) {
+            akhWien = new Hospital();
+            akhWien.setName("Krankenhaus 1 - AKH Wien");
+            akhWien.setShortName("AKHW");
+            akhWien.setPassword(authService.encodePassword("password"));
+            akhWien.seteMail("kh1@dse.at");
+            akhWien.setX(AKHWIEN.getX());
+            akhWien.setY(AKHWIEN.getY());
+            hospitalRepository.save(akhWien);
+
+            opSlot = new OpSlot();
+            opSlot.setHospital(akhWien);
+
+            opSlot.setSlotStart(from1.getTime());
+            opSlot.setSlotEnd(to1.getTime());
+
+            opSlot.setType("eye");
+
+            opSlotRepository.save(opSlot);
+
+        }
+        Hospital akhLinz = hospitalRepository.findByEmail("kh2@dse.at");
+        if (akhLinz == null) {
+            akhLinz = new Hospital();
+            akhLinz.setName("Krankenhaus 2 - LKH Graz");
+            akhLinz.setShortName("AKHL");
+            akhLinz.setPassword(authService.encodePassword("password"));
+            akhLinz.seteMail("kh2@dse.at");
+            akhLinz.setX(AKHLINZ.getX());
+            akhLinz.setY(AKHLINZ.getY());
+            hospitalRepository.save(akhLinz);
+
+            opSlot = new OpSlot();
+            opSlot.setHospital(akhLinz);
+
+            opSlot.setSlotStart(from2.getTime());
+            opSlot.setSlotEnd(to2.getTime());
+
+            opSlot.setType("neuro");
+
+            opSlotRepository.save(opSlot);
+        }
+
+        Hospital lkhGraz = hospitalRepository.findByEmail("kh3@dse.at");
+        if (lkhGraz == null) {
+            lkhGraz = new Hospital();
+            lkhGraz.setName("Krankenhaus 3 - LKH Graz");
+            lkhGraz.setShortName("LKHG");
+            lkhGraz.setPassword(authService.encodePassword("password"));
+            lkhGraz.seteMail("kh3@dse.at");
+            lkhGraz.setX(LKHGRAZ.getX());
+            lkhGraz.setY(LKHGRAZ.getY());
+            hospitalRepository.save(lkhGraz);
+
+            opSlot = new OpSlot();
+            opSlot.setHospital(lkhGraz);
+
+            opSlot.setSlotStart(from3.getTime());
+            opSlot.setSlotEnd(to3.getTime());
+
+            opSlot.setType("eye");
+        }
+
+    }
+
     public static Hospital createHospital(HospitalRepository hospitalRepository, AuthService authService) {
-        Hospital hospital = hospitalRepository.findByEmail("kh1@dse.at");
+        Hospital hospital = hospitalRepository.findByEmail("kh0@dse.at");
         if (hospital == null) {
             hospital = new Hospital();
-            hospital.setName("Krankenhaus 1");
-            hospital.setShortName("KH 1");
+            hospital.setName("Krankenhaus 0 - Demo KH");
+            hospital.setShortName("KH 0");
             hospital.setPassword(authService.encodePassword("password"));
-            hospital.seteMail("kh1@dse.at");
-
+            hospital.seteMail("kh0@dse.at");
+            hospital.setX(AKHWIEN.getX());
+            hospital.setY(AKHWIEN.getY());
             hospitalRepository.save(hospital);
         }
 
         return hospital;
     }
+
+
 
     public static Patient createPatient(PatientRepository patientRepository, AuthService authService) {
 

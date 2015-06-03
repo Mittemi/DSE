@@ -2,6 +2,7 @@ package opPlanner.OPmatcher;
 
 import opPlanner.OPmatcher.Service.OPMatcherService;
 import opPlanner.OPmatcher.controller.OPMatcherController;
+import opPlanner.OPmatcher.dto.Reservation;
 import opPlanner.OPmatcher.dto.TimeWindow;
 import opPlanner.OPmatcher.model.OPSlot;
 import opPlanner.OPmatcher.repository.OPSlotRepository;
@@ -73,7 +74,7 @@ public class OPMatcherTest {
 
 	@After
 	public void cleanTestData() {
-		//todo thi: repo.deleteAll();
+		repo.deleteAll();
 	}
 
 	@Test
@@ -155,9 +156,15 @@ public class OPMatcherTest {
 		GeoResults<OPSlot> resultSlots = opMatcherService.findFreeSlotList(TUWIEN.getX(), TUWIEN.getY(), 500, null, "eye", slots, null);
 		assertEquals(2, resultSlots.getContent().size());
 
-		TimeWindow preferredTimeWindow = new TimeWindow(from1.getTime(), to2.getTime());
+		//assume that the doctor has already a reservation on one possible op slot
+		Reservation reservation = new Reservation("1234", from1.getTime(), to1.getTime(), "anyPatient@dse.at", "d1@dse.at");
+		List<Reservation> reservations = new LinkedList<>();
+		reservations.add(reservation);
+		resultSlots = opMatcherService.findFreeSlotList(TUWIEN.getX(), TUWIEN.getY(), 500, null, "eye", slots, reservations);
+		assertEquals(1, resultSlots.getContent().size());
 
 		//add a time window --> s.t. op slot at 25.5 at LKHGraz cancels out.
+		TimeWindow preferredTimeWindow = new TimeWindow(from1.getTime(), to2.getTime());
 		resultSlots = opMatcherService.findFreeSlotList(TUWIEN.getX(), TUWIEN.getY(), 500, preferredTimeWindow, "eye", slots, null);
 		assertEquals(1, resultSlots.getContent().size());
 

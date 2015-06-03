@@ -1,6 +1,8 @@
 package opPlanner.KLINIsys.controller;
 
+import opPlanner.KLINIsys.dto.OPSlotDTO;
 import opPlanner.KLINIsys.dto.OpSlotViewModel;
+import opPlanner.KLINIsys.model.OpSlot;
 import opPlanner.KLINIsys.service.OpSlotService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -30,9 +32,13 @@ public class OpSlotController  {
     }
 
     @RequestMapping(value = "/{id}", method = RequestMethod.GET, produces = "application/json")
-    public OpSlotViewModel getSlotById(@PathVariable("id") Long id) {
-        OpSlotViewModel opSlotViewModel = new OpSlotViewModel(opSlotService.getOPSlotById(id));
-        return opSlotViewModel;
+    public OPSlotDTO getSlotById(@PathVariable("id") Long id) {
+        OpSlot opSlot = opSlotService.getOPSlotById((id));
+        if (opSlot == null) {
+            return null;
+        }
+        OPSlotDTO opSlotDTO = new OPSlotDTO(opSlot.getId(),opSlot.getHospital().getId(), opSlot.getHospital().getX(), opSlot.getHospital().getY(), opSlot.getSlotStart(), opSlot.getSlotEnd(), opSlot.getType());
+        return opSlotDTO;
     }
 
 }

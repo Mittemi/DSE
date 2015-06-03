@@ -8,10 +8,13 @@ import opPlanner.RESERvation.repository.ReservationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
 import java.text.DateFormat;
@@ -22,6 +25,7 @@ import java.util.*;
  * Created by Thomas on 10.05.2015.
  */
 @RestController
+@RequestMapping("/reservation")
 public class ReservationController {
 
     @Autowired
@@ -53,14 +57,15 @@ public class ReservationController {
      * @return the found op slot which is being reserved after executing this method, if no one was found the
      * reservation will not be processed and null is returned.
      */
-    @RequestMapping(value = "/reserve", method = RequestMethod.GET, produces = "application/json")
-    public Reservation reserve(@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm") Date preferredStart, @DateTimeFormat(pattern =
-            "yyyy-MM-dd HH:mm") Date preferredEnd,
+    @RequestMapping(value = "/reserve", method = RequestMethod.POST, produces = "application/json")
+    public ResponseEntity<String> reserve(@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm") Date preferredStart,
+                                       @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm") Date preferredEnd,
                         Integer preferredPerimeter, String opSlotType, String doctorId, String patientId) {
 
-        if (preferredStart == null || preferredEnd == null || preferredPerimeter == null || opSlotType == null || doctorId == null || patientId == null) {
+        if (preferredStart == null || preferredEnd == null || preferredPerimeter == null
+                || opSlotType == null || doctorId == null || patientId == null) {
             System.out.println("RESERvation - reserve(...): Missing parameter");
-            return null;
+            return new ResponseEntity<String>("missing parameter.", HttpStatus.BAD_REQUEST);
         }
 
         Map<String, Object> params = new HashMap<>();
@@ -78,7 +83,8 @@ public class ReservationController {
         //request the op matcher to find one suitable slot
         OPSlot opSlot = restClient.getForObject(url, OPSlot.class, params);
         if (opSlot == null) {
-            return null;
+            //todo thi: notify about failed reservation
+            return new ResponseEntity<String>("no op slot could be found", HttpStatus.NOT_FOUND);
         }
 
         //save the opSlot as reserved
@@ -94,21 +100,47 @@ public class ReservationController {
         params.put("opSlotId", opSlot.getId());
         restClient.delete(url, params);
 
-        //todo thi create method for retrieving reserved doctors' op slots. for checking availability
+        //todo thi: notify about successful reservation
 
-        return reservation;
-
-        //TODO thi: implement reserve
-        //TODO thi: how to call other REST services?
-        //TODO thi: unique id, in order to avoid duplicates
+        return new ResponseEntity<String>("reservation done", HttpStatus.OK);
     }
 
-    /**
-     * finds corresponding reservations of the given opSlots
-     * @param opSlotIds
-     * @return
-     */
 
+    /**
+     * cancels an existing reservation
+     * @param opSlotId
+     * @return cancelled reservation, or null if the corresponding reservation or op slot were not found.
+     */
+    @RequestMapping(value = "/", method = RequestMethod.DELETE, produces = "application/json")
+    public ResponseEntity<Reservation> cancelReservation(String opSlotId) {
+        //todo thi: send notification
+
+        Reservation reservation = null;
+        Map<String, Object> params = new HashMap<>();
+        params.put("opSlotId", opSlotId);
+        String url = "http://" + config.getOpMatcher().getIpOrHostname()
+                + ":" + config.getOpMatcher().getPort()
+                + "/" + config.getOpMatcher().getAddOPSlotByIdUrl();
+
+        //request the op matcher to add the op slot to the free op slots again
+        ResponseEntity<String> entity;
+        try {
+            entity = restClient.getForEntity(url, String.class, params);
+        } catch (HttpClientErrorException e) {
+            return new ResponseEntity<Reservation>(reservation, HttpStatus.NOT_FOUND);
+        }
+        String body = entity.getBody();
+
+        System.out.println("Reservation: reservation with op slot : " +body+ " cancelled.");
+
+        //perform actual delete
+        List<Reservation> deletedReservations = repo.deleteReservationByOpSlotId(opSlotId);
+        if (deletedReservations.size() != 1) {
+            return new ResponseEntity<Reservation>(reservation, HttpStatus.NOT_FOUND);
+        }
+        reservation = deletedReservations.get(0);
+        return new ResponseEntity<Reservation>(reservation, HttpStatus.OK);
+    }
     // todo: a list as get parameter won't work in reality... an url has to be shorter than 2000 chars!!!!
     // todo: thi
     @RequestMapping(value = "/findReservationsByOPSlots", method = RequestMethod.GET, produces = "application/json")

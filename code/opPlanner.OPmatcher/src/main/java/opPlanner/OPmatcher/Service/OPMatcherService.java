@@ -87,24 +87,31 @@ public class OPMatcherService {
 
         template.indexOps(OPSlot.class).ensureIndex(new GeospatialIndex("position"));
         NearQuery nearQuery = NearQuery.near(x, y).maxDistance(new Distance(preferredPerimeter, Metrics.KILOMETERS));
-
-        //filter by opSlotType
-        Criteria criteria = Criteria.where("type").is(opSlotType);
+        Criteria criteria = new Criteria();
+        List<Criteria> criteriaList = new LinkedList<>();
         Criteria startTimeCriteria = null;
         Criteria endTimeCriteria = null;
 
+        //filter by opSlotType
+        if (opSlotType != null) {
+            criteria = Criteria.where("type").is(opSlotType);
+        }
 
         //filter by preferredTimeWindow
         if (preferredTimeWindow != null) {
             if (preferredTimeWindow.getStartTime() != null) {
                 startTimeCriteria = Criteria.where("start").gte(preferredTimeWindow.getStartTime());
+                criteriaList.add(startTimeCriteria);
             }
             if (preferredTimeWindow.getEndTime() != null) {
                 endTimeCriteria = Criteria.where("end").lte(preferredTimeWindow.getEndTime());
+                criteriaList.add(endTimeCriteria);
             }
         }
 
-        criteria = criteria.andOperator(startTimeCriteria, endTimeCriteria);
+        if (criteriaList.size() > 0) {
+            criteria.andOperator(criteriaList.toArray(new Criteria[criteriaList.size()]));
+        }
         nearQuery.query(new Query(criteria)); //add filter criteria to the geo near query
         GeoResults<OPSlot> slots = template.geoNear(nearQuery, OPSlot.class); //find nearest slots
 
@@ -151,7 +158,7 @@ public class OPMatcherService {
      * @param opSlotId
      */
     public void deleteFreeOPSlot(String opSlotId) {
-        repo.delete(opSlotId);
+       repo.delete(opSlotId);
     }
 
 
@@ -261,20 +268,29 @@ public class OPMatcherService {
         return patient;
     }
 
-    public void addFreeOPSlotById(String opSlotId) {
+    /**
+     * retrieves the op slot with the given id from KLINISys and saves it to the OPMatcher data storage.
+     * @param opSlotId
+     * @return added op slot, null if no op slot could be found from KLiniSys and therefore not be added.
+     */
+    public OPSlot addFreeOPSlotById(String opSlotId) {
         Map<String, Object> params = new HashMap<>();
         params.put("id", opSlotId);
         String url = "http://" + config.getKlinisys().getIpOrHostname()
                 + ":" + config.getKlinisys().getPort()
                 + "/" + config.getKlinisys().getOpSlotUrl();
 
-        //TODO thi: retrieve opslot in right format
-        //Patient patient = restClient.getForObject(url, Patient.class, params);
-
-        //TODO thi: add op slot
+        OPSlot opSlot = restClient.getForObject(url, OPSlot.class, params);
+        if (opSlot != null) {
+            repo.save(opSlot);
+        }
+        return opSlot;
     }
 
     private boolean isSlotAlreadyReserved(Date slotStart, Date slotEnd, List<Reservation> reservations) {
+        if (reservations == null) {
+            return  false;
+        }
         for (Reservation reservation : reservations) {
             if (overlap(slotStart, slotEnd, reservation.getStart(), reservation.getEnd())) {
                 return true;
