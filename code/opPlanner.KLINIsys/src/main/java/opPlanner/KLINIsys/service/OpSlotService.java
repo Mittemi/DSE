@@ -2,12 +2,11 @@ package opPlanner.KLINIsys.service;
 
 import opPlanner.KLINIsys.dto.ExtendedOpSlotViewModel;
 import opPlanner.KLINIsys.dto.OpSlotViewModel;
-import opPlanner.KLINIsys.dto.ReservationDTO;
+import opPlanner.KLINIsys.dto.ReservationDto;
 import opPlanner.KLINIsys.model.Doctor;
 import opPlanner.KLINIsys.model.Hospital;
 import opPlanner.KLINIsys.model.OpSlot;
 import opPlanner.KLINIsys.model.Patient;
-import opPlanner.KLINIsys.repository.DoctorRepository;
 import opPlanner.KLINIsys.repository.OpSlotRepository;
 import opPlanner.KLINIsys.repository.PatientRepository;
 import opPlanner.Shared.OpPlannerProperties;
@@ -42,7 +41,7 @@ public class OpSlotService {
     public List<?extends OpSlotViewModel> getFilteredOpSlots(Class<?> type, Doctor doctor, Patient patient, Hospital hospital, Date from, Date to) {
 
         List<OpSlot> opSlots = opSlotRepository.findByHospitalDoctorAndTimeWindow(doctor, hospital, from, to);
-        Map<Long, ReservationDTO> reservationInfos = getReservationDetails(opSlots.stream().map(x -> x.getId()).collect(Collectors.toList()));
+        Map<Long, ReservationDto> reservationInfos = getReservationDetails(opSlots.stream().map(x -> x.getId()).collect(Collectors.toList()));
 
         if (from != null)
             System.out.println("From: " + from);
@@ -73,7 +72,7 @@ public class OpSlotService {
         result.stream().forEach(x -> { if(patients.containsKey(x)) x.setPatientId(patients.get(x).getId()); });
     }
 
-    private OpSlotViewModel enrichBasic(OpSlot opSlot, Map<Long, ReservationDTO> reservationInfos) {
+    private OpSlotViewModel enrichBasic(OpSlot opSlot, Map<Long, ReservationDto> reservationInfos) {
 
         OpSlotViewModel opSlotViewModel = new OpSlotViewModel(opSlot);
         opSlotViewModel.setFreeSlot(true);
@@ -84,7 +83,7 @@ public class OpSlotService {
         return opSlotViewModel;
     }
 
-    private ExtendedOpSlotViewModel enrichExtended(OpSlot opSlot, Map<Long, ReservationDTO> reservationInfos) {
+    private ExtendedOpSlotViewModel enrichExtended(OpSlot opSlot, Map<Long, ReservationDto> reservationInfos) {
 
         ExtendedOpSlotViewModel extendedOpSlotViewModel = new ExtendedOpSlotViewModel(opSlot);
         extendedOpSlotViewModel.setFreeSlot(true);
@@ -96,15 +95,15 @@ public class OpSlotService {
         return extendedOpSlotViewModel;
     }
 
-    public Map<Long, ReservationDTO> getReservationDetails(List<Long> slotIds) {
+    public Map<Long, ReservationDto> getReservationDetails(List<Long> slotIds) {
         Map<String, Object[]> urlVariables = new HashMap<>();
         urlVariables.put("slotIds", slotIds.toArray());
 
-        ReservationDTO[] result = restTemplate.getForObject(config.getReservation().buildUrl("findReservationsByOPSlots?opSlotId={slotIds}"), ReservationDTO[].class, urlVariables);
+        ReservationDto[] result = restTemplate.getForObject(config.getReservation().buildUrl("findReservationsByOPSlots?opSlotId={slotIds}"), ReservationDto[].class, urlVariables);
 
-        Map<Long, ReservationDTO> resultMap = new HashMap<>();
+        Map<Long, ReservationDto> resultMap = new HashMap<>();
 
-        for (ReservationDTO reservationDTO : result) {
+        for (ReservationDto reservationDTO : result) {
             resultMap.put(Long.parseLong(reservationDTO.getOpSlotId()), reservationDTO);
         }
 
@@ -116,7 +115,7 @@ public class OpSlotService {
 
         if(slot == null)    return false;
 
-        Map<Long, ReservationDTO> reservationDetails = getReservationDetails(Arrays.asList(new Long[]{id}));
+        Map<Long, ReservationDto> reservationDetails = getReservationDetails(Arrays.asList(new Long[]{id}));
 
         if(reservationDetails.size() == 0) {
             opSlotRepository.delete(slot);

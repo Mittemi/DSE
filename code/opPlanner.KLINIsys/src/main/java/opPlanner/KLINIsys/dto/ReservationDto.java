@@ -5,7 +5,7 @@ import java.awt.image.Kernel;
 /**
  * Created by Michael on 03.06.2015.
  */
-public class ReservationDTO {
+public class ReservationDto {
 
     private String opSlotId;
     private String patientId;
