@@ -1,16 +1,12 @@
 package opPlanner.KLINIsys.controller;
 
-import opPlanner.KLINIsys.Constants;
 import opPlanner.KLINIsys.dto.OpSlotViewModel;
-import opPlanner.KLINIsys.model.Hospital;
 import opPlanner.KLINIsys.model.Patient;
-import opPlanner.KLINIsys.repository.PatientRepository;
-import opPlanner.KLINIsys.repository.HospitalRepository;
 import opPlanner.KLINIsys.repository.PatientRepository;
 import opPlanner.KLINIsys.service.OpSlotService;
 import opPlanner.KLINIsys.service.PatientService;
+import opPlanner.Shared.Constants;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.repository.query.Param;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;

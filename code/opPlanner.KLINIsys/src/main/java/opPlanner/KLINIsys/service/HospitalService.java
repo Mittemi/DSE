@@ -17,4 +17,8 @@ public class HospitalService {
     public Iterable<Hospital> allHospitals() {
         return hospitalRepository.findAll();
     }
+
+    public Hospital findByEmail(String hospitalMail) {
+        return hospitalRepository.findByEmail(hospitalMail);
+    }
 }

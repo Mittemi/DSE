@@ -1,20 +1,16 @@
 package opPlanner.KLINIsys.controller;
 
-import opPlanner.KLINIsys.Constants;
+
 import opPlanner.KLINIsys.dto.OpSlotViewModel;
 import opPlanner.KLINIsys.model.Doctor;
-import opPlanner.KLINIsys.model.Hospital;
-import opPlanner.KLINIsys.model.Patient;
 import opPlanner.KLINIsys.repository.DoctorRepository;
-import opPlanner.KLINIsys.repository.HospitalRepository;
-import opPlanner.KLINIsys.service.DoctorService;
 import opPlanner.KLINIsys.service.OpSlotService;
+import opPlanner.Shared.Constants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
-import javax.print.Doc;
 import javax.servlet.http.HttpServletResponse;
 import java.util.Date;
 import java.util.List;

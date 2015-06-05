@@ -1,14 +1,22 @@
 package opPlanner.ApiGateway.controller;
 
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
+import com.sun.javafx.fxml.builder.URLBuilder;
 import opPlanner.Shared.OpPlannerProperties;
 import opPlanner.ApiGateway.Constants;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -16,7 +24,7 @@ import java.util.Map;
  * Created by Michael on 18.04.2015.
  */
 @RestController
-@RequestMapping("/opslots")     //important otherwise the security checks won't work
+@RequestMapping("/opslots")
 public class OpSlotsController {
 
     private RestTemplate client;
@@ -71,13 +79,33 @@ public class OpSlotsController {
         return "Service currently down! Try again later...";
     }
 
+    @PreAuthorize("hasRole('Hospital')")
+    //@HystrixCommand(fallbackMethod = "createFallback", groupKey = Constants.GROUP_KEY_KLINISYS)
+    @RequestMapping(value = "/create", method = RequestMethod.PUT)
+    public String create(Authentication auth, @RequestBody String requestBody) {
+
+        System.out.println("API: create slot");
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+
+        HttpEntity<String> entity = new HttpEntity<>(requestBody,headers);
+
+        client.put(config.getKlinisys().buildUrl("opslot/create/" + auth.getPrincipal() + "/"), entity);
+
+        return "OK";
+    }
+
+    public String createFallback(Authentication auth, HttpServletRequest request) {
+        return "That didn't work out! Try again later!";
+    }
+
 
     @PreAuthorize("hasRole('Hospital')")
     @HystrixCommand(fallbackMethod = "deleteOpSlotFallback", groupKey = Constants.GROUP_KEY_KLINISYS)
     @RequestMapping(value = "/{id}", method = RequestMethod.DELETE, produces = org.springframework.http.MediaType.APPLICATION_JSON_VALUE)
     public String deleteOpSlot(Authentication auth, @PathVariable("id") Integer slotId){
 
-        client.delete(config.getKlinisys().buildUrl("opslot/{id}"), slotId);
+        client.delete(config.getKlinisys().buildUrl("opslot/" + auth.getPrincipal() + "/{id}"), slotId);
 
         System.out.println("DeleteOpSlot: OK" + slotId);
 

@@ -26,11 +26,11 @@ public class OpSlot extends AbstractPersistable<Long> {
     @ManyToOne(optional = false, targetEntity = Hospital.class)
     @JoinColumn(name = "hospital_id", referencedColumnName = "id")
     private Hospital hospital;
-
+/*
     @ManyToOne(targetEntity = Doctor.class)
     @JoinColumn(name = "doctor_id", referencedColumnName = "id")
     private Doctor doctor;
-
+*/
     public String getType() {
         return type;
     }
@@ -62,7 +62,7 @@ public class OpSlot extends AbstractPersistable<Long> {
     public void setHospital(Hospital hospital) {
         this.hospital = hospital;
     }
-
+/*
     public Doctor getDoctor() {
         return doctor;
     }
@@ -70,5 +70,5 @@ public class OpSlot extends AbstractPersistable<Long> {
     public void setDoctor(Doctor doctor) {
         this.doctor = doctor;
     }
-
+*/
 }
