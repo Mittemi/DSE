@@ -142,7 +142,7 @@ public class OpSlotsController {
     @HystrixCommand(fallbackMethod = "deleteReservationFallback", groupKey = Constants.GROUP_KEY_RESERVATION)
     @RequestMapping(value = "/reservation/{id}", method = RequestMethod.DELETE, produces = org.springframework.http.MediaType.APPLICATION_JSON_VALUE)
     public String deleteReservation(Authentication auth, @PathVariable("id") Integer slotId) {
-        client.delete(config.getReservation().buildUrl("reservation/{id}"), slotId);
+        client.delete(config.getReservation().buildUrl("reservation/cancelByOpSlotId?opSlotId={id}"), slotId);
     //todo test this
         System.out.println("Reservation: OK" + slotId);
 

@@ -135,8 +135,8 @@ public class ReservationController {
      * @param opSlotId
      * @return cancelled reservation, or null if the corresponding reservation or op slot were not found.
      */
-    @RequestMapping(value = "/", method = RequestMethod.DELETE, produces = "application/json")
-    public ResponseEntity<Reservation> cancelReservation(String opSlotId) {
+    @RequestMapping(value = "/cancelByOpSlotId", method = RequestMethod.DELETE, produces = "application/json")
+    public ResponseEntity<Reservation> cancelReservation(@RequestParam String opSlotId) {
         //todo thi: send notification
 
         Reservation reservation = null;
