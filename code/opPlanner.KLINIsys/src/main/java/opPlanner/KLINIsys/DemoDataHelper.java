@@ -188,7 +188,7 @@ public class DemoDataHelper {
 
     public static OpSlot createOpSlot(OpSlotRepository opSlotRepository, Doctor doctor, Hospital hospital) {
         OpSlot opSlot = new OpSlot();
-        opSlot.setDoctor(doctor);
+     //   opSlot.setDoctor(doctor);
         opSlot.setHospital(hospital);
 
         opSlot.setSlotStart(new Date());

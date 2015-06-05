@@ -1,10 +1,8 @@
 package opPlanner.KLINIsys.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.fasterxml.jackson.databind.ser.std.DateSerializer;
-import opPlanner.KLINIsys.Constants;
 import opPlanner.KLINIsys.model.OpSlot;
+import opPlanner.Shared.Constants;
 
 import java.util.Date;
 
@@ -38,10 +36,10 @@ public class OpSlotViewModel {
         this.type = opSlot.getType();
         this.slotStart = opSlot.getSlotStart();
         this.slotEnd = opSlot.getSlotEnd();
-        if(opSlot.getDoctor() != null) {
+        /*if(opSlot.getDoctor() != null) {
             this.doctorName = opSlot.getDoctor().getName();
             this.doctorId = opSlot.getDoctor().getId();
-        }
+        }*/
         this.hospitalId = opSlot.getHospital().getId();
         this.hospitalName = opSlot.getHospital().getShortName();
         freeSlot = true;

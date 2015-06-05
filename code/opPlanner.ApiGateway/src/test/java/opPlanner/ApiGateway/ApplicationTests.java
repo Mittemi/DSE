@@ -23,6 +23,7 @@ public class ApplicationTests {
 	@Test
 	public void configTest() {
 		assertNotNull(config);
-
+		assertNotNull(config.getReservation());
+		assertNotNull(config.getReservation().getIpOrHostname());
 	}
 }

@@ -1,6 +1,7 @@
 package opPlanner.KLINIsys.service;
 
 import opPlanner.KLINIsys.dto.ExtendedOpSlotViewModel;
+import opPlanner.Shared.dto.NotificationDTO;
 import opPlanner.KLINIsys.dto.OpSlotViewModel;
 import opPlanner.KLINIsys.dto.ReservationDto;
 import opPlanner.KLINIsys.model.Doctor;
@@ -11,6 +12,9 @@ import opPlanner.KLINIsys.repository.OpSlotRepository;
 import opPlanner.KLINIsys.repository.PatientRepository;
 import opPlanner.Shared.OpPlannerProperties;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -40,7 +44,7 @@ public class OpSlotService {
 
     public List<?extends OpSlotViewModel> getFilteredOpSlots(Class<?> type, Doctor doctor, Patient patient, Hospital hospital, Date from, Date to) {
 
-        List<OpSlot> opSlots = opSlotRepository.findByHospitalDoctorAndTimeWindow(doctor, hospital, from, to);
+        List<OpSlot> opSlots = opSlotRepository.findByHospitalAndTimeWindow(hospital, from, to);
         Map<Long, ReservationDto> reservationInfos = getReservationDetails(opSlots.stream().map(x -> x.getId()).collect(Collectors.toList()));
 
         if (from != null)
@@ -110,15 +114,19 @@ public class OpSlotService {
         return resultMap;
     }
 
-    public boolean deleteSlot(Long id) {
+    public boolean deleteSlot(String email, Long id) {
         OpSlot slot = opSlotRepository.findOne(id);
 
         if(slot == null)    return false;
+
+        if(!slot.getHospital().geteMail().equals(email))
+            return false;
 
         Map<Long, ReservationDto> reservationDetails = getReservationDetails(Arrays.asList(new Long[]{id}));
 
         if(reservationDetails.size() == 0) {
             opSlotRepository.delete(slot);
+            // notification ??
             return true;
         }
         return false;
@@ -138,4 +146,31 @@ public class OpSlotService {
     }
 
 
+    /**
+     * creates the slot if all fields are valid otherwise it does nothing
+     * @param hospital
+     * @param opSlot
+     */
+    public void createSlot(Hospital hospital, OpSlot opSlot) {
+
+        opSlot.setHospital(hospital);
+
+        // date required and start < end
+        if(opSlot.getSlotStart() == null ||opSlot.getSlotEnd() == null ||opSlot.getSlotStart().after(opSlot.getSlotEnd()))
+            return;
+
+        //future slots only
+        if(opSlot.getSlotStart().before(new Date()))
+            return;
+
+        // type required
+        if(opSlot.getType() == null)
+            return;
+
+        // hospital required
+        if(opSlot.getHospital() == null)
+            return;
+
+        opSlotRepository.save(opSlot);
+    }
 }

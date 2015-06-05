@@ -30,6 +30,7 @@ repositories {
 
 
 dependencies {
+    compile project(':..:opPlanner.Shared')
     compile("org.springframework.boot:spring-boot-starter-data-mongodb")
     compile("org.springframework.boot:spring-boot-starter-data-rest")
     testCompile("org.springframework.boot:spring-boot-starter-test")

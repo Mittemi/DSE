@@ -6,5 +6,6 @@ package opPlanner.ApiGateway;
 public class Constants {
     public static final String GROUP_KEY_KLINISYS = "klinisys";
     public static final String GROUP_KEY_RESERVATION = "reservation";
+    public static final String GROUP_KEY_NOTIFICATION = "notification";
     public static final String GROUP_KEY_AUTH = GROUP_KEY_KLINISYS;
 }
