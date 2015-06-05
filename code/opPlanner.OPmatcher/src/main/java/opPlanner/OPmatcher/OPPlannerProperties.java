@@ -37,6 +37,15 @@ public class OPPlannerProperties {
         private String timeWindowUrl;
         private String timeWindowAltUrl;
         private String opSlotUrl;
+        private String opSlotListUrl;
+
+        public String getOpSlotListUrl() {
+            return opSlotListUrl;
+        }
+
+        public void setOpSlotListUrl(String opSlotListUrl) {
+            this.opSlotListUrl = opSlotListUrl;
+        }
 
         public String getOpSlotUrl() {
             return opSlotUrl;
@@ -96,6 +105,15 @@ public class OPPlannerProperties {
         private String ipOrHostname;
         private String reservationByDoctorUrl;
         private String findReservationsByDoctorIdAndTWURL;
+        private String findAllReservationsUrl;
+
+        public String getFindAllReservationsUrl() {
+            return findAllReservationsUrl;
+        }
+
+        public void setFindAllReservationsUrl(String findAllReservationsUrl) {
+            this.findAllReservationsUrl = findAllReservationsUrl;
+        }
 
         public String getFindReservationsByDoctorIdAndTWURL() {
             return findReservationsByDoctorIdAndTWURL;

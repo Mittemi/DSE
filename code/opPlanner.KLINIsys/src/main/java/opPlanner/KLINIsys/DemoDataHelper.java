@@ -95,11 +95,17 @@ public class DemoDataHelper {
 
             opSlot = new OpSlot();
             opSlot.setHospital(lkhGraz);
-
             opSlot.setSlotStart(from3.getTime());
             opSlot.setSlotEnd(to3.getTime());
-
             opSlot.setType("eye");
+            opSlotRepository.save(opSlot);
+
+            opSlot = new OpSlot();
+            opSlot.setHospital(lkhGraz);
+            opSlot.setSlotStart(from1.getTime());
+            opSlot.setSlotEnd(to1.getTime());
+            opSlot.setType("eye");
+            opSlotRepository.save(opSlot);
         }
 
     }

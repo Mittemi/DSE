@@ -129,6 +129,10 @@ public class OpSlotService {
         return opSlotRepository.findByHospital_EMail(hospital.geteMail());
     }
 
+    public Iterable<OpSlot> allOpSlots() {
+        return opSlotRepository.findAll();
+    }
+
     public OpSlot getOPSlotById(Long id) {
         return opSlotRepository.findOne(id);
     }

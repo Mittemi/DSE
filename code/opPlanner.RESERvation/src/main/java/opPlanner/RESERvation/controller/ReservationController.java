@@ -15,8 +15,11 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.HttpClientErrorException;
+import org.springframework.web.client.HttpServerErrorException;
+import org.springframework.web.client.ResourceAccessException;
 import org.springframework.web.client.RestTemplate;
 
+import javax.xml.ws.Response;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -42,6 +45,16 @@ public class ReservationController {
     public ReservationController()
     {
         restClient = new RestTemplate();
+    }
+
+
+    @RequestMapping(value = "/findReservationsByPatientIdAndTW", method = RequestMethod.GET, produces = "application/json")
+    public List<Reservation> findReservationsByPatientId(@RequestParam(value="patientId")String patientId, @RequestParam
+            (value="start", required = false)@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm")Date start, @RequestParam
+                                                                (value="end", required = false)
+                                                        @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm")Date end) {
+        List<Reservation> reservations = repo.findByPatientAndTimeWindow(patientId,start,end);
+        return reservations;
     }
 
     /**
@@ -81,7 +94,18 @@ public class ReservationController {
                 + "/" + config.getOpMatcher().getFindOPSlotUrl();
 
         //request the op matcher to find one suitable slot
-        OPSlot opSlot = restClient.getForObject(url, OPSlot.class, params);
+        ResponseEntity<OPSlot> response;
+        try {
+            response = restClient.getForEntity(url, OPSlot.class, params);
+        } catch (HttpServerErrorException e) {
+            //todo thi: notify about failed reservation
+            return new ResponseEntity<String>("OP Matcher does not work properly: \n" + e.getMessage(), HttpStatus
+                    .NOT_FOUND);
+        } catch (ResourceAccessException e) {
+            return new ResponseEntity<String>("OP Matcher is not accessible: \n" + e.getMessage(), HttpStatus
+                    .NOT_FOUND);
+        }
+        OPSlot opSlot = response.getBody();
         if (opSlot == null) {
             //todo thi: notify about failed reservation
             return new ResponseEntity<String>("no op slot could be found", HttpStatus.NOT_FOUND);
@@ -158,8 +182,18 @@ public class ReservationController {
     @RequestMapping(value = "/findReservationsByDoctorIdAndTW", method = RequestMethod.GET, produces =
             "application/json")
     public List<Reservation> findReservationsByDoctorId(@RequestParam(value="doctorId")String doctorId, @RequestParam
-            (value="start")@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm")Date start, @RequestParam(value="end")@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm")Date end) {
-        List<Reservation> reservations = repo.findByDoctorAndTimeWindow(doctorId,start,end);
+            (value="start", required = false)@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm")Date start, @RequestParam
+            (value="end", required = false)
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm")Date end) {
+        List<Reservation> reservations = repo.findByDoctorAndTimeWindow(doctorId, start, end);
         return reservations;
     }
+
+    @RequestMapping(value = "/findAllReservations", method = RequestMethod.GET, produces = "application/json")
+    public List<Reservation> findAllReservations() {
+        List<Reservation> reservations = repo.findAll();
+        return reservations;
+    }
+
+
 }

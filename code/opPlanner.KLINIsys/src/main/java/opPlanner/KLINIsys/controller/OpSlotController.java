@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletResponse;
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  * Created by Michael on 13.05.2015.
@@ -39,6 +41,18 @@ public class OpSlotController  {
         }
         OPSlotDTO opSlotDTO = new OPSlotDTO(opSlot.getId(),opSlot.getHospital().getId(), opSlot.getHospital().getX(), opSlot.getHospital().getY(), opSlot.getSlotStart(), opSlot.getSlotEnd(), opSlot.getType());
         return opSlotDTO;
+    }
+
+    @RequestMapping(value = "/list", method = RequestMethod.GET, produces = "application/json")
+    public List<OPSlotDTO> getAllSlots() {
+        Iterable<OpSlot> opSlotList = opSlotService.allOpSlots();
+        List<OPSlotDTO> opSlotDTOList = new LinkedList<OPSlotDTO>();
+        OPSlotDTO opSlotDTO;
+        for (OpSlot opSlot : opSlotList) {
+            opSlotDTO = new OPSlotDTO(opSlot.getId(),opSlot.getHospital().getId(), opSlot.getHospital().getX(), opSlot.getHospital().getY(), opSlot.getSlotStart(), opSlot.getSlotEnd(), opSlot.getType());
+            opSlotDTOList.add(opSlotDTO);
+        }
+       return opSlotDTOList;
     }
 
 }

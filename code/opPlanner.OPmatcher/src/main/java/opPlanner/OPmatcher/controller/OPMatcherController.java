@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import opPlanner.OPmatcher.OPPlannerProperties;
 import opPlanner.OPmatcher.Service.OPMatcherService;
+import opPlanner.OPmatcher.Service.OPMatcherServicesNotAvailableException;
 import opPlanner.OPmatcher.dto.Patient;
 import opPlanner.OPmatcher.dto.Reservation;
 import opPlanner.OPmatcher.dto.TimeWindow;
@@ -62,10 +63,17 @@ public class OPMatcherController {
      * opSlotType is null or simply if the work schedule of the doctor could not be retrieved.
      */
     @RequestMapping(value = "/findFreeSlot", method = RequestMethod.GET, produces = "application/json")
-    public OPSlot findFreeSlot(Integer preferredPerimeter, TimeWindow preferredTimeWindow, String opSlotType,
-                                    String doctorId, String patientId) {
-        OPSlot chosenSlot = opMatcherService.findFreeSlot(preferredPerimeter, preferredTimeWindow, opSlotType, doctorId, patientId);
-        return chosenSlot;
+    public ResponseEntity<OPSlot> findFreeSlot(Integer preferredPerimeter,
+                                               TimeWindow preferredTimeWindow, String opSlotType,
+                                               String doctorId, String patientId) {
+        OPSlot chosenSlot = null;
+        try {
+            chosenSlot = opMatcherService.findFreeSlot(preferredPerimeter, preferredTimeWindow, opSlotType, doctorId, patientId);
+        } catch (OPMatcherServicesNotAvailableException e) {
+            System.out.println(e.getMessage());
+            return new ResponseEntity<OPSlot>(chosenSlot, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+        return new ResponseEntity<OPSlot>(chosenSlot, HttpStatus.OK);
     }
 
     /**

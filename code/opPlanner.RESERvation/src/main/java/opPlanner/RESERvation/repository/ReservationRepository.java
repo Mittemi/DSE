@@ -19,11 +19,19 @@ public interface ReservationRepository extends MongoRepository<Reservation, Stri
 
     List<Reservation> findByDoctorId(String doctorId);
 
-    @Query("{ doctorId: ?0, start: { $gt: ?1 }, end: { $lt: ?2 }}")
+    List<Reservation> findByPatientId(String patientId);
+
+    @Query("{ doctorId: ?0, start: { $gte: ?1 }, end: { $lte: ?2 }}")
     List<Reservation> findByDoctorAndTimeWindow(@Param("doctorId")String doctorId,
                                                @Param("start")@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm") Date
                                                        dateFrom,
                                                @Param("end")@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm") Date dateTo);
+
+    @Query("{ patientId: ?0, start: { $gte: ?1 }, end: { $lte: ?2 }}")
+    List<Reservation> findByPatientAndTimeWindow(@Param("patientId")String patientId,
+                                                @Param("start")@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm") Date
+                                                        dateFrom,
+                                                @Param("end")@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm") Date dateTo);
 
     List<Reservation> deleteReservationByOpSlotId(String opSlotId);
 }

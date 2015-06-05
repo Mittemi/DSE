@@ -20,6 +20,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.client.RestTemplate;
 
+import javax.annotation.PostConstruct;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -45,6 +46,7 @@ public class OPMatcherService {
         restClient = new RestTemplate();
     }
 
+
     public OPSlot findFreeSlot(Integer preferredPerimeter, TimeWindow preferredTimeWindow, String opSlotType,
                                String doctorId, String patientId) {
         OPSlot chosenSlot = null;
@@ -67,7 +69,6 @@ public class OPMatcherService {
         chosenSlot = getEarliestOPSlot(slots);
         //TODO thi: notification, because of successful op slot matching
         return chosenSlot;
-
     }
 
     /**

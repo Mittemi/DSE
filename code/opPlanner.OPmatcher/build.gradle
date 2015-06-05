@@ -32,10 +32,16 @@ repositories {
 dependencies {
     compile("org.springframework.boot:spring-boot-starter-data-mongodb")
     compile("org.springframework.boot:spring-boot-starter-data-rest")
+    compile("org.springframework.boot:spring-boot-starter-aop:1.2.4.RELEASE")
+    compile("org.aspectj:aspectjrt:1.8.5")
+    compile("org.aspectj:aspectjweaver:1.8.5")
     testCompile("org.springframework.boot:spring-boot-starter-test")
     testCompile('junit:junit:4.10')
 }
 
+springBoot {
+    mainClass = "opPlanner.OPmatcher.Application"
+}
 
 eclipse {
     classpath {

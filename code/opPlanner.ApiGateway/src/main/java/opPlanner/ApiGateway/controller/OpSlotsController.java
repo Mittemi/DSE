@@ -143,7 +143,7 @@ public class OpSlotsController {
     @RequestMapping(value = "/reservation/{id}", method = RequestMethod.DELETE, produces = org.springframework.http.MediaType.APPLICATION_JSON_VALUE)
     public String deleteReservation(Authentication auth, @PathVariable("id") Integer slotId) {
         client.delete(config.getReservation().buildUrl("reservation/{id}"), slotId);
-
+    //todo test this
         System.out.println("Reservation: OK" + slotId);
 
         return "OK";

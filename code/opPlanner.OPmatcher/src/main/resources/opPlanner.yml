@@ -7,11 +7,13 @@ application:
     timeWindowUrl: "workSchedule/findWorkScheduleByDoctorAndTimeWindow?email={email}&startTime={startTime}&endTime={endTime}"
     timeWindowAltUrl: "timeWindows/search/findByDoctor_EMail?email={email}"
     opSlotUrl: "opslot/{id}"
+    opSlotListUrl: "opslot/list"
   reservation:
     port : 9002
     ipOrHostname: 127.0.0.1
     reservationByDoctorUrl: "reservation/findReservationsByDoctorId?doctorId={doctorId}"
     findReservationsByDoctorIdAndTWURL : "reservation/findReservationsByDoctorIdAndTW?doctorId={doctorId}&start={start}&end={end}"
+    findAllReservationsUrl: "reservation/findAllReservations"
   opMatcher:
     port : 9001
     ipOrHostname: 127.0.0.1
