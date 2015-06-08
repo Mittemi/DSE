@@ -128,12 +128,18 @@ public class OpSlotsTests {
         List<?extends OpSlotListDTO> opSlots = opSlotService.getFilteredOpSlots(Doctor.class, doctor,null,null,null,null);
 
         assertNotNull(opSlots);
-        assertEquals(opSlots.size(), 10);
 
-        // this doc has no slots
-        opSlots = opSlotService.getFilteredOpSlots(Doctor.class, doctorRepository.findByEmail("d2@dse.at"),null,null,null,null);
-        assertNotNull(opSlots);
-        assertEquals(opSlots.size(), 0);
+        // only really relevant when data is available at the reservation
+        for (OpSlotListDTO opSlot : opSlots) {
+            assertEquals(ExtendedOpSlotListDTO.class, opSlot.getClass());
+
+            ExtendedOpSlotListDTO extendedOpSlotListDTO = (ExtendedOpSlotListDTO) opSlot;
+            assertNotNull(extendedOpSlotListDTO.getDoctorId());
+            assertNotNull(extendedOpSlotListDTO.getDoctorName());
+            assertNotNull(extendedOpSlotListDTO.getDoctorName());
+            assertNotNull(extendedOpSlotListDTO.getPatientId());
+            assertNotNull(extendedOpSlotListDTO.getPatientName());
+        }
     }
 
 

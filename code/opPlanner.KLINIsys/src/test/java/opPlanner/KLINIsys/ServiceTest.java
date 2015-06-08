@@ -97,11 +97,11 @@ public class ServiceTest {
     @Test
     public void findByEmailIn() {
 
-        List<Hospital> hospitals = hospitalRepository.findByeMailIn(Arrays.asList(new String[]{"kh1@dse.at", "h2@dse.at"}));
+        List<Hospital> hospitals = hospitalRepository.findByeMailIn(Arrays.asList(new String[]{"kh0@dse.at", "h2@dse.at"}));
         assertEquals(2, hospitals.size());
         hospitals = hospitalRepository.findByeMailIn(Arrays.asList(new String[]{}));
         assertEquals(0, hospitals.size());
-        hospitals = hospitalRepository.findByeMailIn(Arrays.asList(new String[]{"kh1@dse.at"}));
+        hospitals = hospitalRepository.findByeMailIn(Arrays.asList(new String[]{"kh0@dse.at"}));
         assertEquals(1, hospitals.size());
         hospitals = hospitalRepository.findByeMailIn(Arrays.asList(new String[]{"h2@dse.at"}));
         assertEquals(1, hospitals.size());
@@ -112,11 +112,11 @@ public class ServiceTest {
     @Test
     public void findAfterDelete() {
 
-        Hospital h = hospitalRepository.findByName("Krankenhaus 1").get(0);
+        Hospital h = hospitalRepository.findByName("Krankenhaus 2").get(0);
 
         hospitalRepository.delete(h);
 
-        assertTrue(hospitalRepository.findByName("Krankenhaus 1").size() == 0);
+        assertTrue(hospitalRepository.findByName("Krankenhaus 2").size() == 0);
     }
 
     @Test
