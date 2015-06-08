@@ -152,6 +152,7 @@ public class DemoDataHelper {
         if(doctor == null) {
             doctor = new Doctor();
             doctor.seteMail("d1@dse.at");
+            doctor.setName("The one and only doc");
             doctor.setPassword(authService.encodePassword("password"));
 
             doctorRepository.save(doctor);

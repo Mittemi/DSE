@@ -1,5 +1,6 @@
 package opPlanner.KLINIsys.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import opPlanner.KLINIsys.model.OpSlot;
 import opPlanner.KLINIsys.model.Patient;
 
@@ -12,6 +13,17 @@ public class ExtendedOpSlotViewModel extends OpSlotViewModel {
     }
 
     private String patientName;
+
+    @JsonIgnore
+    private String patientEmail;
+
+    public String getPatientEmail() {
+        return patientEmail;
+    }
+
+    public void setPatientEmail(String patientEmail) {
+        this.patientEmail = patientEmail;
+    }
 
     private Long patientId;
 

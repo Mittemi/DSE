@@ -80,7 +80,7 @@ public class ApplicationTests {
 		opSlotIdList.add("2");
 		opSlotIdList.add("3");
 		opSlotIdList.add("4");
-		List<Reservation> reservations = reservationController.findReservationsByOPSlots(opSlotIdList);
+		List<Reservation> reservations = reservationController.findReservationsByOPSlots(opSlotIdList.toArray(new String[opSlotIdList.size()]));
 		assertEquals("not all reservations found", 4, reservations.size());
 	}
 
@@ -98,30 +98,30 @@ public class ApplicationTests {
 
 	@Test
 	public void findReservationsByPatientId() {
-		List<Reservation> reservations = reservationController.findReservationsByPatientId(patientId1, from1.getTime(), to1.getTime());
+		List<Reservation> reservations = reservationController.findReservationsByPatientIdAndTW(patientId1, from1.getTime(), to1.getTime());
 		assertEquals(1, reservations.size());
 
-		reservations = reservationController.findReservationsByPatientId(patientId1, from1.getTime(), to2.getTime());
+		reservations = reservationController.findReservationsByPatientIdAndTW(patientId1, from1.getTime(), to2.getTime());
 		assertEquals(2, reservations.size());
 
-		reservations = reservationController.findReservationsByPatientId(patientId2, from2.getTime(), to2.getTime());
+		reservations = reservationController.findReservationsByPatientIdAndTW(patientId2, from2.getTime(), to2.getTime());
 		assertEquals(0, reservations.size());
 
-		reservations = reservationController.findReservationsByPatientId(patientId2, from1.getTime(), to3.getTime());
+		reservations = reservationController.findReservationsByPatientIdAndTW(patientId2, from1.getTime(), to3.getTime());
 		assertEquals(2, reservations.size());
 
-		reservations = reservationController.findReservationsByPatientId(patientId2, from1.getTime(), to1.getTime());
+		reservations = reservationController.findReservationsByPatientIdAndTW(patientId2, from1.getTime(), to1.getTime());
 		assertEquals(1, reservations.size());
 	}
 
 	@Test
 	public void cancelReservation() {
-		List<Reservation> reservations = reservationController.findReservationsByPatientId(patientId1, from1.getTime(), to1.getTime());
+		List<Reservation> reservations = reservationController.findReservationsByPatientIdAndTW(patientId1, from1.getTime(), to1.getTime());
 		assertEquals(1, reservations.size());
 
 		repo.deleteReservationByOpSlotId(reservations.get(0).getOpSlotId());
 
-		reservations = reservationController.findReservationsByPatientId(patientId1, from1.getTime(), to1.getTime());
+		reservations = reservationController.findReservationsByPatientIdAndTW(patientId1, from1.getTime(), to1.getTime());
 		assertEquals(0, reservations.size());
 	}
 
@@ -129,7 +129,7 @@ public class ApplicationTests {
 	public void cancelReservationAndReserveAgain() {
 		reservationController.cancelReservation("2");
 		reservationController.reserve(from2.getTime(), to2.getTime(), 500, "eye", doctorId1, patientId1);
-		List<Reservation> reservations = reservationController.findReservationsByPatientId(patientId1,
+		List<Reservation> reservations = reservationController.findReservationsByPatientIdAndTW(patientId1,
 				from1.getTime(), to1.getTime());
 		assertEquals(1, reservations.size());
 	}

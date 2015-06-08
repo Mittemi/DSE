@@ -1,6 +1,7 @@
 package opPlanner.KLINIsys.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import opPlanner.KLINIsys.model.OpSlot;
 import opPlanner.Shared.Constants;
 
@@ -25,6 +26,10 @@ public class OpSlotViewModel {
 
     private Long doctorId;
 
+    @JsonIgnore
+    private String doctorEmail;
+
+
     private String hospitalName;
 
     private Long hospitalId;
@@ -36,13 +41,21 @@ public class OpSlotViewModel {
         this.type = opSlot.getType();
         this.slotStart = opSlot.getSlotStart();
         this.slotEnd = opSlot.getSlotEnd();
-        /*if(opSlot.getDoctor() != null) {
-            this.doctorName = opSlot.getDoctor().getName();
-            this.doctorId = opSlot.getDoctor().getId();
-        }*/
         this.hospitalId = opSlot.getHospital().getId();
         this.hospitalName = opSlot.getHospital().getShortName();
         freeSlot = true;
+    }
+
+    public String getDoctorEmail() {
+        return doctorEmail;
+    }
+
+    public void setDoctorEmail(String doctorEmail) {
+        this.doctorEmail = doctorEmail;
+    }
+
+    public Long getHospitalId() {
+        return hospitalId;
     }
 
     public Long getId() {

@@ -10,10 +10,7 @@ import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.HttpServerErrorException;
 import org.springframework.web.client.ResourceAccessException;
@@ -49,27 +46,35 @@ public class ReservationController {
 
 
     @RequestMapping(value = "/findReservationsByPatientIdAndTW", method = RequestMethod.GET, produces = "application/json")
-    public List<Reservation> findReservationsByPatientId(@RequestParam(value="patientId")String patientId, @RequestParam
-            (value="start", required = false)@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm")Date start, @RequestParam
-                                                                (value="end", required = false)
+    public List<Reservation> findReservationsByPatientIdAndTW(@RequestParam(value="patientId")String patientId, @RequestParam
+            (value="start")@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm")Date start, @RequestParam
+                                                                (value="end")
                                                         @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm")Date end) {
         List<Reservation> reservations = repo.findByPatientAndTimeWindow(patientId,start,end);
         return reservations;
     }
 
-    /**
-     * tries to reserve one op slot, if one was found by the opMatcher.
-     * e.g. http://localhost:9002/reservation?preferredStart=2015-05-20%2010:00&preferredEnd=2015-05-27%2018:00&preferredPerimeter=500&opSlotType=eye&doctorId=d1@dse.at&patientId=p1@dse.at
-     *
-     * @param preferredStart
-     * @param preferredEnd
-     * @param preferredPerimeter
-     * @param opSlotType
-     * @param doctorId - unique doctor email address
-     * @param patientId - unique patient email address
-     * @return the found op slot which is being reserved after executing this method, if no one was found the
-     * reservation will not be processed and null is returned.
-     */
+
+    @RequestMapping(value = "/findReservationsByPatientId", method = RequestMethod.GET, produces = "application/json")
+    public List<Reservation> findReservationsByPatientId(@RequestParam(value="patientId")String patientId) {
+        List<Reservation> reservations = repo.findByPatientId(patientId);
+
+        return reservations;
+    }
+
+        /**
+         * tries to reserve one op slot, if one was found by the opMatcher.
+         * e.g. http://localhost:9002/reservation?preferredStart=2015-05-20%2010:00&preferredEnd=2015-05-27%2018:00&preferredPerimeter=500&opSlotType=eye&doctorId=d1@dse.at&patientId=p1@dse.at
+         *
+         * @param preferredStart
+         * @param preferredEnd
+         * @param preferredPerimeter
+         * @param opSlotType
+         * @param doctorId - unique doctor email address
+         * @param patientId - unique patient email address
+         * @return the found op slot which is being reserved after executing this method, if no one was found the
+         * reservation will not be processed and null is returned.
+         */
     @RequestMapping(value = "/reserve", method = RequestMethod.POST, produces = "application/json")
     public ResponseEntity<String> reserve(@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm") Date preferredStart,
                                        @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm") Date preferredEnd,
@@ -167,9 +172,9 @@ public class ReservationController {
     }
     // todo: a list as get parameter won't work in reality... an url has to be shorter than 2000 chars!!!!
     // todo: thi
-    @RequestMapping(value = "/findReservationsByOPSlots", method = RequestMethod.GET, produces = "application/json")
-    public List<Reservation> findReservationsByOPSlots(@RequestParam(value="opSlotId")List<String> opSlotIds) {
-        List<Reservation> reservations = repo.findByOpSlotIdIn(opSlotIds);
+    @RequestMapping(value = "/findReservationsByOPSlots", method = RequestMethod.POST, produces = "application/json")
+    public List<Reservation> findReservationsByOPSlots(@RequestBody String[] opSlotIds) {
+        List<Reservation> reservations = repo.findByOpSlotIdIn(Arrays.asList(opSlotIds));
         return reservations;
     }
 

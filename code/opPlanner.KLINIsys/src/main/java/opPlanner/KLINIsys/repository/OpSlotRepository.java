@@ -30,6 +30,9 @@ public interface OpSlotRepository extends CrudRepository<OpSlot, Long> {
     //@Query("select s from OpSlot s where (s.doctor.eMail = :email and s.slotStart >= :from and s.slotEnd <= :to)")
     //List<OpSlot> findByDoctorAndTimeWindow(@Param("email")String eMail, @Param("from") Date dateFrom, @Param("to") Date dateTo);
 
+    @Query("select s from OpSlot s where (s.id in (:slotIds))")
+    List<OpSlot> findByIdIn(@Param("slotIds") List<Long> slotIds);
+
     // used for op slots listing
     @Query("select s from OpSlot s where (:hospital is null or s.hospital = :hospital) and (:start is null or s.slotStart >= :start) and (:end is null or s.slotEnd <= :end)")
     List<OpSlot> findByHospitalAndTimeWindow(@Param("hospital") Hospital hospital, @Param("start") Date start, @Param("end") Date end);
