@@ -28,6 +28,11 @@ import static org.junit.Assert.*;
 //@ActiveProfiles("unit-test")
 public class ServiceTest {
 
+
+    /* IMPORTANT REQUIREMENT:
+        These tests require the RESERVATION system to be accessible. They do not depend on the actual data retrieving from the RESERVATION system.
+     */
+
     @Autowired
     private AuthService authService;
 

@@ -1,6 +1,6 @@
 package opPlanner.KLINIsys.controller;
 
-import opPlanner.KLINIsys.dto.OpSlotViewModel;
+import opPlanner.KLINIsys.dto.OpSlotListDTO;
 import opPlanner.KLINIsys.model.Patient;
 import opPlanner.KLINIsys.repository.PatientRepository;
 import opPlanner.KLINIsys.service.OpSlotService;
@@ -34,12 +34,6 @@ public class PatientController {
 
     @Autowired
     private PatientService patientService;
-    
-/*
-    @RequestMapping(value = "/", method = RequestMethod.GET, produces = "application/json")
-    public Iterable<Patient> index() {
-        return patientService.allPatients();
-    }*/
 
     @RequestMapping(value = "/findPatientByEmail", method = RequestMethod.GET, produces = "application/json")
     public Patient getPatientByEmail(@RequestParam("email")String eMail) {
@@ -47,7 +41,7 @@ public class PatientController {
     }
     
     @RequestMapping(value = "/{mail}/", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
-    public List<?extends OpSlotViewModel> getOpSlots(@PathVariable("mail")String mail,
+    public List<?extends OpSlotListDTO> getOpSlots(@PathVariable("mail")String mail,
                                                      @RequestParam(value = "from", required = false)  @DateTimeFormat(pattern = Constants.DATE_FORMAT_STRING) Date dateFrom,
                                                      @RequestParam(value = "to", required = false)  @DateTimeFormat(pattern = Constants.DATE_FORMAT_STRING) Date dateTo,
                                                      HttpServletResponse response) {

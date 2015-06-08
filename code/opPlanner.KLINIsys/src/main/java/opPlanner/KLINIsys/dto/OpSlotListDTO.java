@@ -10,7 +10,7 @@ import java.util.Date;
 /**
  * Created by Michael on 20.05.2015.
  */
-public class OpSlotViewModel {
+public class OpSlotListDTO {
 
     private Long id;
 
@@ -36,7 +36,7 @@ public class OpSlotViewModel {
 
     private boolean freeSlot;
 
-    public OpSlotViewModel(OpSlot opSlot) {
+    public OpSlotListDTO(OpSlot opSlot) {
         this.id = opSlot.getId();
         this.type = opSlot.getType();
         this.slotStart = opSlot.getSlotStart();

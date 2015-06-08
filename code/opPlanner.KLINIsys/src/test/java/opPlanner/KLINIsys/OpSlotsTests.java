@@ -1,7 +1,7 @@
 package opPlanner.KLINIsys;
 
-import opPlanner.KLINIsys.dto.ExtendedOpSlotViewModel;
-import opPlanner.KLINIsys.dto.OpSlotViewModel;
+import opPlanner.KLINIsys.dto.ExtendedOpSlotListDTO;
+import opPlanner.KLINIsys.dto.OpSlotListDTO;
 import opPlanner.KLINIsys.model.Doctor;
 import opPlanner.KLINIsys.model.Hospital;
 import opPlanner.KLINIsys.model.OpSlot;
@@ -29,6 +29,10 @@ import static org.junit.Assert.*;
 @Transactional
 @SpringApplicationConfiguration(classes = Application.class)
 public class OpSlotsTests {
+
+    /* IMPORTANT REQUIREMENT:
+        These tests require the RESERVATION system to be accessible. They do not depend on the actual data retrieving from the RESERVATION system.
+     */
 
     @Autowired
     private AuthService authService;
@@ -96,18 +100,18 @@ public class OpSlotsTests {
 
     @Test
     public void testServicePublic() {
-        List<?extends OpSlotViewModel> opSlots = opSlotService.getFilteredOpSlots(null, null,null,null,null,null);
+        List<?extends OpSlotListDTO> opSlots = opSlotService.getFilteredOpSlots(null, null,null,null,null,null);
 
         assertNotNull(opSlots);
         assertEquals(opSlots.size(), 10);
 
         // we must not get an extended model when using public access!
-        assertFalse(opSlots.stream().anyMatch(x->x instanceof ExtendedOpSlotViewModel));
+        assertFalse(opSlots.stream().anyMatch(x->x instanceof ExtendedOpSlotListDTO));
     }
 
     @Test
     public void testServiceHospital() {
-        List<?extends OpSlotViewModel> opSlots = opSlotService.getFilteredOpSlots(Hospital.class, null,null,hospital,null,null);
+        List<?extends OpSlotListDTO> opSlots = opSlotService.getFilteredOpSlots(Hospital.class, null,null,hospital,null,null);
 
         assertNotNull(opSlots);
         assertEquals(opSlots.size(), 10);
@@ -121,7 +125,7 @@ public class OpSlotsTests {
 
     @Test
     public void testServiceDoctor() {
-        List<?extends OpSlotViewModel> opSlots = opSlotService.getFilteredOpSlots(Doctor.class, doctor,null,null,null,null);
+        List<?extends OpSlotListDTO> opSlots = opSlotService.getFilteredOpSlots(Doctor.class, doctor,null,null,null,null);
 
         assertNotNull(opSlots);
         assertEquals(opSlots.size(), 10);
@@ -135,7 +139,7 @@ public class OpSlotsTests {
 
     @Test
     public void testServiceBasicDateFiltering() {
-        List<?extends OpSlotViewModel> opSlots = opSlotService.getFilteredOpSlots(null, null,null,null,null, new Date());
+        List<?extends OpSlotListDTO> opSlots = opSlotService.getFilteredOpSlots(null, null,null,null,null, new Date());
         assertNotNull(opSlots);
         assertEquals(opSlots.size(), 10);   //later therefore we still get all slots
 

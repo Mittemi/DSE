@@ -1,6 +1,6 @@
 package opPlanner.KLINIsys.controller;
 
-import opPlanner.KLINIsys.dto.OpSlotViewModel;
+import opPlanner.KLINIsys.dto.OpSlotListDTO;
 import opPlanner.KLINIsys.model.Hospital;
 import opPlanner.KLINIsys.repository.HospitalRepository;
 import opPlanner.KLINIsys.service.OpSlotService;
@@ -20,15 +20,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/hospital")
 public class HospitalController {
-/*
-    @Autowired
-    private HospitalService hospitalService;
 
-    @RequestMapping(value = "/", method = RequestMethod.GET, produces = "application/json")
-    public Iterable<Hospital> index() {
-        return hospitalService.allHospitals();
-    }
-*/
     @Autowired
     private OpSlotService opSlotService;
 
@@ -36,7 +28,7 @@ public class HospitalController {
     private HospitalRepository hospitalRepository;
 
     @RequestMapping(value = "/{mail}/", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
-    public List<?extends OpSlotViewModel> getOpSlots(@PathVariable("mail")String mail,
+    public List<?extends OpSlotListDTO> getOpSlots(@PathVariable("mail")String mail,
                                                      @RequestParam(value = "from", required = false)  @DateTimeFormat(pattern = Constants.DATE_FORMAT_STRING) Date dateFrom,
                                                      @RequestParam(value = "to", required = false)  @DateTimeFormat(pattern = Constants.DATE_FORMAT_STRING) Date dateTo,
                                                      HttpServletResponse response) {

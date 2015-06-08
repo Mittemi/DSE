@@ -1,8 +1,7 @@
 package opPlanner.KLINIsys.service;
 
-import com.sun.jndi.toolkit.url.Uri;
-import opPlanner.KLINIsys.dto.ExtendedOpSlotViewModel;
-import opPlanner.KLINIsys.dto.OpSlotViewModel;
+import opPlanner.KLINIsys.dto.ExtendedOpSlotListDTO;
+import opPlanner.KLINIsys.dto.OpSlotListDTO;
 import opPlanner.KLINIsys.dto.ReservationDto;
 import opPlanner.KLINIsys.model.Doctor;
 import opPlanner.KLINIsys.model.Hospital;
@@ -13,7 +12,6 @@ import opPlanner.KLINIsys.repository.OpSlotRepository;
 import opPlanner.KLINIsys.repository.PatientRepository;
 import opPlanner.Shared.OpPlannerProperties;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.hateoas.UriTemplate;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -58,7 +56,7 @@ public class OpSlotService {
      * @param to null or end date required if from is used
      * @return list of op slots depending on type
      */
-    public List<?extends OpSlotViewModel> getFilteredOpSlots(Class<?> type, Doctor doctor, Patient patient, Hospital hospital, Date from, Date to) {
+    public List<?extends OpSlotListDTO> getFilteredOpSlots(Class<?> type, Doctor doctor, Patient patient, Hospital hospital, Date from, Date to) {
 
         if (from != null)
             System.out.println("From: " + from);
@@ -67,8 +65,14 @@ public class OpSlotService {
 
         if (type == null) {      //public
             List<OpSlot> opSlots = opSlotRepository.findByHospitalAndTimeWindow(null, from, to);        // hospital is optional therefore use null to get the unfiltered list
+
+            // get all reservations for the supplied list of ids
             Map<Long, ReservationDto> reservationInfos = getReservationDetails(opSlots.stream().map(x -> x.getId()).collect(Collectors.toList()));
-            List<OpSlotViewModel> result = opSlots.stream().map(x -> enrichBasic(x, reservationInfos)).collect(Collectors.toList());
+
+            // merge klinisys data with reservation data
+            List<OpSlotListDTO> result = opSlots.stream().map(x -> toOpSlotListDTO(x, reservationInfos)).collect(Collectors.toList());
+
+            // set doctor info (mail, id, name)
             fillDoctorInfos(result);
             return result;
         }
@@ -76,7 +80,7 @@ public class OpSlotService {
         // doctor, hospital or patient
         if (type != null) {
 
-            List<ExtendedOpSlotViewModel> result;
+            List<ExtendedOpSlotListDTO> result;
             List<OpSlot> opSlots = null;
             Map<Long, ReservationDto> reservationInfos = null;
 
@@ -85,23 +89,22 @@ public class OpSlotService {
                 opSlots = opSlotRepository.findByHospitalAndTimeWindow(hospital, from, to);
                 List<Long> slotIds = opSlots.stream().map(x -> x.getId()).collect(Collectors.toList());
                 reservationInfos = getReservationDetails(slotIds);
-            }
-
-            if(type.equals(Patient.class)) {
+            } else if(type.equals(Patient.class)) {
 
                 reservationInfos = getReservationDetailsByKey("patientId", patient.geteMail(), from, to);
                 opSlots = opSlotRepository.findByIdIn(new LinkedList<>(reservationInfos.keySet()));
-            }
-
-            if(type.equals(Doctor.class)) {
+            } else if(type.equals(Doctor.class)) {
                 reservationInfos = getReservationDetailsByKey("doctorId", doctor.geteMail(), from, to);
                 opSlots = opSlotRepository.findByIdIn(new LinkedList<>(reservationInfos.keySet()));
             }
 
             final Map<Long, ReservationDto> finalReservationInfos = reservationInfos;
-            result = opSlots.stream().map(x -> enrichExtended(x, finalReservationInfos)).collect(Collectors.toList());
+            // merge the information form reservation and klinisys
+            result = opSlots.stream().map(x -> toExtendedOpSlotListDTO(x, finalReservationInfos)).collect(Collectors.toList());
 
+            // set additional patient info (mail, name, id)
             fillPatientInfos(result);
+            // set additional doctor infos (mail, name, id)
             fillDoctorInfos(result);
             return result;
 
@@ -113,7 +116,7 @@ public class OpSlotService {
      * sets the patient id and name when an email is present
      * @param result
      */
-    private void fillPatientInfos(List<ExtendedOpSlotViewModel> result) {
+    private void fillPatientInfos(List<ExtendedOpSlotListDTO> result) {
         List<String> patientMails = result.stream().filter(x->x.getPatientName() != null).map(x->x.getPatientName()).collect(Collectors.toList());
 
         final Map<String, Patient> patients = patientRepository.findByeMailIn(patientMails).stream().collect(Collectors.toMap(Patient::geteMail, x -> x));
@@ -131,7 +134,7 @@ public class OpSlotService {
      * sets the doctor id and name when an email is present
      * @param result
      */
-    private void fillDoctorInfos(List<?extends OpSlotViewModel> result) {
+    private void fillDoctorInfos(List<?extends OpSlotListDTO> result) {
         List<String> doctorMails = result.stream().filter(x->x.getDoctorName() != null).map(x->x.getDoctorName()).collect(Collectors.toList());
         final Map<String, Doctor> doctors = doctorRepository.findByeMailIn(doctorMails).stream().collect(Collectors.toMap(Doctor::geteMail, x->x));
 
@@ -145,36 +148,37 @@ public class OpSlotService {
     }
 
     /**
+     * Contains only public data
      *
      * @param opSlot the opSlot
      * @param reservationInfos reservation for lookup
      * @return a new instance containing information about a possible reservation
      */
-    private OpSlotViewModel enrichBasic(OpSlot opSlot, Map<Long, ReservationDto> reservationInfos) {
+    private OpSlotListDTO toOpSlotListDTO(OpSlot opSlot, Map<Long, ReservationDto> reservationInfos) {
 
-        OpSlotViewModel opSlotViewModel = new OpSlotViewModel(opSlot);
-        opSlotViewModel.setFreeSlot(true);
+        OpSlotListDTO opSlotListDTO = new OpSlotListDTO(opSlot);
+        opSlotListDTO.setFreeSlot(true);
 
-        if(reservationInfos.containsKey(opSlotViewModel.getId())) {
-            ReservationDto reservationDto = reservationInfos.get(opSlotViewModel.getId());
+        if(reservationInfos.containsKey(opSlotListDTO.getId())) {
+            ReservationDto reservationDto = reservationInfos.get(opSlotListDTO.getId());
 
-            opSlotViewModel.setDoctorEmail(reservationDto.getDoctorId());
-            opSlotViewModel.setDoctorName(reservationDto.getDoctorId());
+            opSlotListDTO.setDoctorEmail(reservationDto.getDoctorId());
+            opSlotListDTO.setDoctorName(reservationDto.getDoctorId());
 
-            opSlotViewModel.setFreeSlot(false);
+            opSlotListDTO.setFreeSlot(false);
         }
-        return opSlotViewModel;
+        return opSlotListDTO;
     }
 
     /**
-     *
+     * Contains private data (patient information)
      * @param opSlot the opSlot
      * @param reservationInfos reservation information for lookup
      * @return an extendedopslotviewmodel containing all basic information as well as the patients name if reserved
      */
-    private ExtendedOpSlotViewModel enrichExtended(OpSlot opSlot, Map<Long, ReservationDto> reservationInfos) {
+    private ExtendedOpSlotListDTO toExtendedOpSlotListDTO(OpSlot opSlot, Map<Long, ReservationDto> reservationInfos) {
 
-        ExtendedOpSlotViewModel extendedOpSlotViewModel = new ExtendedOpSlotViewModel(opSlot);
+        ExtendedOpSlotListDTO extendedOpSlotViewModel = new ExtendedOpSlotListDTO(opSlot);
         extendedOpSlotViewModel.setFreeSlot(true);
 
         if(reservationInfos.containsKey(extendedOpSlotViewModel.getId())) {

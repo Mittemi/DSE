@@ -21,7 +21,7 @@ public class OPSlotDTO {
     /**
      *
      * @param hospitalId
-     * @param x - longitude (längengrad)
+     * @param x - longitude (laengengrad)
 
 
      * @param y - latitude (breitengrad)

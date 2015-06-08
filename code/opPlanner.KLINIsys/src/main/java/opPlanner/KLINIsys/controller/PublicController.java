@@ -1,6 +1,6 @@
 package opPlanner.KLINIsys.controller;
 
-import opPlanner.KLINIsys.dto.OpSlotViewModel;
+import opPlanner.KLINIsys.dto.OpSlotListDTO;
 import opPlanner.KLINIsys.service.OpSlotService;
 import opPlanner.Shared.Constants;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,7 +25,7 @@ public class PublicController {
     private OpSlotService opSlotService;
 
     @RequestMapping(value = "/", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
-    public List<? extends OpSlotViewModel> getOpSlots(@RequestParam(value = "from", required = false)  @DateTimeFormat(pattern = Constants.DATE_FORMAT_STRING) Date dateFrom,
+    public List<? extends OpSlotListDTO> getOpSlots(@RequestParam(value = "from", required = false)  @DateTimeFormat(pattern = Constants.DATE_FORMAT_STRING) Date dateFrom,
                                                       @RequestParam(value = "to", required = false)  @DateTimeFormat(pattern = Constants.DATE_FORMAT_STRING)Date dateTo) {
         return opSlotService.getFilteredOpSlots(null, null, null, null, dateFrom, dateTo);
     }

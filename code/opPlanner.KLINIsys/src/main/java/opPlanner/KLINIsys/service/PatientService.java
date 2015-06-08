@@ -14,10 +14,6 @@ public class PatientService {
     @Autowired
     private PatientRepository patientRepository;
 
-    public Iterable<Patient> allPatients() {
-        return patientRepository.findAll();
-    }
-
     public Patient getPatientByEmail(String eMail) {
         return patientRepository.findByEmail(eMail);
     }

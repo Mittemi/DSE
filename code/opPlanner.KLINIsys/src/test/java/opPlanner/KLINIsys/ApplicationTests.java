@@ -1,6 +1,7 @@
 package opPlanner.KLINIsys;
 
 import opPlanner.KLINIsys.service.HospitalService;
+import opPlanner.KLINIsys.service.OpSlotService;
 import opPlanner.Shared.OpPlannerProperties;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -8,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.core.env.Environment;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.web.client.RestTemplate;
 
 import static org.junit.Assert.*;
 
@@ -45,5 +47,12 @@ public class ApplicationTests {
 		assertNotNull(plannerProperties);
 		assertNotNull(plannerProperties.getReservation());
 		assertNotNull(plannerProperties.getReservation().getBaseUrl());
+	}
+
+	@Test
+	public void testReservationSystemAccessible() {
+		RestTemplate restTemplate = new RestTemplate();
+
+		restTemplate.getForObject(plannerProperties.getReservation().buildUrl(""), String.class);
 	}
 }

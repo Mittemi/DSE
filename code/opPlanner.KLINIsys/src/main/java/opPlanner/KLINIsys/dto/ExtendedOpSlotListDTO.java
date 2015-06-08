@@ -2,13 +2,12 @@ package opPlanner.KLINIsys.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import opPlanner.KLINIsys.model.OpSlot;
-import opPlanner.KLINIsys.model.Patient;
 
 /**
  * Created by Michael on 20.05.2015.
  */
-public class ExtendedOpSlotViewModel extends OpSlotViewModel {
-    public ExtendedOpSlotViewModel(OpSlot opSlot) {
+public class ExtendedOpSlotListDTO extends OpSlotListDTO {
+    public ExtendedOpSlotListDTO(OpSlot opSlot) {
         super(opSlot);
     }
 

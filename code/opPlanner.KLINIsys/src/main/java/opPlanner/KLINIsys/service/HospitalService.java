@@ -14,10 +14,6 @@ public class HospitalService {
     @Autowired
     private HospitalRepository hospitalRepository;
 
-    public Iterable<Hospital> allHospitals() {
-        return hospitalRepository.findAll();
-    }
-
     public Hospital findByEmail(String hospitalMail) {
         return hospitalRepository.findByEmail(hospitalMail);
     }

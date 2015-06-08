@@ -19,16 +19,7 @@ import java.util.List;
 @Repository
 public interface OpSlotRepository extends CrudRepository<OpSlot, Long> {
 
-    //@Query("select s from OpSlot s where (:type is null or s.type = :type) and (:start is null or s.slotStart >= :start) and (:end is null or s.slotEnd <= :end)")
-    //List<OpSlot> findByHospital(@Param("type") String type, @Param("start")@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm") Date start, @Param("end")@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm") Date end);
-
     List<OpSlot> findByHospital_EMail(@Param("type") String eMail);
-
-    //@Query("select s from OpSlot s where (s.doctor.eMail = :email)")
-    //List<OpSlot> findByDoctor(@Param("email")String eMail/*, @Param("from") Date dateFrom, @Param("to") Date dateTo*/);
-
-    //@Query("select s from OpSlot s where (s.doctor.eMail = :email and s.slotStart >= :from and s.slotEnd <= :to)")
-    //List<OpSlot> findByDoctorAndTimeWindow(@Param("email")String eMail, @Param("from") Date dateFrom, @Param("to") Date dateTo);
 
     @Query("select s from OpSlot s where (s.id in (:slotIds))")
     List<OpSlot> findByIdIn(@Param("slotIds") List<Long> slotIds);

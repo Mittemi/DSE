@@ -1,10 +1,8 @@
 package opPlanner.KLINIsys.controller;
 
 import opPlanner.KLINIsys.dto.OPSlotDTO;
-import opPlanner.KLINIsys.dto.OpSlotViewModel;
 import opPlanner.KLINIsys.model.OpSlot;
 import opPlanner.KLINIsys.model.Hospital;
-import opPlanner.KLINIsys.model.OpSlot;
 import opPlanner.KLINIsys.service.HospitalService;
 import opPlanner.KLINIsys.service.OpSlotService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +11,6 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletResponse;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Date;
 
 /**
  * Created by Michael on 13.05.2015.
