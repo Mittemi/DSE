@@ -1,8 +1,8 @@
 package opPlanner.KLINIsys.controller;
 
-import opPlanner.KLINIsys.Constants;
 import opPlanner.KLINIsys.dto.OpSlotViewModel;
 import opPlanner.KLINIsys.service.OpSlotService;
+import opPlanner.Shared.Constants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.MediaType;
