@@ -74,19 +74,19 @@ public class ReservationController {
         return reservations;
     }
 
-        /**
-         * tries to reserve one op slot, if one was found by the opMatcher.
-         * e.g. http://localhost:9002/reservation?preferredStart=2015-05-20%2010:00&preferredEnd=2015-05-27%2018:00&preferredPerimeter=500&opSlotType=eye&doctorId=d1@dse.at&patientId=p1@dse.at
-         *
-         * @param preferredStart
-         * @param preferredEnd
-         * @param preferredPerimeter
-         * @param opSlotType
-         * @param doctorId - unique doctor email address
-         * @param patientId - unique patient email address
-         * @return the found op slot which is being reserved after executing this method, if no one was found the
-         * reservation will not be processed and null is returned.
-         */
+    /**
+     * tries to reserve one op slot, if one was found by the opMatcher.
+     * e.g. http://localhost:9002/reservation?preferredStart=2015-05-20%2010:00&preferredEnd=2015-05-27%2018:00&preferredPerimeter=500&opSlotType=eye&doctorId=d1@dse.at&patientId=p1@dse.at
+     *
+     * @param preferredStart
+     * @param preferredEnd
+     * @param preferredPerimeter
+     * @param opSlotType
+     * @param doctorId - unique doctor email address
+     * @param patientId - unique patient email address
+     * @return the found op slot which is being reserved after executing this method, if no one was found the
+     * reservation will not be processed and null is returned.
+     */
     @RequestMapping(value = "/reserve", method = RequestMethod.POST, produces = "application/json")
     public ResponseEntity<String> reserve(@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm") Date preferredStart,
                                        @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm") Date preferredEnd,
