@@ -158,8 +158,14 @@ public class OPMatcherService {
      * removes one free op slot
      * @param opSlotId
      */
-    public void deleteFreeOPSlot(String opSlotId) {
-       repo.delete(opSlotId);
+    public boolean deleteFreeOPSlot(String opSlotId) {
+
+        boolean exist = repo.exists(opSlotId);
+
+        if(exist) {
+            repo.delete(opSlotId);
+        }
+        return exist;
     }
 
 

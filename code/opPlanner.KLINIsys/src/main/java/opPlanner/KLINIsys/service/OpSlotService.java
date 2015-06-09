@@ -1,6 +1,7 @@
 package opPlanner.KLINIsys.service;
 
 import opPlanner.KLINIsys.dto.ExtendedOpSlotListDTO;
+import opPlanner.KLINIsys.dto.OPSlotDTO;
 import opPlanner.KLINIsys.dto.OpSlotListDTO;
 import opPlanner.KLINIsys.dto.ReservationDto;
 import opPlanner.KLINIsys.model.Doctor;
@@ -12,9 +13,7 @@ import opPlanner.KLINIsys.repository.OpSlotRepository;
 import opPlanner.KLINIsys.repository.PatientRepository;
 import opPlanner.Shared.OpPlannerProperties;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
+import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -257,20 +256,36 @@ public class OpSlotService {
         return toOpSlotLookupMap(result);
     }
 
-
-
-
+    /**
+     * removes the slot from klinisys
+     *  - therefore we need to make sure there exists no reservation for the supplied slot
+     *
+     *  the deletion is done in a 2 step process:
+     *   1) delete the slot from opmatcher, it can't get reserved anymore!
+     *   2) remove the slot from klinisys
+     * @param email
+     * @param id
+     * @return
+     */
     public boolean deleteSlot(String email, Long id) {
         OpSlot slot = opSlotRepository.findOne(id);
 
         if(slot == null)    return false;
 
+        // check permissions
         if(!slot.getHospital().geteMail().equals(email))
             return false;
 
         Map<Long, ReservationDto> reservationDetails = getReservationDetails(Arrays.asList(new Long[]{id}));
 
+        //there is no existing reservation for the slot, not enough to check only here
         if(reservationDetails.size() == 0) {
+
+            // delete the slot from the opmatcher if it is still managed by the opmatcher --> no reservation
+            boolean resultOpMatcher = sendSlotDeletingNotification(slot);
+
+            if(!resultOpMatcher)    return false;
+
             opSlotRepository.delete(slot);
             // notification ??
             return true;
@@ -313,5 +328,34 @@ public class OpSlotService {
             return;
 
         opSlotRepository.save(opSlot);
+
+        sendSlotCreatedNotification(opSlot);
+    }
+
+    /**
+     * Send a notification to the opmatcher about the newly created op slot
+     * @param opSlot
+     */
+    private void sendSlotCreatedNotification(OpSlot opSlot) {
+        //OPSlotDTO opSlotDTO = new OPSlotDTO(opSlot.getId(),opSlot.getHospital().getId(), opSlot.getHospital().getX(), opSlot.getHospital().getY(), opSlot.getSlotStart(), opSlot.getSlotEnd(), opSlot.getType());
+
+        String url = config.getOpMatcher().buildUrl("addOPSlotById/{slotId}");
+
+        restTemplate.getForObject(url, String.class);
+        System.out.println("Create slot notification sent");
+    }
+
+    /**
+     * Notify the opmatcher about the upcomming deletion of the supplied slot
+     * @return is it possible to delete this slot
+     * @param opSlot
+     */
+    private boolean sendSlotDeletingNotification(OpSlot opSlot) {
+
+        String url = config.getOpMatcher().buildUrl("delete/" + opSlot.getId());
+        ResponseEntity<String> responseEntity = restTemplate.exchange(url, HttpMethod.DELETE, null, String.class);
+
+        System.out.println("Delete slot notification sent");
+        return responseEntity.getStatusCode() == HttpStatus.OK;
     }
 }

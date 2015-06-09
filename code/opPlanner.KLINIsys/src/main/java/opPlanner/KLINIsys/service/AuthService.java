@@ -19,6 +19,12 @@ public class AuthService {
     @Autowired
     private LoginUserRepository loginUserRepository;
 
+    /**
+     *
+     * @param username username
+     * @param password plain text password
+     * @return authentication result (true, false, includes the roles)
+     */
     public AuthResult authenticate(String username, String password) {
 
         LoginUser lu = loginUserRepository.findByEmail(username);
@@ -37,6 +43,11 @@ public class AuthService {
         return new AuthResult(false, new LinkedList<>());
     }
 
+    /**
+     * extracts the role as list of strings from the supplied user
+     * @param lu
+     * @return
+     */
     private LinkedList<String> getRoles(LoginUser lu) {
         LinkedList<String> roles = new LinkedList<>();
 
@@ -44,11 +55,21 @@ public class AuthService {
         return roles;
     }
 
+    /**
+     *
+     * @param password the plain text password
+     * @return the encoded password
+     */
     public String encodePassword(String password) {
         BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
         return bCryptPasswordEncoder.encode(password);
     }
 
+    /**
+     *
+     * @param username the user to get it's roles for
+     * @return the list of roles (Hospital, Patient, Doctor)
+     */
     public List<String> roles(String username) {
         LoginUser lu = loginUserRepository.findByEmail(username);
 

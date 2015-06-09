@@ -95,7 +95,7 @@ public class OPMatcherController {
     public ResponseEntity<String> addFreeOPSlotById(@PathVariable("opSlotId")String opSlotId) {
        OPSlot opSlot = opMatcherService.addFreeOPSlotById(opSlotId);
         if (opSlot == null) {
-            return  new ResponseEntity<String>("no op slot with id " + opSlotId + " could have been found/added.",
+            return new ResponseEntity<String>("no op slot with id " + opSlotId + " could have been found/added.",
                     HttpStatus.NOT_FOUND);
         }
        return new ResponseEntity<String>(opSlot.toString(), HttpStatus.OK);
@@ -107,10 +107,12 @@ public class OPMatcherController {
      * @param opSlotId - id of op slot to delete
      */
     @RequestMapping(value = "/delete/{opSlotId}", method = RequestMethod.DELETE, produces = "application/json")
-    public void deleteFreeOPSlot(@PathVariable("opSlotId") String opSlotId) {
-        opMatcherService.deleteFreeOPSlot(opSlotId);
+    public ResponseEntity<String> deleteFreeOPSlot(@PathVariable("opSlotId") String opSlotId) {
+        boolean result = opMatcherService.deleteFreeOPSlot(opSlotId);
+
+        if(!result)
+            return new ResponseEntity<String>("delete not possible", HttpStatus.INTERNAL_SERVER_ERROR);
+
+        return new ResponseEntity<String>("slot deleted", HttpStatus.OK);
     }
-
-
-
 }
