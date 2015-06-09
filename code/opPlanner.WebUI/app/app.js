@@ -13,7 +13,8 @@ angular.module('myApp', [
     'myApp.notifications',
     'myApp.slot',
     'myApp.home',
-    'myApp.version'
+    'myApp.version',
+    'ui.bootstrap.datetimepicker'
 ])
 .config(function($routeProvider, $locationProvider) {
   $routeProvider
