@@ -17,7 +17,8 @@ public class OPSlot {
     @Id
     private String id;
 
-    private long hospitalId;
+    //hospital email
+    private String hospitalId;
 
     //Geo location info
     private double[] position;
@@ -37,7 +38,7 @@ public class OPSlot {
      * @param end
      * @param type
      */
-    public OPSlot(String id, long hospitalId, double x, double y, Date start, Date end, String type) {
+    public OPSlot(String id, String hospitalId, double x, double y, Date start, Date end, String type) {
         this.id = id;
         this.hospitalId = hospitalId;
         this.start = start;
@@ -54,7 +55,7 @@ public class OPSlot {
      * @param start
      * @param end
      */
-    public OPSlot(long hospitalId, double x, double y, Date start, Date end, String type) {
+    public OPSlot(String hospitalId, double x, double y, Date start, Date end, String type) {
         this.hospitalId = hospitalId;
         this.start = start;
         this.end = end;
@@ -70,7 +71,7 @@ public class OPSlot {
      * @param end
      * @param type
      */
-    public OPSlot(long hospitalId, double[] position, Date start, Date end, String type) {
+    public OPSlot(String hospitalId, double[] position, Date start, Date end, String type) {
         this.hospitalId = hospitalId;
         this.start = start;
         this.end = end;
@@ -90,11 +91,11 @@ public class OPSlot {
         this.id = id;
     }
 
-    public long getHospitalId() {
+    public String getHospitalId() {
         return hospitalId;
     }
 
-    public void setHospitalId(long hospitalId) {
+    public void setHospitalId(String hospitalId) {
         this.hospitalId = hospitalId;
     }
 

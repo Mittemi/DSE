@@ -69,7 +69,7 @@ public class DemoController {
         //TODO thi: notification, because of successful op slot matching
         return chosenSlot;*/
         List<OPSlot> slots = new LinkedList<>();
-        slots.add(new OPSlot(1,2,3, new Date(), new Date(),"eye"));
+        slots.add(new OPSlot("kh0@dse.at",1,3, new Date(), new Date(),"eye"));
         return slots;
     }
 
@@ -96,16 +96,21 @@ public class DemoController {
         to3 = new GregorianCalendar();
         to3.set(2015, 05, 25, 12, 00);
 
-        OPSlot slotAKHVienna = new OPSlot("1", 1, AKHWIEN.getX(), AKHWIEN.getY(), from1.getTime(), to1.getTime(), "eye");
+        OPSlot slotAKHVienna = new OPSlot("1", "kh1@dse.at", AKHWIEN.getX(), AKHWIEN.getY(), from1.getTime(), to1
+                .getTime(),
+                "eye");
         	//akh wien
         repo.save(slotAKHVienna);
-        OPSlot slotAKHLinz = new OPSlot("2", 2, AKHLINZ.getX(), AKHLINZ.getY(), from2.getTime(), to2.getTime(),
+        OPSlot slotAKHLinz = new OPSlot("2", "kh2@dse.at", AKHLINZ.getX(), AKHLINZ.getY(), from2.getTime(), to2
+                .getTime(),
                 "neuro");	//akh linz
         repo.save(slotAKHLinz);
-        OPSlot slotLKHGraz = new OPSlot("3", 3, LKHGRAZ.getX(), LKHGRAZ.getY() , from3.getTime(), to3.getTime(), "eye");
+        OPSlot slotLKHGraz = new OPSlot("3", "kh3@dse.at", LKHGRAZ.getX(), LKHGRAZ.getY() , from3.getTime(), to3
+                .getTime(), "eye");
         		//lkh graz
         repo.save(slotLKHGraz);
-        OPSlot slotLKHGraz2 = new OPSlot("4", 3, LKHGRAZ.getX(), LKHGRAZ.getY() , from1.getTime(), to1.getTime(), "eye"); //lkh graz
+        OPSlot slotLKHGraz2 = new OPSlot("4", "kh3@dse.at", LKHGRAZ.getX(), LKHGRAZ.getY() , from1.getTime(), to1
+                .getTime(), "eye"); //lkh graz
         repo.save(slotLKHGraz2);
 
         return "OPMatcher demo data init done";

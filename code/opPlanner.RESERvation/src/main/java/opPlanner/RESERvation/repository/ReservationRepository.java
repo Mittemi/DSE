@@ -21,6 +21,8 @@ public interface ReservationRepository extends MongoRepository<Reservation, Stri
 
     List<Reservation> findByPatientId(String patientId);
 
+    Reservation findByOpSlotId(String opSlotId);
+
     @Query("{ doctorId: ?0, start: { $gte: ?1 }, end: { $lte: ?2 }}")
     List<Reservation> findByDoctorAndTimeWindow(@Param("doctorId")String doctorId,
                                                @Param("start")@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm") Date

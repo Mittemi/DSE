@@ -8,7 +8,8 @@ import java.util.Date;
 public class OPSlotDTO {
     private String id;
 
-    private long hospitalId;
+    //here: hospital email is considered as external identifier
+    private String hospitalId;
 
     //Geo location info
     private double[] position;
@@ -28,7 +29,7 @@ public class OPSlotDTO {
      * @param start
      * @param end
      */
-    public OPSlotDTO(Long id, Long hospitalId, double x, double y, Date start, Date end, String type) {
+    public OPSlotDTO(Long id, String hospitalId, double x, double y, Date start, Date end, String type) {
         this.id = id.toString();
         this.hospitalId = hospitalId;
         this.start = start;
@@ -45,7 +46,7 @@ public class OPSlotDTO {
      * @param end
      * @param type
      */
-    public OPSlotDTO(Long id, Long hospitalId, double[] position, Date start, Date end, String type) {
+    public OPSlotDTO(Long id, String hospitalId, double[] position, Date start, Date end, String type) {
         this.id = id.toString();
         this.hospitalId = hospitalId;
         this.start = start;
@@ -59,11 +60,11 @@ public class OPSlotDTO {
     }
 
 
-    public Long getHospitalId() {
+    public String getHospitalId() {
         return hospitalId;
     }
 
-    public void setHospitalId(Long hospitalId) {
+    public void setHospitalId(String hospitalId) {
         this.hospitalId = hospitalId;
     }
 

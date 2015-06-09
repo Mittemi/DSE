@@ -15,6 +15,7 @@ application:
   notifier:
     port : 9003
     ipOrHostname: 127.0.0.1
+    createUrl: "create"
   mongoDb:
     port : 27017
     ipOrHostname: 192.168.59.103

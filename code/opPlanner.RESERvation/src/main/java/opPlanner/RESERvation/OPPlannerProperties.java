@@ -135,6 +135,36 @@ public class OPPlannerProperties {
 
     }
 
+    public static class Notifier {
+        private int port;
+        private String ipOrHostname;
+        private String createUrl;
+
+        public int getPort() {
+            return port;
+        }
+
+        public void setPort(int port) {
+            this.port = port;
+        }
+
+        public String getIpOrHostname() {
+            return ipOrHostname;
+        }
+
+        public void setIpOrHostname(String ipOrHostname) {
+            this.ipOrHostname = ipOrHostname;
+        }
+
+        public String getCreateUrl() {
+            return createUrl;
+        }
+
+        public void setCreateUrl(String createUrl) {
+            this.createUrl = createUrl;
+        }
+    }
+
 
 
     @NotNull
@@ -170,4 +200,14 @@ public class OPPlannerProperties {
         this.klinisys = klinisys;
     }
 
+    @NotNull
+    private Notifier notifier;
+
+    public Notifier getNotifier() {
+        return notifier;
+    }
+
+    public void setNotifier(Notifier notifier) {
+        this.notifier = notifier;
+    }
 }

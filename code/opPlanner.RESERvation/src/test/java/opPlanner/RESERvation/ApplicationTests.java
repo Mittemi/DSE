@@ -127,7 +127,7 @@ public class ApplicationTests {
 
 	@Test
 	public void cancelReservationAndReserveAgain() {
-		reservationController.cancelReservation("2");
+		reservationController.cancelReservation("2", "d1@dse.at");
 		reservationController.reserve(from2.getTime(), to2.getTime(), 500, "eye", doctorId1, patientId1);
 		List<Reservation> reservations = reservationController.findReservationsByPatientIdAndTW(patientId1,
 				from1.getTime(), to1.getTime());

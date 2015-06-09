@@ -3,6 +3,8 @@ package opPlanner.NOTifier.controller;
 import opPlanner.NOTifier.model.Notification;
 import opPlanner.NOTifier.repository.NotificationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Date;
@@ -45,10 +47,11 @@ public class NotificationController {
      * @param notification the new notification which should be created, the date is replaced with the current one
      */
     @RequestMapping(value = "/create", method = RequestMethod.PUT, produces = "application/json")
-    public void create(@RequestBody Notification notification) {
+    public void /*ResponseEntity<String>*/ create(@RequestBody Notification notification) {
         notification.setCreationDate(new Date());
         notification.setId(null);
 
         notificationRepository.save(notification);
+        /*return new ResponseEntity<String>("Notification saved: " + notification.getMessage(), HttpStatus.OK);*/
     }
 }

@@ -64,11 +64,14 @@ public class OPMatcherTest {
 		to3 = new GregorianCalendar();
 		to3.set(2015, 05, 25, 12, 00);
 
-		OPSlot slotAKHVienna = new OPSlot(1, AKHWIEN.getX(), AKHWIEN.getY(), from1.getTime(), to1.getTime(), "eye");	//akh wien
+		OPSlot slotAKHVienna = new OPSlot("kh1@dse.at", AKHWIEN.getX(), AKHWIEN.getY(), from1.getTime(), to1.getTime(),
+				"eye")
+				;	//akh wien
 		repo.save(slotAKHVienna);
-		OPSlot slotAKHLinz = new OPSlot(2, AKHLINZ.getX(), AKHLINZ.getY(), from2.getTime(), to2.getTime(), "neuro");	//akh linz
+		OPSlot slotAKHLinz = new OPSlot("kh2@dse.at", AKHLINZ.getX(), AKHLINZ.getY(), from2.getTime(), to2.getTime(), "neuro");	//akh linz
 		repo.save(slotAKHLinz);
-		OPSlot slotLKHGraz = new OPSlot(3, LKHGRAZ.getX(), LKHGRAZ.getY() , from3.getTime(), to3.getTime(), "eye");		//lkh graz
+		OPSlot slotLKHGraz = new OPSlot("kh3@dse.at", LKHGRAZ.getX(), LKHGRAZ.getY() , from3.getTime(), to3.getTime()
+				, "eye");		//lkh graz
 		repo.save(slotLKHGraz);
 	}
 

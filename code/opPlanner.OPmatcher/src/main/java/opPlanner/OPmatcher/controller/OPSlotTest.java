@@ -29,7 +29,7 @@ public class OPSlotTest {
                 new AnnotationConfigApplicationContext(SpringMongoConfig.class);
         MongoOperations mongoOperation = (MongoOperations) ctx.getBean("mongoTemplate");
 
-        OPSlot slot = new OPSlot(1, -0.5, 2.5, new Date(),new Date(), "eye");
+        OPSlot slot = new OPSlot("kh0@dse.at", -0.5, 2.5, new Date(),new Date(), "eye");
         // save
         mongoOperation.save(slot);
 

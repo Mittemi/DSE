@@ -8,7 +8,8 @@ import java.util.Date;
 public class OPSlot {
     private String id;
 
-    private long hospitalId;
+    //hospital email (external identifier for hospital)
+    private String hospitalId;
 
     //Geo location info
     private double[] position;
@@ -26,11 +27,11 @@ public class OPSlot {
         this.id = id;
     }
 
-    public long getHospitalId() {
+    public String getHospitalId() {
         return hospitalId;
     }
 
-    public void setHospitalId(long hospitalId) {
+    public void setHospitalId(String hospitalId) {
         this.hospitalId = hospitalId;
     }
 

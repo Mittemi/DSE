@@ -40,7 +40,8 @@ public class OpSlotController  {
         if (opSlot == null) {
             return null;
         }
-        OPSlotDTO opSlotDTO = new OPSlotDTO(opSlot.getId(),opSlot.getHospital().getId(), opSlot.getHospital().getX(), opSlot.getHospital().getY(), opSlot.getSlotStart(), opSlot.getSlotEnd(), opSlot.getType());
+        OPSlotDTO opSlotDTO = new OPSlotDTO(opSlot.getId(),opSlot.getHospital().geteMail(), opSlot.getHospital().getX(),
+                opSlot.getHospital().getY(), opSlot.getSlotStart(), opSlot.getSlotEnd(), opSlot.getType());
         return opSlotDTO;
     }
 
@@ -50,7 +51,8 @@ public class OpSlotController  {
         List<OPSlotDTO> opSlotDTOList = new LinkedList<OPSlotDTO>();
         OPSlotDTO opSlotDTO;
         for (OpSlot opSlot : opSlotList) {
-            opSlotDTO = new OPSlotDTO(opSlot.getId(),opSlot.getHospital().getId(), opSlot.getHospital().getX(), opSlot.getHospital().getY(), opSlot.getSlotStart(), opSlot.getSlotEnd(), opSlot.getType());
+            opSlotDTO = new OPSlotDTO(opSlot.getId(), opSlot.getHospital().geteMail(), opSlot.getHospital().getX(),
+                    opSlot.getHospital().getY(), opSlot.getSlotStart(), opSlot.getSlotEnd(), opSlot.getType());
             opSlotDTOList.add(opSlotDTO);
         }
        return opSlotDTOList;
