@@ -283,6 +283,11 @@ public class ReservationController {
         sendNotification("Cancellation succeded.", patientId, message);
     }
 
+    @RequestMapping(value = "/demo")
+    public void demo() {
+        sendNotification("asdf", "asdf", "asdf");
+    }
+
     /**
      * sends a message to the NOTifier, via REST-Service call
      * @param subject
@@ -290,13 +295,11 @@ public class ReservationController {
      * @param recipient
      */
     private void sendNotification(String subject, String recipient, String message) {
-        NotificationDTO notificationDTO = new NotificationDTO(recipient, message, subject, new Date());
+        NotificationDTO notificationDTO = new NotificationDTO(recipient, message, subject);
         String url = "http://" + config.getNotifier().getIpOrHostname()
                 + ":" + config.getNotifier().getPort()
                 + "/" + config.getNotifier().getCreateUrl();
 
-        restClient.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
-        restClient.getMessageConverters().add(new StringHttpMessageConverter());
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
 

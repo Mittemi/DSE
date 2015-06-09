@@ -17,18 +17,6 @@ public class NotificationDTO {
 
         private String subject;
 
-        @JsonFormat(pattern = "yyyy-MM-dd")
-        @DateTimeFormat(pattern = "yyyy-MM-dd")
-        private Date creationDate;
-
-        public Date getCreationDate() {
-            return creationDate;
-        }
-
-        public void setCreationDate(Date creationDate) {
-            this.creationDate = creationDate;
-        }
-
         public String geteMail() {
             return eMail;
         }
@@ -53,10 +41,12 @@ public class NotificationDTO {
             this.subject = subject;
         }
 
-        public NotificationDTO(String eMail, String message, String subject, Date creationDate) {
+        public NotificationDTO(String eMail, String message, String subject) {
             this.eMail = eMail;
             this.message = message;
             this.subject = subject;
-            this.creationDate = creationDate;
         }
+
+    public NotificationDTO() {
+    }
 }
