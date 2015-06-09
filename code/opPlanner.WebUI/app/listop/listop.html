@@ -1,37 +1,88 @@
 <h1>Operation List</h1>
 <p>This lists contains all operations in the hospital</p>
+
+<div class="createNewOpSlotSection" ng-hide="globals.currentUser == null || globals.currentUser.role != 'Hospital'">
+    <button type="button" class="btn btn-default" aria-label="Left Align" ng-click="showfield=true" ng-hide="showfield">
+        <span class="glyphicon glyphicon-edit" aria-hidden="true"></span> Add new op slot
+    </button>
+
+    <form name="opSlot" ng-controller="OpSlotFormController" class="opSlotForm" ng-show="showfield">
+        <table class="table table-striped">
+            <tr>
+                <td>
+                    Operation Type<br />
+                    <input name="input" ng-model="data.opType" required><br />
+                </td>
+                <td>
+                    Start:
+                    <div class="dropdown">
+                        <a class="dropdown-toggle my-toggle-select" id="startTime" role="button" data-toggle="dropdown" data-target="#" href="">
+                            <div class="input-append"><input type="text" class="input-large" data-ng-model="data.slotStart"><span class="add-on"><i
+                                    class="icon-calendar"></i></span>
+                            </div>
+                        </a>
+                        <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+                            <datetimepicker data-ng-model="data.slotStart"
+                                            data-datetimepicker-config="{ dropdownSelector: '.my-toggle-select' }"></datetimepicker>
+                        </ul>
+                    </div>
+                </td>
+                <td>
+                    End:
+                    <div class="dropdown">
+                        <a class="dropdown-toggle my-toggle-select" id="endTime" role="button" data-toggle="dropdown" data-target="#" href="">
+                            <div class="input-append"><input type="text" class="input-large" data-ng-model="data.slotEnd"><span class="add-on"><i
+                                    class="icon-calendar"></i></span>
+                            </div>
+                        </a>
+                        <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+                            <datetimepicker data-ng-model="data.slotEnd"
+                                            data-datetimepicker-config="{ dropdownSelector: '.my-toggle-select' }"></datetimepicker>
+                        </ul>
+                    </div>
+                </td>
+
+                <td>
+                    <br />
+                    <button type="button" class="btn btn-default" aria-label="Left Align" ng-click="newOpSlot()">
+                        <span class="glyphicon glyphicon-ok" aria-hidden="true"></span> Add Op Slot
+                    </button>
+                </td>
+
+        </table>
+
+    </form>
+
+</div>
+
 <br />
 
-    <table class="table table-striped">
-        <tr>
-            <!-- Necessary workaround for sorted elements: http://stackoverflow.com/questions/19287716/skip-ng-repeat-json-ordering-in-angular-js //-->
-            <td>Op-Slot ID</td>
-            <td>Operation Type</td>
-            <td>Start Time</td>
-            <td>End Time</td>
-            <td ng-class="{true:'hidden'}[globals.currentUser == null]">Doctor</td>
-            <td>Hospital Name</td>
-            <td ng-class="{true:'hidden'}[globals.currentUser == null]">Name of Patient</td>
-            <td>&nbsp;</td>
-        </tr>
-        <tr ng-repeat="tmp in oplist" ng-class="{true:'success', false:'danger'}[tmp.freeSlot]">
-            <td>{{tmp.id}}</td>
-            <td>{{tmp.type}}</td>
-            <td>{{tmp.slotStart}}</td>
-            <td>{{tmp.slotEnd}}</td>
-            <td ng-class="{true:'hidden'}[globals.currentUser == null]">{{tmp.doctorName}} (ID: {{tmp.doctorId}})</td>
-            <td>{{tmp.hospitalName}}</td>
-            <td ng-class="{true:'hidden'}[globals.currentUser == null]">{{tmp.patientName}} (ID: {{tmp.patientId}})</td>
-            <td>
-                <span ng-class="{true:'hidden', false:''}[!tmp.freeSlot || globals.currentUser == null]">
+<table class="table table-striped">
+    <tr>
+        <!-- Necessary workaround for sorted elements: http://stackoverflow.com/questions/19287716/skip-ng-repeat-json-ordering-in-angular-js //-->
+        <td>Op-Slot ID</td>
+        <td>Operation Type</td>
+        <td>Start Time</td>
+        <td>End Time</td>
+        <td ng-hide="globals.currentUser == null">Doctor</td>
+        <td>Hospital Name</td>
+        <td ng-hide="globals.currentUser == null">Name of Patient</td>
+        <td>&nbsp;</td>
+    </tr>
+    <tr ng-repeat="tmp in oplist" ng-class="{true:'success', false:'danger'}[tmp.freeSlot]">
+        <td>{{tmp.id}}</td>
+        <td>{{tmp.type}}</td>
+        <td>{{tmp.slotStart}}</td>
+        <td>{{tmp.slotEnd}}</td>
+        <td ng-hide="globals.currentUser == null">{{tmp.doctorName}} (ID: {{tmp.doctorId}})</td>
+        <td>{{tmp.hospitalName}}</td>
+        <td ng-hide="globals.currentUser == null">{{tmp.patientName}} (ID: {{tmp.patientId}})</td>
+        <td>
+                <span ng-hide="!tmp.freeSlot || globals.currentUser == null">
                     <button type="button" class="btn btn-default btn-xs" ng-click="removeOpSlot(tmp.id)">
                         <span class="glyphicon glyphicon-remove" aria-hidden="true"></span> Remove Slot
                     </button>
                 </span>
-            </td>
-        </tr>
-    </table>
-
-
-
-
+        </td>
+    </tr>
+</table>

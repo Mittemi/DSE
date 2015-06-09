@@ -9,8 +9,8 @@ angular.module('myApp.listop', ['ngRoute'])
   });
 }])
 
-.controller('listopCtrl', ['$scope','$http',
-      function($scope,$http,OPSlotService) {
+.controller('listopCtrl', ['$scope','$http','$location',
+      function($scope,$http,$location) {
 
           $http.get('http://localhost:8080/opslots/list').
               success(function(data, status, headers, config) {
@@ -33,10 +33,12 @@ angular.module('myApp.listop', ['ngRoute'])
                       // when the response is available
                   })
                   .error(function (data, status, headers, config) {
-                      // called asynchronously if an error occurs
-                      // or server returns response with an error status.
+                      $location.path('/#/listop');
                   });
-          }
+          };
+
+
+
           /**
            * Supress the build-in sorting in ng-repeat, JSON format is preserved
            * @param obj
@@ -48,8 +50,19 @@ angular.module('myApp.listop', ['ngRoute'])
               }
               return Object.keys(obj);
           };
-
-
 }])
-;
 
+.controller('OpSlotFormController', ['$scope','$http', function($scope,$http) {
+
+        $scope.newOpSlot = function(){
+
+            var json = " { 'type' : '" + $scope.data.opType  + "', 'slotStart' : " + $scope.data.slotStart.getTime() + ", 'slotEnd' : " + $scope.data.slotEnd.getTime() + " }";
+            $http.put('http://localhost:8080/opslots/create', json)
+                .success(function (data, status, headers, config) {
+
+                })
+                .error(function (data, status, headers, config) {
+
+                });
+        };
+    }]);
