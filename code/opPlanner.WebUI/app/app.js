@@ -31,6 +31,7 @@ angular.module('myApp', [
         redirectTo: '/home'
     });
 })
+
 .run(['$rootScope', '$location', '$cookieStore', '$http',
     function ($rootScope, $location, $cookieStore, $http) {
         // keep user logged in after page refresh
@@ -53,6 +54,8 @@ angular.module('myApp', [
                 return ""
             }
         }
+
+
         /**
          * Forces Login before entering any other page -> because of
          */

@@ -31,3 +31,4 @@ angular.module('Authentication')
         function ($scope, $rootScope, $location, AuthenticationService) {
             AuthenticationService.ClearCredentials();
 }]);
+

@@ -1,1 +1,37 @@
-<h1>Die Operationsliste</h1>
+<h1>Operation List</h1>
+<p>This lists contains all operations in the hospital</p>
+<br />
+
+    <table class="table table-striped">
+        <tr>
+            <!-- Necessary workaround for sorted elements: http://stackoverflow.com/questions/19287716/skip-ng-repeat-json-ordering-in-angular-js //-->
+            <td>Op-Slot ID</td>
+            <td>Operation Type</td>
+            <td>Start Time</td>
+            <td>End Time</td>
+            <td ng-class="{true:'hidden'}[globals.currentUser == null]">Doctor</td>
+            <td>Hospital Name</td>
+            <td ng-class="{true:'hidden'}[globals.currentUser == null]">Name of Patient</td>
+            <td>&nbsp;</td>
+        </tr>
+        <tr ng-repeat="tmp in oplist" ng-class="{true:'success', false:'danger'}[tmp.freeSlot]">
+            <td>{{tmp.id}}</td>
+            <td>{{tmp.type}}</td>
+            <td>{{tmp.slotStart}}</td>
+            <td>{{tmp.slotEnd}}</td>
+            <td ng-class="{true:'hidden'}[globals.currentUser == null]">{{tmp.doctorName}} (ID: {{tmp.doctorId}})</td>
+            <td>{{tmp.hospitalName}}</td>
+            <td ng-class="{true:'hidden'}[globals.currentUser == null]">{{tmp.patientName}} (ID: {{tmp.patientId}})</td>
+            <td>
+                <span ng-class="{true:'hidden', false:''}[!tmp.freeSlot || globals.currentUser == null]">
+                    <button type="button" class="btn btn-default btn-xs" ng-click="removeOpSlot(tmp.id)">
+                        <span class="glyphicon glyphicon-remove" aria-hidden="true"></span> Remove Slot
+                    </button>
+                </span>
+            </td>
+        </tr>
+    </table>
+
+
+
+
