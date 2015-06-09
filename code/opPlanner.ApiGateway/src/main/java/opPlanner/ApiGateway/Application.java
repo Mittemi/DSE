@@ -14,7 +14,6 @@ import org.springframework.context.annotation.ComponentScan;
 @SpringBootApplication
 @EnableConfigurationProperties({  OpPlannerProperties.class})
 @EnableCircuitBreaker
-//@EnableHystrixDashboard     //TODO: remove for production ???
 public class Application {
 
     public static void main(String[] args) {

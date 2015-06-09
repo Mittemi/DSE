@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
+import javax.servlet.http.HttpServletResponse;
+
 /**
  * Created by Michael on 05.06.2015.
  */
@@ -30,24 +32,25 @@ public class NotificationController {
     @RequestMapping(value = "/list", method = RequestMethod.GET, produces = "application/json")
     @HystrixCommand(fallbackMethod = "indexFallback", groupKey = Constants.GROUP_KEY_NOTIFICATION)
     @PreAuthorize("isAuthenticated()")
-    public String index(Authentication auth) {
+    public String index(Authentication auth, HttpServletResponse response) {
 
         return client.getForObject(config.getNotifier().buildUrl("list/{eMail}/"),String.class, auth.getPrincipal());
     }
 
     /* Hystrix Fallback */
-    public String indexFallback(Authentication auth) {
+    public String indexFallback(Authentication auth, HttpServletResponse response) {
+        response.setStatus(HttpServletResponse.SC_SERVICE_UNAVAILABLE);
         return "Notification Service currently not available!";
     }
 
     @RequestMapping(value = "/delete/{id}", method = RequestMethod.DELETE)
     @HystrixCommand(fallbackMethod = "deleteFallback", groupKey = Constants.GROUP_KEY_NOTIFICATION)
     @PreAuthorize("isAuthenticated()")
-    public void delete(String id, Authentication auth) {
+    public void delete(String id, Authentication auth, HttpServletResponse response) {
         client.delete(config.getNotifier().buildUrl("delete/" + auth.getPrincipal() + "/" + id));
     }
 
-    public void deleteFallback(String id, Authentication auth) {
-
+    public void deleteFallback(String id, Authentication auth, HttpServletResponse response) {
+        response.setStatus(HttpServletResponse.SC_SERVICE_UNAVAILABLE);
     }
 }

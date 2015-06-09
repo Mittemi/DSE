@@ -16,6 +16,9 @@ import java.util.stream.Collectors;
 
 /**
  * Created by Michael on 28.04.2015.
+ *
+ * The spring security provider for authentication against the klinisys
+ *
  */
 public class CustomAuthenticationProvider implements AuthenticationProvider {
 
@@ -49,6 +52,9 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
         return authentication.equals(UsernamePasswordAuthenticationToken.class) || authentication.equals(AnonymousAuthenticationToken.class);
     }
 
+    /**
+     * used as fallback mechanism for the login, in case the klinisys is not responding within the set timeout we fallback to not loggedin
+     */
     private class AuthHystrixCommand extends com.netflix.hystrix.HystrixCommand<AuthResult> {
 
         private String name;
@@ -73,6 +79,13 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
 
     private RestTemplate restClient;
 
+    /**
+     * authenticates against klinisys
+     * this method is used as part of the hystrix command
+     * @param username username
+     * @param password plain text password
+     * @return auth result
+     */
     public AuthResult auth(String username, String password) {
 
         Map<String, Object> params = new HashMap<>();

@@ -47,7 +47,7 @@ public class OpSlotsController {
 
     @RequestMapping(value = "/list", method = RequestMethod.GET, produces = "application/json")
     @HystrixCommand(fallbackMethod = "indexFallback", groupKey = Constants.GROUP_KEY_KLINISYS)
-    public String index(Authentication auth, @RequestParam(value = "from", required = false) String from, @RequestParam(value = "to", required = false) String to) {
+    public String index(Authentication auth, @RequestParam(value = "from", required = false) String from, @RequestParam(value = "to", required = false) String to, HttpServletResponse response) {
 
         Map<String, Object> param = new HashMap<>();
         Map<String, Object> request = new HashMap<>();
@@ -74,7 +74,8 @@ public class OpSlotsController {
                 System.out.println(" Group: Patient, Mail: " + auth.getPrincipal());
                 param.put("type", "patient");
             } else {
-                return "501";
+                response.setStatus(HttpServletResponse.SC_NOT_IMPLEMENTED);
+                return null;
             }
         } else {
             url = config.getKlinisys().buildUrl("public/");
@@ -84,14 +85,15 @@ public class OpSlotsController {
     }
 
     /* fallback Hystrix */
-    public String indexFallback(Authentication auth, String from, String to) {
+    public String indexFallback(Authentication auth, String from, String to, HttpServletResponse response) {
+        response.setStatus(HttpServletResponse.SC_SERVICE_UNAVAILABLE);
         return "Service currently down! Try again later...";
     }
 
     @PreAuthorize("hasRole('Hospital')")
     //@HystrixCommand(fallbackMethod = "createFallback", groupKey = Constants.GROUP_KEY_KLINISYS)
     @RequestMapping(value = "/create", method = RequestMethod.PUT)
-    public String create(Authentication auth, @RequestBody String requestBody) {
+    public String create(Authentication auth, @RequestBody String requestBody, HttpServletResponse response) {
 
         System.out.println("API: create slot");
         HttpHeaders headers = new HttpHeaders();
@@ -104,7 +106,8 @@ public class OpSlotsController {
         return "OK";
     }
 
-    public String createFallback(Authentication auth, HttpServletRequest request) {
+    public String createFallback(Authentication auth, HttpServletResponse response) {
+        response.setStatus(HttpServletResponse.SC_SERVICE_UNAVAILABLE);
         return "That didn't work out! Try again later!";
     }
 
@@ -112,7 +115,7 @@ public class OpSlotsController {
     @PreAuthorize("hasRole('Hospital')")
     @HystrixCommand(fallbackMethod = "deleteOpSlotFallback", groupKey = Constants.GROUP_KEY_KLINISYS)
     @RequestMapping(value = "/{id}", method = RequestMethod.DELETE, produces = org.springframework.http.MediaType.APPLICATION_JSON_VALUE)
-    public String deleteOpSlot(Authentication auth, @PathVariable("id") Integer slotId){
+    public String deleteOpSlot(Authentication auth, @PathVariable("id") Integer slotId, HttpServletResponse response){
 
         client.delete(config.getKlinisys().buildUrl("opslot/" + auth.getPrincipal() + "/{id}"), slotId);
 
@@ -122,7 +125,8 @@ public class OpSlotsController {
     }
 
     /* fallback Hystrix */
-    public String deleteOpSlotFallback(Authentication auth, Integer id) {
+    public String deleteOpSlotFallback(Authentication auth, Integer id, HttpServletResponse response) {
+        response.setStatus(HttpServletResponse.SC_SERVICE_UNAVAILABLE);
         return "That didn't work out! Try again later!";
     }
 
