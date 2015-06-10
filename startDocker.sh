@@ -22,4 +22,8 @@ cd ..
 cd ./opPlanner.RESERvation/
 echo -e "\n\n\n##### Starting Reservation #####\n"
 sh ./containerbau.sh
+cd ..
+cd ./docker/
+echo -e "\n\n\n##### Starting postgres and mongo db #####\n"
+sh ./dbrun.sh
 echo -e "\n ##### DONE - I'm going home now ! #####"
