@@ -50,6 +50,23 @@ angular.module('myApp.listop', ['ngRoute'])
               }
               return Object.keys(obj);
           };
+
+
+          $scope.setSelectedType = function(type){
+              $scope.selectedType = type;
+              $scope.openType = null;
+          };
+
+          $scope.setSelectedKH = function(khname){
+                $scope.selectedKH = khname;
+              $scope.openKH = null;
+          };
+
+
+          $scope.setSelectedDoc = function(docname){
+              $scope.selectedDoc = docname;
+              $scope.openDoc = null;
+          };
 }])
 
 .controller('OpSlotFormController', ['$scope','$http', function($scope,$http) {

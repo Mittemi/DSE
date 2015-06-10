@@ -14,7 +14,8 @@ angular.module('myApp', [
     'myApp.slot',
     'myApp.home',
     'myApp.version',
-    'ui.bootstrap.datetimepicker'
+    'ui.bootstrap.datetimepicker',
+    'angular.filter'
 ])
 .config(function($routeProvider, $locationProvider) {
   $routeProvider
