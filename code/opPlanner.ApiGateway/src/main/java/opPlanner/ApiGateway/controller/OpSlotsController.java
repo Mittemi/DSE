@@ -45,7 +45,7 @@ public class OpSlotsController {
         client = new RestTemplate();
     }
 
-    @RequestMapping(value = "/list", method = RequestMethod.GET, produces = "application/json")
+    @RequestMapping(value = "/list", method = RequestMethod.POST, produces = "application/json")
     @HystrixCommand(fallbackMethod = "indexFallback", groupKey = Constants.GROUP_KEY_KLINISYS)
     public String index(Authentication auth, @RequestParam(value = "from", required = false) String from, @RequestParam(value = "to", required = false) String to, HttpServletResponse response) {
 
@@ -58,7 +58,7 @@ public class OpSlotsController {
             request.put("to", to);
         }
         String url = null;
-        System.out.print("OpSlot-List -- From: " + (from != null ? from : "null") + ", TO: " + (to != null ? to : ""));
+        System.out.print("OpSlot-List -- From: " + (from != null ? from : "null") + ", TO: " + (to != null ? to : "null"));
         if (auth != null && auth.isAuthenticated()) {
 
             param.put("mail", auth.getPrincipal());

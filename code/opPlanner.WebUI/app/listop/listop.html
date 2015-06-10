@@ -77,8 +77,61 @@
                 </ul>
             </div>
         </td>
-        <td>Start Time</td>
-        <td>End Time</td>
+
+        <td>
+            <div class="btn-group" ng-class="{open: openstartTime}" data-toggle="dropdown">
+                <button class="btn">{{selectedstartTime}}<span ng-hide="selectedstartTime != null">StartTime</span></button>
+                <button class="btn dropdown-toggle" ng-click="openstartTime=!open"><span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu" aria-labelledby="dropdownMenu">
+                    <li>
+                        <a ng-click="slotStartFilter = null; openstartTime = null"><span class="glyphicon glyphicon-remove-circle"></span>  Disable Filter </a>
+                    </li>
+                    <li class="divider"></li>
+                    <li>
+                        <div class="dropdown">
+                            <a class="dropdown-toggle my-toggle-select" id="startTimeFilter" role="button" data-toggle="dropdown" data-target="#" href="">
+                                <div class="input-append"><input type="text" class="input-large" data-ng-model="slotStartFilter"><span class="add-on"><i
+                                        class="icon-calendar"></i></span>
+                                </div>
+                            </a>
+                            <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+                                <datetimepicker data-ng-model="slotStartFilter"
+                                                data-datetimepicker-config="{ dropdownSelector: '.my-toggle-select' }"></datetimepicker>
+                            </ul>
+                        </div>
+                    </li>
+                    <li><a ng-click="setSelectedStartDate(slotStartFilter)">Apply Filter</a></li>
+                </ul>
+            </div>
+        </td>
+        <td>
+            <div class="btn-group" ng-class="{open: openendTime2}" data-toggle="dropdown">
+                <button class="btn">{{selectedendTime}}<span ng-hide="selectedendTime != null">EndTime</span></button>
+                <button class="btn dropdown-toggle" ng-click="openendTime2=!open"><span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu" aria-labelledby="dropdownMenu">
+                    <li>
+                        <a ng-click="slotEndFilter = null; openendTime2 = null"><span class="glyphicon glyphicon-remove-circle"></span>  Disable Filter </a>
+                    </li>
+                    <li class="divider"></li>
+                    <li>
+                        <div class="dropdown">
+                            <a class="dropdown-toggle my-toggle-select" id="endTimeFilter" role="button" data-toggle="dropdown" data-target="#" href="">
+                                <div class="input-append"><input type="text" class="input-large" data-ng-model="slotEndFilter"><span class="add-on"><i
+                                        class="icon-calendar"></i></span>
+                                </div>
+                            </a>
+                            <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+                                <datetimepicker data-ng-model="slotEndFilter"
+                                                data-datetimepicker-config="{ dropdownSelector: '.my-toggle-select' }"></datetimepicker>
+                            </ul>
+                        </div>
+                    </li>
+                    <li><a ng-click="setSelectedEndDate(slotEndFilter)">Apply Filter</a></li>
+                </ul>
+            </div>
+        </td>
 
         <td>
             <div class="btn-group" ng-class="{open: openDoc}" data-toggle="dropdown">
@@ -118,7 +171,7 @@
     </tr>
 
 
-    <tr ng-repeat="tmp in oplist | filter: selectedKH | filter: selectedType | orderBy:'slotStart':false" ng-class="{true:'success', false:'danger'}[tmp.freeSlot]">
+    <tr ng-repeat="tmp in oplist | filter: selectedKH | filter: selectedType | filter: selectedStart | orderBy:'slotStart':false" ng-class="{true:'success', false:'danger'}[tmp.freeSlot]">
 
         <td>{{tmp.type}}</td>
         <td>{{tmp.slotStart}}</td>

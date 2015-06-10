@@ -51,7 +51,6 @@ angular.module('myApp.listop', ['ngRoute'])
               return Object.keys(obj);
           };
 
-
           $scope.setSelectedType = function(type){
               $scope.selectedType = type;
               $scope.openType = null;
@@ -66,6 +65,39 @@ angular.module('myApp.listop', ['ngRoute'])
           $scope.setSelectedDoc = function(docname){
               $scope.selectedDoc = docname;
               $scope.openDoc = null;
+          };
+
+          $scope.setSelectedStartDate = function(start){
+              $scope.selectedStart = start;
+              $scope.getListFromServer();
+              $scope.openstartTime = null;
+          };
+
+          $scope.setSelectedEndDate = function(end){
+              $scope.selectedEnd = end;
+              $scope.getListFromServer();
+              $scope.openendTime2 = null;
+          };
+
+          $scope.getListFromServer = function () {
+              var params = "?";
+              if($scope.selectedStart != null){
+                  params += "from=" + $scope.selectedStart.getTime();
+              }
+              if(params != "?" && $scope.selectedEnd != null){
+                  params += "&";
+              }
+              if($scope.selectedEnd != null){
+                  params += "to=" + $scope.selectedEnd.getTime();
+              }
+
+              $http.get('http://localhost:8080/opslots/list' + params).
+                  success(function (data, status, headers, config) {
+                      $scope.oplist = data;
+                  }).
+                  error(function (data, status, headers, config) {
+                      $scope.oplist = data;
+                  });
           };
 }])
 
