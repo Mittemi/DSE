@@ -91,22 +91,22 @@ public class OpSlotsController {
     }
 
     @PreAuthorize("hasRole('Hospital')")
-    //@HystrixCommand(fallbackMethod = "createFallback", groupKey = Constants.GROUP_KEY_KLINISYS)
-    @RequestMapping(value = "/create", method = RequestMethod.PUT)
-    public String create(Authentication auth, @RequestBody String requestBody, HttpServletResponse response) {
+    @HystrixCommand(fallbackMethod = "createFallback", groupKey = Constants.GROUP_KEY_KLINISYS)
+    @RequestMapping(value = "/create", method = RequestMethod.PUT, consumes = "application/json")
+    public String create(Authentication auth, @RequestBody Object requestBody, HttpServletResponse response) {
 
         System.out.println("API: create slot");
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
 
-        HttpEntity<String> entity = new HttpEntity<>(requestBody,headers);
+        HttpEntity<Object> entity = new HttpEntity<>(requestBody,headers);
 
         client.put(config.getKlinisys().buildUrl("opslot/create/" + auth.getPrincipal() + "/"), entity);
 
         return "OK";
     }
 
-    public String createFallback(Authentication auth, HttpServletResponse response) {
+    public String createFallback(Authentication auth, Object requestBody, HttpServletResponse response) {
         response.setStatus(HttpServletResponse.SC_SERVICE_UNAVAILABLE);
         return "That didn't work out! Try again later!";
     }
@@ -138,7 +138,7 @@ public class OpSlotsController {
     @RequestMapping(value = "/reservation", method = RequestMethod.POST, produces = org.springframework.http
             .MediaType.APPLICATION_JSON_VALUE)
     public String createReservation(Authentication auth, String patientId, Date preferredStart, Date preferredEnd,
-                                    Integer preferredPerimeter, String opSlotType) {
+                                    Integer preferredPerimeter, String opSlotType, HttpServletResponse response) {
 
         String doctorMail = (String)auth.getPrincipal();
         MultiValueMap<String, String> map = new LinkedMultiValueMap<String, String>();
@@ -154,8 +154,10 @@ public class OpSlotsController {
             reservationURI = new URI(config.getReservation().buildUrl("reservation/reserve"));
             result = client.postForEntity(reservationURI, map, String.class);
         } catch (URISyntaxException e) {
+            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
             return "NOK (URI Problems)";
         } catch (HttpClientErrorException e) {
+            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
             return "NOK (Reservation was not sucessful)";
         }
 
@@ -165,7 +167,8 @@ public class OpSlotsController {
     }
 
     /* fallback Hystrix */
-    public String createReservationFallback(Authentication auth, Integer id) {
+    public String createReservationFallback(Authentication auth, Integer id, HttpServletResponse response) {
+        response.setStatus(HttpServletResponse.SC_SERVICE_UNAVAILABLE);
         return "That didn't work out! Try again later!";
     }
 
@@ -173,7 +176,7 @@ public class OpSlotsController {
     @PreAuthorize("hasRole('Doctor')")
     @HystrixCommand(fallbackMethod = "deleteReservationFallback", groupKey = Constants.GROUP_KEY_RESERVATION)
     @RequestMapping(value = "/reservation/{id}", method = RequestMethod.DELETE, produces = org.springframework.http.MediaType.APPLICATION_JSON_VALUE)
-    public String deleteReservation(Authentication auth, @PathVariable("id") Integer slotId) {
+    public String deleteReservation(Authentication auth, @PathVariable("id") Integer slotId, HttpServletResponse response) {
         Map<String, Object> params = new HashMap<>();
         params.put("slotId", slotId);
         params.put("doctorId", auth.getPrincipal());
@@ -186,7 +189,8 @@ public class OpSlotsController {
     }
 
     /* fallback Hystrix */
-    public String deleteReservationFallback(Authentication auth, Integer id) {
+    public String deleteReservationFallback(Authentication auth, Integer id, HttpServletResponse response) {
+        response.setStatus(HttpServletResponse.SC_SERVICE_UNAVAILABLE);
         return "That didn't work out! Try again later!";
     }
 }
