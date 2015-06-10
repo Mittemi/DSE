@@ -1,1 +1,11 @@
 <h1>Notifications</h1>
+
+
+<table class="table table-striped">
+
+    <tr ng-repeat="tmp in notificationlist">
+        <td ng-repeat="(key,value) in tmp">
+            {{key}} ; {{value}}
+        </td>
+    </tr>
+</table>

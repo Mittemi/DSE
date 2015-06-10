@@ -9,6 +9,28 @@ angular.module('myApp.notifications', ['ngRoute'])
   });
 }])
 
-.controller('notificationsCtrl', [function() {
+.controller('notificationsCtrl', ['$scope','$http','$location',
+  function($scope,$http,$location) {
 
-}]);
+    $http.get('http://localhost:8080/notification/list').
+        success(function(data, status, headers, config) {
+          $scope.notificationlist = data;
+        }).
+        error(function(data, status, headers, config) {
+          $scope.notificationlist = data;
+        });
+
+
+
+    /**
+     * Supress the build-in sorting in ng-repeat, JSON format is preserved
+     * @param obj
+     * @returns {Array}
+     */
+    $scope.notSorted = function(obj){
+      if (!obj) {
+        return [];
+      }
+      return Object.keys(obj);
+    };
+  }]);
