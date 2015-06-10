@@ -38,18 +38,6 @@ angular.module('myApp.listop', ['ngRoute'])
           };
 
           /**
-           * Supress the build-in sorting in ng-repeat, JSON format is preserved
-           * @param obj
-           * @returns {Array}
-           */
-          $scope.notSorted = function(obj){
-              if (!obj) {
-                  return [];
-              }
-              return Object.keys(obj);
-          };
-
-          /**
            * Sets the filter on the type
            * @param type
            */
@@ -74,6 +62,15 @@ angular.module('myApp.listop', ['ngRoute'])
           $scope.setSelectedDoc = function(docname){
               $scope.selectedDoc = docname;
               $scope.openDoc = null;
+          };
+
+          /**
+           * Sets the filter on the patient
+           * @param docname
+           */
+          $scope.setSelectedDoc = function(patient){
+              $scope.selectedPatient = patient;
+              $scope.openPatient = null;
           };
 
           /**

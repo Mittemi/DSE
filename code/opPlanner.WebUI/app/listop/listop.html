@@ -59,8 +59,6 @@
 
 <table class="table table-striped">
     <tr id="descriptionColumn">
-        <!-- Necessary workaround for sorted elements: http://stackoverflow.com/questions/19287716/skip-ng-repeat-json-ordering-in-angular-js //-->
-
         <td>
             <div class="btn-group" ng-class="{open: openType}" data-toggle="dropdown">
                 <button class="btn">{{selectedType}}<span ng-hide="selectedType != null">Operation Type</span></button>
@@ -79,7 +77,7 @@
         </td>
 
         <td>
-            <div class="btn-group" ng-class="{open: openstartTime}" data-toggle="dropdown">
+            <div class="btn-group" ng-class="{open: openstartTime}" data-toggle="dropdown" data-datetimepicker-config="{ dropdownSelector: '.my-toggle-select' }">
                 <button class="btn">{{selectedstartTime}}<span ng-hide="selectedstartTime != null">StartTime</span></button>
                 <button class="btn dropdown-toggle" ng-click="openstartTime=!open"><span class="caret"></span>
                 </button>
@@ -166,12 +164,31 @@
                 </ul>
             </div>
         </td>
-        <td ng-hide="globals.currentUser == null">Name of Patient</td>
+
+        <td ng-hide="globals.currentUser == null">
+            <div class="btn-group" ng-class="{open: openPatient}" data-toggle="dropdown">
+                <button class="btn">{{selectedPatient}}<span ng-hide="selectedPatient != null">Patient Name</span></button>
+                <button class="btn dropdown-toggle" ng-click="openPatient=!open"><span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu" aria-labelledby="dropdownMenu">
+                    <li>
+                        <a ng-click="selectedPatient = null; openPatient = null"><span class="glyphicon glyphicon-remove-circle"></span>  Uncheck All </a>
+                    </li>
+                    <li class="divider"></li>
+                    <li ng-repeat="tmp in oplist | uniq:'patientName'">
+                        <a ng-click="setSelectedPatient(tmp.patientName);">{{tmp.patientName}} &nbsp;<span ng-show="selectedPatient == tmp.patientName" class="glyphicon glyphicon-ok"></span></a>
+                    </li>
+                </ul>
+            </div>
+        </td>
+
+
+
         <td>&nbsp;</td>
     </tr>
 
 
-    <tr ng-repeat="tmp in oplist | filter: selectedKH | filter: selectedType | filter: selectedStart | orderBy:'slotStart':false" ng-class="{true:'success', false:'danger'}[tmp.freeSlot]">
+    <tr ng-repeat="tmp in oplist | filter: selectedKH | filter: selectedType | orderBy:'slotStart':false" ng-class="{true:'success', false:'danger'}[tmp.freeSlot]">
 
         <td>{{tmp.type}}</td>
         <td>{{tmp.slotStart}}</td>
