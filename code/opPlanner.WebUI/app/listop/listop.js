@@ -124,11 +124,13 @@ angular.module('myApp.listop', ['ngRoute'])
 
         $scope.newOpSlot = function(){
 
-            var json = " { 'type' : '" + $scope.data.opType  + "', 'slotStart' : " + $scope.data.slotStart.getTime() + ", 'slotEnd' : " + $scope.data.slotEnd.getTime() + " }";
+            var json = '{"type" : "' + $scope.data.opType  + '", "slotStart" : ' + $scope.data.slotStart.getTime() + ', "slotEnd" : ' + $scope.data.slotEnd.getTime() + ' }';
             $http.put('http://localhost:8080/opslots/create', json)
                 .success(function (data, status, headers, config) {
                 })
                 .error(function (data, status, headers, config) {
                 });
+            $scope.getListFromServer();
+            $scope.showfield = false;
         };
     }]);
