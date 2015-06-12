@@ -339,7 +339,7 @@ public class OpSlotService {
     private void sendSlotCreatedNotification(OpSlot opSlot) {
         //OPSlotDTO opSlotDTO = new OPSlotDTO(opSlot.getId(),opSlot.getHospital().getId(), opSlot.getHospital().getX(), opSlot.getHospital().getY(), opSlot.getSlotStart(), opSlot.getSlotEnd(), opSlot.getType());
 
-        String url = config.getOpMatcher().buildUrl("addOPSlotById/{slotId}");
+        String url = config.getOpMatcher().buildUrl("addOPSlotById/" + opSlot.getId());
 
         restTemplate.getForObject(url, String.class);
         System.out.println("Create slot notification sent");
