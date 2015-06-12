@@ -28,9 +28,6 @@ angular.module('myApp', [
           controller: 'LogoutController',
           templateUrl: 'authentication/views/logout.html'
       })
-      .when('/',{
-          redirectTo: '/home'
-      })
     .otherwise(
     {
         redirectTo: '/home'
@@ -39,6 +36,16 @@ angular.module('myApp', [
 
 .run(['$rootScope', '$location', '$cookieStore', '$http',
     function ($rootScope, $location, $cookieStore, $http) {
+        // check server connection
+        $http.get('http://localhost:8080/').
+            error(function(data, status, headers, config) {
+                alert("Error while trying to communicate with APIGateway \nPlease check connection.")
+            });
+
+
+
+
+
         // keep user logged in after page refresh
         $rootScope.globals = $cookieStore.get('globals') || {};
         if ($rootScope.globals.currentUser) {
@@ -58,7 +65,7 @@ angular.module('myApp', [
             } else {
                 return ""
             }
-        }
+        };
 
 
         /**

@@ -17,7 +17,7 @@ angular.module('myApp.listop', ['ngRoute'])
                   $scope.oplist = data;
               }).
               error(function(data, status, headers, config) {
-                  $scope.oplist = data;
+                  alert("Error while recieving data from server. \nPlease check connection.")
               });
 
 
@@ -29,11 +29,10 @@ angular.module('myApp.listop', ['ngRoute'])
 
               $http.delete('http://localhost:8080/opslots/' + id)
                   .success(function (data, status, headers, config) {
-                      // this callback will be called asynchronously
-                      // when the response is available
+                     $scope.getListFromServer();
                   })
                   .error(function (data, status, headers, config) {
-                      $location.path('/#/listop');
+                      alert("Error while trying to delete. \nPlease check server connection.");
                   });
           };
 
@@ -115,7 +114,7 @@ angular.module('myApp.listop', ['ngRoute'])
                       $scope.oplist = data;
                   }).
                   error(function (data, status, headers, config) {
-                      $scope.oplist = data;
+                      alert("Error while getting Server data. \nPlease check connection.")
                   });
           };
 }])
@@ -129,6 +128,7 @@ angular.module('myApp.listop', ['ngRoute'])
                 .success(function (data, status, headers, config) {
                 })
                 .error(function (data, status, headers, config) {
+                    alert("Error while creating new Operation Slot. \nPlease check connection to server.")
                 });
             $scope.getListFromServer();
             $scope.showfield = false;
