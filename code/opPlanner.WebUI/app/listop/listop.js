@@ -110,7 +110,7 @@ angular.module('myApp.listop', ['ngRoute'])
             $scope.dt = null;
         };
         $scope.today();
-        
+
         $scope.clear = function () {
             $scope.dt = null;
         };
