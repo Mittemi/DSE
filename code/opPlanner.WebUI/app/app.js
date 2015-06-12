@@ -28,6 +28,9 @@ angular.module('myApp', [
           controller: 'LogoutController',
           templateUrl: 'authentication/views/logout.html'
       })
+      .when('/',{
+          redirectTo: '/home'
+      })
     .otherwise(
     {
         redirectTo: '/home'

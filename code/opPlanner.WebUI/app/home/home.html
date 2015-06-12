@@ -1,4 +1,35 @@
-<!--
+<div class="col-lg-6 col-lg-offset-3">
+    <h1>Dashboard</h1>
+    <h4>What do you wanna do?</h4>
+
+    <a href="/#/login" ng-hide="globals.currentUser != null">
+        <br /><br />
+        <button type="button" class="btn btn-default btn-lg">
+            <span class="glyphicon glyphicon-user" aria-hidden="true"></span> Login to Klinisys
+        </button>
+    </a>
+    <br /><br />
+    <a href="/#/listop">
+        <button type="button" class="btn btn-default btn-lg">
+            <span class="glyphicon glyphicon-calendar" aria-hidden="true"></span> List OP Slots
+        </button>
+    </a>
+    <br /><br />
+    <a href="/#/login" ng-hide="globals.currentUser == null">
+        <button type="button" class="btn btn-default btn-lg">
+            <span class="glyphicon glyphicon-comment" aria-hidden="true"></span> Show Notifications
+        </button>
+    </a>
+
+
+</div>
+
+
+
+
+
+
+<!-- OLD SLIDER MAIN PAGE
 &lt;!&ndash; Slider main container &ndash;&gt;
 <div class="swiper-container">
     &lt;!&ndash; Additional required wrapper &ndash;&gt;
