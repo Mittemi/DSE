@@ -64,3 +64,10 @@
   align-items: center;
 }
 
+/**
+* TimePicker Arrows
+**/
+.timePickers{
+  margin-top:-2.5em;
+  margin-bottom:-1.0em;
+}

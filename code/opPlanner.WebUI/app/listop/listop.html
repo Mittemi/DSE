@@ -1,13 +1,7 @@
-<h1>Operation List</h1>
-<p>This lists contains all operations in the hospital</p>
-
 <div class="createNewOpSlotSection" ng-hide="globals.currentUser == null || globals.currentUser.role != 'Hospital'">
     <button type="button" class="btn btn-default" aria-label="Left Align" ng-click="showfield=true" ng-hide="showfield">
         <span class="glyphicon glyphicon-edit" aria-hidden="true"></span> Add new op slot
     </button>
-
-
-
 </div>
 
 <br />
@@ -74,15 +68,22 @@
         <td>
             <div ng-controller="DatepickerCtrl">
                    <p class="input-group">
-                       <input type="text" class="form-control" datepicker-popup="{{format}}" ng-model="dt" is-open="opened" min-date="'2015-05-01'" max-date="'maxDate'" datepicker-options="dateOptions" date-disabled="disabled(date, mode)" ng-required="true" close-text="Close" />
+                       <input type="text" class="form-control" datepicker-popup="{{format}}" ng-model="dt" is-open="opened" min-date="'2015-05-01'" max-date="'maxDate'" datepicker-options="dateOptions" ng-required="true" close-text="Close" ng-change="changed()"/>
                   <span class="input-group-btn">
                         <button type="button" class="btn btn-default" ng-click="open($event)"><i class="glyphicon glyphicon-calendar"></i></button>
                   </span>
                    </p>
             </div>
         </td>
-<td>Starttime</td>
-        <td>Endtime</td>
+        <td>
+            <div ng-controller="StartTimePickerCtrl" class="timePickers">
+                <timepicker ng-model="mytime" ng-change="changed()" hour-step="hstep" minute-step="mstep" show-meridian="ismeridian" arrowkeys="false"></timepicker>
+            </div>
+        </td>
+        <td>
+            <div ng-controller="EndTimePickerCtrl" class="timePickers">
+                <timepicker ng-model="mytime" ng-change="changed()" hour-step="hstep" minute-step="mstep" show-meridian="ismeridian" arrowkeys="false"></timepicker></div>
+        </td>
         <td>
             <!-- Type Selector button -->
             <div class="btn-group" dropdown is-open="status.isopenType">
