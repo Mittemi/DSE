@@ -17,6 +17,7 @@
     "angular-bootstrap-datetimepicker": "0.3.x",
     "moment" : "2.10.*",
     "angular-filter" : "0.5.4",
-    "angular-bootstrap" : "latest"
+    "angular-bootstrap" : "latest",
+    "bootstrap-timepicker" : "0.2.x"
   }
 }
