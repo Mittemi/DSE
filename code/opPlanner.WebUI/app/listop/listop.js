@@ -77,31 +77,14 @@ angular.module('myApp.listop', ['ngRoute'])
                         alert("Error while getting Server data. \nPlease check connection.")
                     });
             };
+
+            /**
+             * GetDate Formatted
+             */
+            $scope.formatDate = function (time, format) {
+                return moment(time).format(format);
+            };
         }])
-
-    .controller('OpSlotFormController', ['$scope', '$http', function ($scope, $http) {
-
-        $scope.newOpSlot = function () {
-
-            var json = '{"type" : "' + $scope.data.opType + '", "slotStart" : ' + $scope.data.slotStart.getTime() + ', "slotEnd" : ' + $scope.data.slotEnd.getTime() + ' }';
-            $http.put('http://localhost:8080/opslots/create', json)
-                .success(function (data, status, headers, config) {
-                })
-                .error(function (data, status, headers, config) {
-                    alert("Error while creating new Operation Slot. \nPlease check connection to server.")
-                });
-            $scope.getListFromServer();
-            $scope.showfield = false;
-        };
-
-        /**
-         * GetDate Formatted
-         */
-        $scope.formatDate = function (time, format) {
-            return moment(time).format(format);
-        };
-
-    }])
 
     .controller('DatepickerCtrl', function ($rootScope,$scope,$log) {
 
@@ -276,4 +259,169 @@ angular.module('myApp.listop', ['ngRoute'])
         $scope.clear = function () {
             $scope.mytime = null;
         };
-    });
+    })
+
+
+    .controller('NewSlotCtrl', function ($scope, $modal, $log) {
+
+        $scope.items = ['item1', 'item2', 'item3'];
+
+        $scope.animationsEnabled = true;
+
+        $scope.open = function (size) {
+
+            var modalInstance = $modal.open({
+                animation: $scope.animationsEnabled,
+                templateUrl: 'myModalContent.html',
+                controller: 'ModalInstanceCtrl',
+                size: size,
+                resolve: {
+                    items: function () {
+                        return $scope.items;
+                    }
+                }
+            });
+
+            modalInstance.result.then(function (selectedItem) {
+                $scope.selected = selectedItem;
+            }, function () {
+                $log.info('Modal dismissed at: ' + new Date());
+            });
+        };
+
+        $scope.toggleAnimation = function () {
+            $scope.animationsEnabled = !$scope.animationsEnabled;
+        };
+
+
+
+
+
+    })
+
+// Please note that $modalInstance represents a modal window (instance) dependency.
+// It is not the same as the $modal service used above.
+
+.controller('ModalInstanceCtrl', function ($scope, $modalInstance,$http, items) {
+
+    $scope.items = items;
+    $scope.selected = {
+        item: $scope.items[0]
+    };
+
+
+    $scope.cancel = function () {
+        $modalInstance.dismiss('cancel');
+    };
+
+    $scope.today = function() {
+        $scope.dt = new Date();
+    };
+    $scope.today();
+
+    $scope.clear = function () {
+        $scope.dt = null;
+    };
+
+    $scope.toggleMin = function() {
+        $scope.minDate = $scope.minDate ? null : new Date();
+    };
+    $scope.toggleMin();
+
+    $scope.open = function($event) {
+        $event.preventDefault();
+        $event.stopPropagation();
+
+        $scope.opened = true;
+    };
+
+    $scope.dateOptions = {
+        formatYear: 'yy',
+        startingDay: 1
+    };
+
+    $scope.formats = ['dd.MM.yyyy'];
+    $scope.format = $scope.formats[0];
+
+    var tomorrow = new Date();
+    tomorrow.setDate(tomorrow.getDate() + 1);
+    var afterTomorrow = new Date();
+    afterTomorrow.setDate(tomorrow.getDate() + 2);
+    $scope.events =
+        [
+            {
+                date: tomorrow,
+                status: 'full'
+            },
+            {
+                date: afterTomorrow,
+                status: 'partially'
+            }
+        ];
+
+    $scope.getDayClass = function(date, mode) {
+        if (mode === 'day') {
+            var dayToCheck = new Date(date).setHours(0,0,0,0);
+
+            for (var i=0;i<$scope.events.length;i++){
+                var currentDay = new Date($scope.events[i].date).setHours(0,0,0,0);
+
+                if (dayToCheck === currentDay) {
+                    return $scope.events[i].status;
+                }
+            }
+        }
+        return '';
+    };
+
+    $scope.startingTime = new Date();
+    $scope.startingTime.setHours(9);
+    $scope.startingTime.setMinutes(0);
+    $scope.endingTime = new Date();
+    $scope.endingTime.setHours(9);
+    $scope.endingTime.setMinutes(15);
+    $scope.hstep = 1;
+    $scope.mstep = 15;
+
+    $scope.options = {
+        hstep: [1, 2, 3],
+        mstep: [1, 5, 10, 15, 25, 30]
+    };
+
+    $scope.ismeridian = false;
+
+    $scope.update = function() {
+        var d = new Date();
+        d.setHours( 14 );
+        d.setMinutes( 0 );
+        $scope.startingTime = d;
+    };
+
+    $scope.newOpSlot = function () {
+
+        var start = $scope.dt;
+        start.setHours($scope.startingTime.getHours());
+        start.setMinutes($scope.startingTime.getMinutes());
+
+        var end = $scope.dt;
+        start.setHours($scope.endingTime.getHours());
+        start.setMinutes($scope.endingTime.getMinutes());
+
+
+
+        var json = '{"type" : "' + $scope.data.opType + '", "slotStart" : ' + start.getTime() + ', "slotEnd" : ' + end.getTime() + ' }';
+        $http.put('http://localhost:8080/opslots/create', json)
+            .success(function (data, status, headers, config) {
+            })
+            .error(function (data, status, headers, config) {
+                alert("Error while creating new Operation Slot. \nPlease check connection to server.")
+            });
+        $scope.getListFromServer();
+    };
+
+    $scope.ok = function () {
+        $modalInstance.close($scope.selected.item);
+        $scope.newOpSlot();
+    };
+
+});

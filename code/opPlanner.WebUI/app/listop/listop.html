@@ -1,47 +1,106 @@
 <h1>OP Slots <span ng-hide="globals.currentUser.role[0] != 'Hospital'">- {{oplist[0].hospitalName}}</span></h1>
 
-<div class="createNewOpSlotSection" ng-hide="globals.currentUser == null || globals.currentUser.role != 'Hospital'">
-    <button type="button" class="btn btn-default" aria-label="Left Align" ng-click="showfield=true" ng-hide="showfield">
-        <span class="glyphicon glyphicon-edit" aria-hidden="true"></span> Add new op slot
+
+<div ng-controller="NewSlotCtrl">
+    <script type="text/ng-template" id="myModalContent.html">
+        <div class="modal-header">
+            <h3 class="modal-title">Insert new OP Slot</h3>
+        </div>
+
+
+        <form class="modal-body form-group">
+            <div class="form-group">
+                <label for="data.opType">Typ</label>
+                <input class="form-control" id="data.opType" placeholder="Type of operation" ng-model="data.opType">
+            </div>
+            <div class="form-group">
+                <label for="opDate">OP Slot Date</label>
+
+                <div class="input-group" id="opDate">
+                    <input type="text" class="form-control" datepicker-popup="{{format}}" ng-model="dt" is-open="opened"
+                           datepicker-options="dateOptions" ng-required="true" close-text="Close"/>
+              <span class="input-group-btn">
+                <button type="button" class="btn btn-default" ng-click="open($event)"><i
+                        class="glyphicon glyphicon-calendar"></i></button>
+              </span>
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-group col-sm-6">
+                    <label for="newOpStart">Start Time</label>
+
+                    <timepicker ng-model="startingTime" id="newOpStart" ng-change="changed()" hour-step="hstep"
+                                minute-step="mstep" show-meridian="ismeridian"></timepicker>
+                </div>
+
+                <div class="form-group col-sm-6">
+                    <label for="newOpEnd">End Time</label>
+
+                    <timepicker ng-model="endingTime" id="newOpEnd" ng-change="changed()" hour-step="hstep"
+                                minute-step="mstep"
+                                show-meridian="ismeridian"></timepicker>
+                </div>
+            </div>
+        </form>
+        </div>
+
+
+        <div class="modal-footer">
+            <button class="btn btn-primary" ng-click="ok()">Insert new OP Slot</button>
+            <button class="btn btn-warning" ng-click="cancel()">Cancel</button>
+        </div>
+    </script>
+
+    <button class="btn btn-default" ng-click="open()" ng-hide="globals.currentUser == null || globals.currentUser.role != 'Hospital'"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span>
+        Add new op slot
     </button>
 </div>
 
-<br />
-<form name="opSlot" ng-controller="OpSlotFormController" class="opSlotForm" >
+
+<br/>
 <table class="table table-striped">
     <tr id="descriptionColumn">
         <td>
             <div ng-controller="DatepickerCtrl">
-                   <p class="input-group">
-                       <input type="text" class="form-control" datepicker-popup="{{format}}" ng-model="dt" is-open="opened" min-date="'2015-05-01'" max-date="'maxDate'" datepicker-options="dateOptions" ng-required="true" close-text="Close" ng-change="changed()"/>
+                <p class="input-group">
+                    <input type="text" class="form-control" datepicker-popup="{{format}}" ng-model="dt" is-open="opened"
+                           min-date="'2015-05-01'" max-date="'maxDate'" datepicker-options="dateOptions"
+                           ng-required="true" close-text="Close" ng-change="changed()"/>
                   <span class="input-group-btn">
-                        <button type="button" class="btn btn-default" ng-click="open($event)"><i class="glyphicon glyphicon-calendar"></i></button>
+                        <button type="button" class="btn btn-default" ng-click="open($event)"><i
+                                class="glyphicon glyphicon-calendar"></i></button>
                   </span>
-                   </p>
+                </p>
             </div>
         </td>
         <td>
             <div ng-controller="StartTimePickerCtrl" class="timePickers">
-                <timepicker ng-model="mytime" ng-change="changed()" hour-step="hstep" minute-step="mstep" show-meridian="ismeridian" arrowkeys="false"></timepicker>
+                <timepicker ng-model="mytime" ng-change="changed()" hour-step="hstep" minute-step="mstep"
+                            show-meridian="ismeridian" arrowkeys="false"></timepicker>
             </div>
         </td>
         <td>
             <div ng-controller="EndTimePickerCtrl" class="timePickers">
-                <timepicker ng-model="mytime" ng-change="changed()" hour-step="hstep" minute-step="mstep" show-meridian="ismeridian" arrowkeys="false"></timepicker></div>
+                <timepicker ng-model="mytime" ng-change="changed()" hour-step="hstep" minute-step="mstep"
+                            show-meridian="ismeridian" arrowkeys="false"></timepicker>
+            </div>
         </td>
         <td>
             <!-- Type Selector button -->
             <div class="btn-group" dropdown is-open="status.isopenType">
                 <button type="button" class="btn btn dropdown-toggle" dropdown-toggle ng-disabled="disabled">
-                    {{selectedType}}<span ng-hide="selectedType != null">Operation Type </span><span class="caret"></span>
+                    {{selectedType}}<span ng-hide="selectedType != null">Operation Type </span><span
+                        class="caret"></span>
                 </button>
                 <ul class="dropdown-menu" aria-labelledby="dropdownMenu">
                     <li>
-                        <a ng-click="selectType(null)"><span class="glyphicon glyphicon-remove-circle"></span>  Uncheck All </a>
+                        <a ng-click="selectType(null)"><span class="glyphicon glyphicon-remove-circle"></span> Uncheck
+                            All </a>
                     </li>
                     <li class="divider"></li>
                     <li ng-repeat="tmp in oplist | uniq:'type'">
-                        <a ng-click="selectType(tmp.type)">{{tmp.type}} &nbsp;<span ng-show="selectedType == tmp.type" class="glyphicon glyphicon-ok"></span></a>
+                        <a ng-click="selectType(tmp.type)">{{tmp.type}} &nbsp;<span ng-show="selectedType == tmp.type"
+                                                                                    class="glyphicon glyphicon-ok"></span></a>
                     </li>
                 </ul>
             </div>
@@ -56,11 +115,13 @@
                 </button>
                 <ul class="dropdown-menu" role="menu">
                     <li>
-                        <a ng-click="selectDoc(null)"><span class="glyphicon glyphicon-remove-circle"></span>  Uncheck All </a>
+                        <a ng-click="selectDoc(null)"><span class="glyphicon glyphicon-remove-circle"></span> Uncheck
+                            All </a>
                     </li>
                     <li class="divider"></li>
                     <li ng-repeat="tmp in oplist | uniq:'doctorName'">
-                        <a ng-click="selectDoc(tmp.doctorName)">{{tmp.doctorName}} &nbsp;<span ng-show="selectedDoc == tmp.doctorName" class="glyphicon glyphicon-ok"></span></a>
+                        <a ng-click="selectDoc(tmp.doctorName)">{{tmp.doctorName}} &nbsp;<span
+                                ng-show="selectedDoc == tmp.doctorName" class="glyphicon glyphicon-ok"></span></a>
                     </li>
                 </ul>
             </div>
@@ -74,11 +135,13 @@
                 </button>
                 <ul class="dropdown-menu" role="menu">
                     <li>
-                        <a ng-click="selectKH(null)"><span class="glyphicon glyphicon-remove-circle"></span>  Uncheck All </a>
+                        <a ng-click="selectKH(null)"><span class="glyphicon glyphicon-remove-circle"></span> Uncheck All
+                        </a>
                     </li>
                     <li class="divider"></li>
                     <li ng-repeat="tmp in oplist | uniq:'hospitalName'">
-                        <a ng-click="selectKH(tmp.hospitalName)">{{tmp.hospitalName}} &nbsp;<span ng-show="selectedKH == tmp.hospitalName" class="glyphicon glyphicon-ok"></span></a>
+                        <a ng-click="selectKH(tmp.hospitalName)">{{tmp.hospitalName}} &nbsp;<span
+                                ng-show="selectedKH == tmp.hospitalName" class="glyphicon glyphicon-ok"></span></a>
                     </li>
                 </ul>
             </div>
@@ -88,15 +151,18 @@
             <!-- Patient select button -->
             <div class="btn-group" dropdown is-open="status.isopenPatient">
                 <button type="button" class="btn btn dropdown-toggle" dropdown-toggle ng-disabled="disabled">
-                    {{selectedPatient}}<span ng-hide="selectedPatient != null">Patient Name</span> <span class="caret"></span>
+                    {{selectedPatient}}<span ng-hide="selectedPatient != null">Patient Name</span> <span
+                        class="caret"></span>
                 </button>
                 <ul class="dropdown-menu" role="menu">
                     <li>
-                        <a ng-click="selectPatient(null)"><span class="glyphicon glyphicon-remove-circle"></span>  Uncheck All </a>
+                        <a ng-click="selectPatient(null)"><span class="glyphicon glyphicon-remove-circle"></span>
+                            Uncheck All </a>
                     </li>
                     <li class="divider"></li>
                     <li ng-repeat="tmp in oplist | uniq:'patientName'">
-                        <a ng-click="selectPatient(tmp.patientName)">{{tmp.patientName}} &nbsp;<span ng-show="selectedPatient == tmp.patientName" class="glyphicon glyphicon-ok"></span></a>
+                        <a ng-click="selectPatient(tmp.patientName)">{{tmp.patientName}} &nbsp;<span
+                                ng-show="selectedPatient == tmp.patientName" class="glyphicon glyphicon-ok"></span></a>
                     </li>
                 </ul>
             </div>
@@ -106,7 +172,8 @@
     </tr>
 
 
-    <tr ng-repeat="tmp in oplist | filter: selectedKH | filter: selectedType | orderBy:'slotStart':false" ng-class="{true:'success', false:'danger'}[tmp.freeSlot]">
+    <tr ng-repeat="tmp in oplist | filter: selectedKH | filter: selectedType | orderBy:'slotStart':false"
+        ng-class="{true:'success', false:'danger'}[tmp.freeSlot]">
 
 
         <td>{{formatDate(tmp.slotStart,"DD.MM.YYYY")}}</td>
@@ -125,4 +192,5 @@
         </td>
     </tr>
 </table>
-</form>
+
+
