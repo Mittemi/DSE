@@ -24,7 +24,7 @@ public class PublicController {
     @Autowired
     private OpSlotService opSlotService;
 
-    @RequestMapping(value = "/", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+    @RequestMapping(value = "/", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public List<? extends OpSlotListDTO> getOpSlots(@RequestParam(value = "from", required = false)  @DateTimeFormat(pattern = Constants.DATE_FORMAT_STRING) Date dateFrom,
                                                       @RequestParam(value = "to", required = false)  @DateTimeFormat(pattern = Constants.DATE_FORMAT_STRING)Date dateTo) {
         return opSlotService.getFilteredOpSlots(null, null, null, null, dateFrom, dateTo);

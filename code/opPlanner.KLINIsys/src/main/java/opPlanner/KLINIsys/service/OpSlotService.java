@@ -11,12 +11,14 @@ import opPlanner.KLINIsys.model.Patient;
 import opPlanner.KLINIsys.repository.DoctorRepository;
 import opPlanner.KLINIsys.repository.OpSlotRepository;
 import opPlanner.KLINIsys.repository.PatientRepository;
+import opPlanner.Shared.Constants;
 import opPlanner.Shared.OpPlannerProperties;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -217,6 +219,9 @@ public class OpSlotService {
     private Map<Long, ReservationDto> toOpSlotLookupMap(ReservationDto[] result) {
         Map<Long, ReservationDto> resultMap = new HashMap<>();
 
+        if(result == null)
+            return resultMap;
+
         for (ReservationDto reservationDTO : result) {
             resultMap.put(Long.parseLong(reservationDTO.getOpSlotId()), reservationDTO);
         }
@@ -246,12 +251,14 @@ public class OpSlotService {
         url = url + "?" + key + "={" + key + "}";
 
         if(from != null && to != null) {
-            urlVariables.put("start", from);
-            urlVariables.put("end", to);
+            SimpleDateFormat sdf = new SimpleDateFormat(Constants.DATETIME_FORMAT_STRING);
+            urlVariables.put("start", sdf.format(from));
+            urlVariables.put("end", sdf.format(to));
             url = url + "&start={start}&end={end}";
         }
 
-        ReservationDto[] result = restTemplate.getForObject(config.getReservation().buildUrl(url), ReservationDto[].class, urlVariables);
+        url = config.getReservation().buildUrl(url);
+        ReservationDto[] result = restTemplate.getForObject(url, ReservationDto[].class, urlVariables);
 
         return toOpSlotLookupMap(result);
     }

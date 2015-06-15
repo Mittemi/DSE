@@ -50,13 +50,11 @@ public class OpSlotsController {
     public String index(Authentication auth, @RequestParam(value = "from", required = false) String from, @RequestParam(value = "to", required = false) String to, HttpServletResponse response) {
 
         Map<String, Object> param = new HashMap<>();
-        Map<String, Object> request = new HashMap<>();
-        if (from != null) {
-            request.put("from", from);
+        String parameters = "";
+        if (from != null && to != null) {
+            parameters = "?from="+from +"&to="+to;
         }
-        if (to != null) {
-            request.put("to", to);
-        }
+
         String url = null;
         System.out.print("OpSlot-List -- From: " + (from != null ? from : "null") + ", TO: " + (to != null ? to : "null"));
         if (auth != null && auth.isAuthenticated()) {
@@ -81,7 +79,7 @@ public class OpSlotsController {
             url = config.getKlinisys().buildUrl("public/");
         }
 
-        return client.postForObject(url, request, String.class, param);
+        return client.getForObject(url+parameters, String.class, param);
     }
 
     /* fallback Hystrix */

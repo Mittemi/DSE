@@ -27,7 +27,7 @@ public class HospitalController {
     @Autowired
     private HospitalRepository hospitalRepository;
 
-    @RequestMapping(value = "/{mail}/", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+    @RequestMapping(value = "/{mail}/", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public List<?extends OpSlotListDTO> getOpSlots(@PathVariable("mail")String mail,
                                                      @RequestParam(value = "from", required = false)  @DateTimeFormat(pattern = Constants.DATE_FORMAT_STRING) Date dateFrom,
                                                      @RequestParam(value = "to", required = false)  @DateTimeFormat(pattern = Constants.DATE_FORMAT_STRING) Date dateTo,
