@@ -90,13 +90,13 @@ angular.module('myApp.listop', ['ngRoute'])
             $rootScope.getListFromServer = function () {
                 var params = "?";
                 if ($rootScope.startInformation != null) {
-                    params += "from=" + $rootScope.startInformation.format("YYYY-MM-DD HH:MM");
+                    params += "from=" + $rootScope.startInformation.format("YYYY-MM-DD hh:mm");
                 }
                 if (params != "?" && $rootScope.startInformation != null) {
                     params += "&";
                 }
                 if ($rootScope.endInformation != null) {
-                    params += "to=" + $rootScope.endInformation.format("YYYY-MM-DD HH:MM");
+                    params += "to=" + $rootScope.endInformation.format("YYYY-MM-DD hh:mm");
                 }
 
                 $http.get('http://localhost:8080/opslots/list' + params).
@@ -432,14 +432,13 @@ angular.module('myApp.listop', ['ngRoute'])
         start.setHours($scope.startingTime.getHours());
         start.setMinutes($scope.startingTime.getMinutes());
 
-
         var end = $scope.dt;
-        start.setHours($scope.endingTime.getHours());
-        start.setMinutes($scope.endingTime.getMinutes());
+        end.setHours($scope.endingTime.getHours());
+        end.setMinutes($scope.endingTime.getMinutes());
 
 
 
-        var json = '{"type" : "' + $scope.data.opType + '", "slotStart" : "' + moment(start).format("YYYY-MM-DDTHH:MM:ss.SSSZZ") + '", "slotEnd" : "' + moment(end).format("YYYY-MM-DDTHH:MM:ss.SSSZZ") + '" }';
+        var json = '{"type" : "' + $scope.data.opType + '", "slotStart" : "' + moment(start).format("YYYY-MM-DDThh:mm:ss.SSSZZ") + '", "slotEnd" : "' + moment(end).format("YYYY-MM-DDThh:mm:ss.SSSZZ") + '" }';
         $http.put('http://localhost:8080/opslots/create', json)
             .success(function (data, status, headers, config) {
                 $scope.getListFromServer();
@@ -620,4 +619,4 @@ angular.module('myApp.listop', ['ngRoute'])
             $scope.newOpSlot();
         };
 
-    });;
+    });
