@@ -437,9 +437,8 @@ angular.module('myApp.listop', ['ngRoute'])
         end.setMinutes($scope.endingTime.getMinutes());
 
 
-
-        var json = '{"type" : "' + $scope.data.opType + '", "slotStart" : "' + moment(start).format("YYYY-MM-DDThh:mm:ss.SSSZZ") + '", "slotEnd" : "' + moment(end).format("YYYY-MM-DDThh:mm:ss.SSSZZ") + '" }';
-        $http.put('http://localhost:8080/opslots/create', json)
+        var insertMessage = {"type": $scope.data.opType , "slotStart" : moment(start).format("YYYY-MM-DDThh:mm:ss.SSSZZ"), "slotEnd" : moment(end).format("YYYY-MM-DDThh:mm:ss.SSSZZ") };
+        $http.put('http://localhost:8080/opslots/create', insertMessage)
             .success(function (data, status, headers, config) {
                 $scope.getListFromServer();
             })
@@ -452,6 +451,7 @@ angular.module('myApp.listop', ['ngRoute'])
     $scope.ok = function () {
         $modalInstance.close($scope.selected.item);
         $scope.newOpSlot();
+
     };
 
 })
@@ -511,11 +511,13 @@ angular.module('myApp.listop', ['ngRoute'])
 
         $scope.today = function() {
             $scope.dt = new Date();
+            $scope.dt2 = new Date();
         };
         $scope.today();
 
         $scope.clear = function () {
             $scope.dt = null;
+            $scope.dt2 = null;
         };
 
         $scope.toggleMin = function() {
@@ -569,43 +571,18 @@ angular.module('myApp.listop', ['ngRoute'])
             return '';
         };
 
-        $scope.startingTime = new Date();
-        $scope.startingTime.setHours(9);
-        $scope.startingTime.setMinutes(0);
-        $scope.endingTime = new Date();
-        $scope.endingTime.setHours(9);
-        $scope.endingTime.setMinutes(15);
-        $scope.hstep = 1;
-        $scope.mstep = 15;
-
-        $scope.options = {
-            hstep: [1, 2, 3],
-            mstep: [1, 5, 10, 15, 25, 30]
-        };
-
-        $scope.ismeridian = false;
-
-        $scope.update = function() {
-            var d = new Date();
-            d.setHours( 14 );
-            d.setMinutes( 0 );
-            $scope.startingTime = d;
-        };
-
-        $scope.newOpSlot = function () {
+        $scope.newReservation = function () {
 
             var start = $scope.dt;
-            start.setHours($scope.startingTime.getHours());
-            start.setMinutes($scope.startingTime.getMinutes());
+            start.setHours(0);
+            start.setMinutes(0);
 
-            var end = $scope.dt;
-            start.setHours($scope.endingTime.getHours());
-            start.setMinutes($scope.endingTime.getMinutes());
+            var end = $scope.dt2;
+            start.setHours(23);
+            start.setMinutes(59);
 
-
-
-            var json = '{"type" : "' + $scope.data.opType + '", "slotStart" : ' + start.getTime() + ', "slotEnd" : ' + end.getTime() + ' }';
-            $http.post('http://localhost:8080/opslots/"/reservation', json)
+            var insertMessage = {"patientId": $scope.data.patientId , "preferredStart" : moment(start).format("YYYY-MM-DD hh:mm"), "preferredEnd" : moment(end).format("YYYY-MM-DD hh:mm"), "preferredPerimeter" : $scope.data.preferredPerimeter , "opSlotType" : $scope.data.opSlotType};
+            $http.post('http://localhost:8080/opslots/reservation', insertMessage)
                 .success(function (data, status, headers, config) {
                 })
                 .error(function (data, status, headers, config) {
@@ -616,7 +593,7 @@ angular.module('myApp.listop', ['ngRoute'])
 
         $scope.ok = function () {
             $modalInstance.close($scope.selected.item);
-            $scope.newOpSlot();
+            $scope.newReservation();
         };
 
     });

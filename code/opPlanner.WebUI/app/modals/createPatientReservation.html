@@ -1,12 +1,10 @@
 ﻿<div class="modal-header">
     <h3 class="modal-title">Patient Reservation</h3>
 </div>
-
-
 <form class="modal-body form-group">
     <div class="form-group">
-        <label for="data.opType">Patient</label>
-        <input class="form-control" id="data.opType" placeholder="Type of operation" ng-model="data.opType">
+        <label for="data.patientId">Patient</label>
+        <input class="form-control" id="data.patientId" placeholder="Patient ID" ng-model="data.patientId">
     </div>
     <div class="row">
         <div class="form-group col-sm-6">
@@ -23,13 +21,12 @@
               </span>
             </div>
         </div>
-
         <div class="form-group col-sm-6">
             <label for="opDateEnd">Zeitraum Ende</label>
 
             <div class="input-group">
 
-                <input type="text" class="form-control" id="opDateEnd" datepicker-popup="{{format}}" ng-model="dt"
+                <input type="text" class="form-control" id="opDateEnd" datepicker-popup="{{format}}" ng-model="dt2"
                        is-open="opened"
                        datepicker-options="dateOptions" ng-required="true" close-text="Close"/>
               <span class="input-group-btn">
@@ -39,10 +36,18 @@
             </div>
         </div>
     </div>
+    <div class="row">
+        <div class="form-group col-sm-6">
+            <label for="data.preferredPerimeter">Maximal Distance to Hospital</label>
+            <input class="form-control" id="data.preferredPerimeter" placeholder="Max. Distance in km" ng-model="data.preferredPerimeter">
+        </div>
+        <div class="form-group col-sm-6">
+            <label for="data.opSlotType">Operationtype</label>
+            <input class="form-control" id="data.opSlotType" placeholder="eg. Eyes, Stomach, Brain" ng-model="data.opSlotType">
+        </div>
+    </div>
 </form>
-
-
 <div class="modal-footer">
-    <button class="btn btn-primary" ng-click="ok()">Insert new OP Slot</button>
+    <button class="btn btn-primary" ng-click="ok()">Start creating a patient reservation</button>
     <button class="btn btn-warning" ng-click="cancel()">Cancel</button>
 </div>
