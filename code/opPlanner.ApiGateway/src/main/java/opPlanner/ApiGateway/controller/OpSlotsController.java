@@ -6,10 +6,7 @@ import com.sun.javafx.fxml.builder.URLBuilder;
 import opPlanner.Shared.OpPlannerProperties;
 import opPlanner.ApiGateway.Constants;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.util.MultiValueMap;
@@ -27,6 +24,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 /**
@@ -104,7 +102,6 @@ public class OpSlotsController {
 
     public void createFallback(Authentication auth, Object requestBody, HttpServletResponse response) {
         response.setStatus(HttpServletResponse.SC_SERVICE_UNAVAILABLE);
-        //return "That didn't work out! Try again later!";
     }
 
 
@@ -123,53 +120,35 @@ public class OpSlotsController {
         response.setStatus(HttpServletResponse.SC_SERVICE_UNAVAILABLE);
     }
 
-    //http://localhost:9002/reservation/reserve?preferredStart=2014-05-20%2010:00&preferredEnd=2016-06-27%2018:00
-    // &preferredPerimeter=500&opSlotType=Demo&doctorId=d1@dse.at&patientId=p1@dse.at
-
     @PreAuthorize("hasRole('Doctor')")
     @HystrixCommand(fallbackMethod = "createReservationFallback", groupKey = Constants.GROUP_KEY_RESERVATION)
-    @RequestMapping(value = "/reservation", method = RequestMethod.POST, produces = org.springframework.http
-            .MediaType.APPLICATION_JSON_VALUE)
-    public String createReservation(Authentication auth, String patientId, Date preferredStart, Date preferredEnd,
-                                    Integer preferredPerimeter, String opSlotType, HttpServletResponse response) {
+    @RequestMapping(value = "/reservation", method = RequestMethod.POST)
+    public void createReservation(Authentication auth, @RequestBody LinkedHashMap<String, Object> map, HttpServletResponse response) {
 
-        String doctorMail = (String)auth.getPrincipal();
-        MultiValueMap<String, String> map = new LinkedMultiValueMap<String, String>();
-        DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm");
-        map.add("patientId", patientId);
-        map.add("preferredStart", formatter.format(preferredStart));
-        map.add("preferredEnd", formatter.format(preferredEnd));
-        map.add("preferredPerimeter", preferredPerimeter.toString());
-        map.add("opSlotType", opSlotType);
-        URI reservationURI;
-        ResponseEntity<String> result;
+        map.put("doctorId", auth.getPrincipal());
+        String reservationURI = config.getReservation().buildUrl("reservation/reserve?preferredStart={preferredStart}&preferredEnd={preferredEnd}&preferredPerimeter={preferredPerimeter}&opSlotType={opSlotType}&patientId={patientId}&doctorId={doctorId}");
+
         try {
-            reservationURI = new URI(config.getReservation().buildUrl("reservation/reserve"));
-            result = client.postForEntity(reservationURI, map, String.class);
-        } catch (URISyntaxException e) {
-            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-            return "NOK (URI Problems)";
-        } catch (HttpClientErrorException e) {
-            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-            return "NOK (Reservation was not sucessful)";
+            ResponseEntity responseEntity = client.postForEntity(reservationURI, null, ResponseEntity.class, map);
+        }catch(HttpClientErrorException e) {
+            // client doesn't care about 404 status code used by the server
+            // gets notification anyway
+            if(!e.getStatusCode().equals(HttpStatus.NOT_FOUND))
+                throw e;
+            response.setStatus(e.getStatusCode().value());
         }
-
-        System.out.println(result.getBody());
-
-        return "OK";
     }
 
     /* fallback Hystrix */
-    public String createReservationFallback(Authentication auth, Integer id, HttpServletResponse response) {
+    public void createReservationFallback(Authentication auth, LinkedHashMap<String, Object> map, HttpServletResponse response) {
         response.setStatus(HttpServletResponse.SC_SERVICE_UNAVAILABLE);
-        return "That didn't work out! Try again later!";
     }
 
 
     @PreAuthorize("hasRole('Doctor')")
     @HystrixCommand(fallbackMethod = "deleteReservationFallback", groupKey = Constants.GROUP_KEY_RESERVATION)
     @RequestMapping(value = "/reservation/{id}", method = RequestMethod.DELETE, produces = org.springframework.http.MediaType.APPLICATION_JSON_VALUE)
-    public String deleteReservation(Authentication auth, @PathVariable("id") Integer slotId, HttpServletResponse response) {
+    public void deleteReservation(Authentication auth, @PathVariable("id") Integer slotId, HttpServletResponse response) {
         Map<String, Object> params = new HashMap<>();
         params.put("slotId", slotId);
         params.put("doctorId", auth.getPrincipal());
@@ -177,13 +156,10 @@ public class OpSlotsController {
                 ("reservation/cancelByOpSlotId?opSlotId={slotId}&doctorId={doctorId}"), params);
     //todo test this
         System.out.println("Reservation: OK" + slotId);
-
-        return "OK";
     }
 
     /* fallback Hystrix */
-    public String deleteReservationFallback(Authentication auth, Integer id, HttpServletResponse response) {
+    public void deleteReservationFallback(Authentication auth, Integer slotId, HttpServletResponse response) {
         response.setStatus(HttpServletResponse.SC_SERVICE_UNAVAILABLE);
-        return "That didn't work out! Try again later!";
     }
 }

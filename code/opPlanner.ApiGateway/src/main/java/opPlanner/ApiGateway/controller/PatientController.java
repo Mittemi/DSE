@@ -38,6 +38,7 @@ public class PatientController {
         return client.getForObject(config.getKlinisys().buildUrl("patient/autoComplete?filter={filter}"), String.class, filter);
     }
 
+    /* fallback Hystrix */
     public String listFallback(String filter) {
         return "[ ]";
     }
