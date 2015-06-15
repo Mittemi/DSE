@@ -57,8 +57,8 @@
       <ul class="nav navbar-nav navbar-right">
           <li ng-class="getClass('/notifications')" ng-hide="globals.currentUser == null"><a href="/#/notifications"><span class="glyphicon glyphicon-comment" aria-hidden="true"></span>&nbsp;&nbsp;Notifications </a></li>
 
-          <li class="dropdown">
-          <a href="" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><span ng-hide="globals.currentUser != null">Zur Anmeldung</span> {{globals.currentUser.username}} <span ng-hide="globals.currentUser == null">({{globals.currentUser.role[0]}})</span> <span class="caret"></span></a>
+          <li class="dropdown" dropdown is-open="status.openLoginMenu">
+          <a href="" class="dropdown-toggle" data-toggle="dropdown" dropdown-toggle ng-disabled="disabled" role="button" aria-expanded="false"><span ng-hide="globals.currentUser != null">Zur Anmeldung</span> {{globals.currentUser.username}} <span ng-hide="globals.currentUser == null">({{globals.currentUser.role[0]}})</span> <span class="caret"></span></a>
           <ul class="dropdown-menu" role="menu">
             <li ng-hide="globals.currentUser != null"><a href="/#/login">Login</a></li>
             <li><a href="/#/logout" ng-hide="globals.currentUser == null">Logout</a></li>
