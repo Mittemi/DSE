@@ -91,7 +91,7 @@ public class OpSlotsController {
     @PreAuthorize("hasRole('Hospital')")
     @HystrixCommand(fallbackMethod = "createFallback", groupKey = Constants.GROUP_KEY_KLINISYS)
     @RequestMapping(value = "/create", method = RequestMethod.PUT, consumes = "application/json")
-    public String create(Authentication auth, @RequestBody Object requestBody, HttpServletResponse response) {
+    public void create(Authentication auth, @RequestBody Object requestBody, HttpServletResponse response) {
 
         System.out.println("API: create slot");
         HttpHeaders headers = new HttpHeaders();
@@ -100,32 +100,27 @@ public class OpSlotsController {
         HttpEntity<Object> entity = new HttpEntity<>(requestBody,headers);
 
         client.put(config.getKlinisys().buildUrl("opslot/create/" + auth.getPrincipal() + "/"), entity);
-
-        return "OK";
     }
 
-    public String createFallback(Authentication auth, Object requestBody, HttpServletResponse response) {
+    public void createFallback(Authentication auth, Object requestBody, HttpServletResponse response) {
         response.setStatus(HttpServletResponse.SC_SERVICE_UNAVAILABLE);
-        return "That didn't work out! Try again later!";
+        //return "That didn't work out! Try again later!";
     }
 
 
     @PreAuthorize("hasRole('Hospital')")
     @HystrixCommand(fallbackMethod = "deleteOpSlotFallback", groupKey = Constants.GROUP_KEY_KLINISYS)
     @RequestMapping(value = "/{id}", method = RequestMethod.DELETE, produces = org.springframework.http.MediaType.APPLICATION_JSON_VALUE)
-    public String deleteOpSlot(Authentication auth, @PathVariable("id") Integer slotId, HttpServletResponse response){
+    public void deleteOpSlot(Authentication auth, @PathVariable("id") Integer slotId, HttpServletResponse response){
 
         client.delete(config.getKlinisys().buildUrl("opslot/" + auth.getPrincipal() + "/{id}"), slotId);
 
         System.out.println("DeleteOpSlot: OK" + slotId);
-
-        return "OK";
     }
 
     /* fallback Hystrix */
-    public String deleteOpSlotFallback(Authentication auth, Integer id, HttpServletResponse response) {
+    public void deleteOpSlotFallback(Authentication auth, Integer id, HttpServletResponse response) {
         response.setStatus(HttpServletResponse.SC_SERVICE_UNAVAILABLE);
-        return "That didn't work out! Try again later!";
     }
 
     //http://localhost:9002/reservation/reserve?preferredStart=2014-05-20%2010:00&preferredEnd=2016-06-27%2018:00

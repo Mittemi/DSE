@@ -1,6 +1,7 @@
 package opPlanner.KLINIsys.controller;
 
 import opPlanner.KLINIsys.dto.OpSlotListDTO;
+import opPlanner.KLINIsys.dto.PatientDTO;
 import opPlanner.KLINIsys.model.Patient;
 import opPlanner.KLINIsys.repository.PatientRepository;
 import opPlanner.KLINIsys.service.OpSlotService;
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletResponse;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Created by Michael on 28.04.2015.
@@ -38,6 +40,11 @@ public class PatientController {
     @RequestMapping(value = "/findPatientByEmail", method = RequestMethod.GET, produces = "application/json")
     public Patient getPatientByEmail(@RequestParam("email")String eMail) {
         return patientService.getPatientByEmail(eMail);
+    }
+
+    @RequestMapping(value = "/autoComplete", method = RequestMethod.GET, produces = "application/json")
+    public List<PatientDTO> autoComplete(@RequestParam String filter) {
+        return patientRepository.findByNameStartsWith(filter).stream().map(x-> new PatientDTO(x)).collect(Collectors.toList());
     }
     
     @RequestMapping(value = "/{mail}/", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)

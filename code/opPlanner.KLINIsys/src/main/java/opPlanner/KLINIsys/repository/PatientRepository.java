@@ -19,4 +19,5 @@ public interface PatientRepository extends LoginUserRepository<Patient> {
 
     List<Patient> findByName(@Param("name")String name);
 
+    List<Patient> findByNameStartsWith(@Param("name") String name);
 }
