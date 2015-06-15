@@ -1,3 +1,6 @@
+<h1>OP Slots <span ng-hide="globals.currentUser.role[0] != 'Hospital'">- {{oplist[0].hospitalName}}</span></h1>
+<h1>OP Slots <span ng-hide="globals.currentUser.role[0] != 'Hospital'">- {{oplist[0].hospitalName}}</span></h1>
+
 <div class="createNewOpSlotSection" ng-hide="globals.currentUser == null || globals.currentUser.role != 'Hospital'">
     <button type="button" class="btn btn-default" aria-label="Left Align" ng-click="showfield=true" ng-hide="showfield">
         <span class="glyphicon glyphicon-edit" aria-hidden="true"></span> Add new op slot
@@ -121,7 +124,7 @@
             </div>
         </td>
 
-        <td>
+        <td ng-hide="globals.currentUser.role[0] == 'Hospital'">
             <!-- Hospital select button button -->
             <div class="btn-group" dropdown is-open="status.isopenHospital">
                 <button type="button" class="btn btn dropdown-toggle" dropdown-toggle ng-disabled="disabled">
@@ -221,7 +224,7 @@
         <td>{{formatDate(tmp.slotEnd,"HH:MM")}}</td>
         <td>{{tmp.type}}</td>
         <td>{{tmp.doctorName}} <span ng-hide="globals.currentUser == null">(ID: {{tmp.doctorId}}) </span></td>
-        <td>{{tmp.hospitalName}}</td>
+        <td ng-hide="globals.currentUser.role[0] == 'Hospital'">{{tmp.hospitalName}}</td>
         <td ng-hide="globals.currentUser == null">{{tmp.patientName}} (ID: {{tmp.patientId}})</td>
         <td>
                 <span ng-show="tmp.freeSlot && globals.currentUser.role[0] == 'Hospital'">
