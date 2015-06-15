@@ -252,6 +252,7 @@ public class OpSlotService {
 
         if(from != null && to != null) {
             SimpleDateFormat sdf = new SimpleDateFormat(Constants.DATETIME_FORMAT_STRING);
+            sdf.setTimeZone(TimeZone.getTimeZone(Constants.TIME_ZONE));
             urlVariables.put("start", sdf.format(from));
             urlVariables.put("end", sdf.format(to));
             url = url + "&start={start}&end={end}";

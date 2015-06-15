@@ -29,8 +29,8 @@ public class HospitalController {
 
     @RequestMapping(value = "/{mail}/", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public List<?extends OpSlotListDTO> getOpSlots(@PathVariable("mail")String mail,
-                                                     @RequestParam(value = "from", required = false)  @DateTimeFormat(pattern = Constants.DATE_FORMAT_STRING) Date dateFrom,
-                                                     @RequestParam(value = "to", required = false)  @DateTimeFormat(pattern = Constants.DATE_FORMAT_STRING) Date dateTo,
+                                                     @RequestParam(value = "from", required = false)  @DateTimeFormat(pattern = Constants.DATETIME_FORMAT_STRING_WITH_TZ) Date dateFrom,
+                                                     @RequestParam(value = "to", required = false)  @DateTimeFormat(pattern = Constants.DATETIME_FORMAT_STRING_WITH_TZ) Date dateTo,
                                                      HttpServletResponse response) {
 
         Hospital hospital = hospitalRepository.findByEmail(mail);

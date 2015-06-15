@@ -16,10 +16,10 @@ public class OpSlotListDTO {
 
     private String type;
 
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Constants.DATETIME_FORMAT_STRING)
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Constants.DATETIME_FORMAT_STRING, timezone = Constants.TIME_ZONE)
     private Date slotStart;
 
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Constants.DATETIME_FORMAT_STRING)
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Constants.DATETIME_FORMAT_STRING, timezone = Constants.TIME_ZONE)
     private Date slotEnd;
 
     private String doctorName;

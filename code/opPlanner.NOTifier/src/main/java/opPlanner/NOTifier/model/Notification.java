@@ -23,7 +23,7 @@ public class Notification {
 
     private String subject;
 
-    @JsonFormat(pattern = Constants.DATETIME_FORMAT_STRING)
+    @JsonFormat(pattern = Constants.DATETIME_FORMAT_STRING, timezone = Constants.TIME_ZONE)
     @DateTimeFormat(pattern = Constants.DATETIME_FORMAT_STRING)
     private Date creationDate;
 
