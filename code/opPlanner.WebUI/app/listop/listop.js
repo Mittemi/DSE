@@ -90,13 +90,13 @@ angular.module('myApp.listop', ['ngRoute'])
             $rootScope.getListFromServer = function () {
                 var params = "?";
                 if ($rootScope.startInformation != null) {
-                    params += "from=" + $rootScope.startInformation.valueOf();
+                    params += "from=" + $rootScope.startInformation.format("YYYY-MM-DD HH:MM");
                 }
                 if (params != "?" && $rootScope.startInformation != null) {
                     params += "&";
                 }
                 if ($rootScope.endInformation != null) {
-                    params += "to=" + $rootScope.endInformation.valueOf();
+                    params += "to=" + $rootScope.endInformation.format("YYYY-MM-DD HH:MM");
                 }
 
                 $http.get('http://localhost:8080/opslots/list' + params).
