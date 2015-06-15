@@ -8,60 +8,17 @@
 </div>
 
 
-
-
+<!-- Modals for op slot creation //-->
 <div ng-controller="NewSlotCtrl">
-    <script type="text/ng-template" id="myModalContent.html">
-        <div class="modal-header">
-            <h3 class="modal-title">Insert new OP Slot</h3>
-        </div>
-
-
-        <form class="modal-body form-group">
-            <div class="form-group">
-                <label for="data.opType">Typ</label>
-                <input class="form-control" id="data.opType" placeholder="Type of operation" ng-model="data.opType">
-            </div>
-            <div class="form-group">
-                <label for="opDate">OP Slot Date</label>
-
-                <div class="input-group" id="opDate">
-                    <input type="text" class="form-control" datepicker-popup="{{format}}" ng-model="dt" is-open="opened"
-                           datepicker-options="dateOptions" ng-required="true" close-text="Close"/>
-              <span class="input-group-btn">
-                <button type="button" class="btn btn-default" ng-click="open($event)"><i
-                        class="glyphicon glyphicon-calendar"></i></button>
-              </span>
-                </div>
-            </div>
-            <div class="row">
-                <div class="form-group col-sm-6">
-                    <label for="newOpStart">Start Time</label>
-
-                    <timepicker ng-model="startingTime" id="newOpStart" ng-change="changed()" hour-step="hstep"
-                                minute-step="mstep" show-meridian="ismeridian"></timepicker>
-                </div>
-
-                <div class="form-group col-sm-6">
-                    <label for="newOpEnd">End Time</label>
-
-                    <timepicker ng-model="endingTime" id="newOpEnd" ng-change="changed()" hour-step="hstep"
-                                minute-step="mstep"
-                                show-meridian="ismeridian"></timepicker>
-                </div>
-            </div>
-        </form>
-        </div>
-
-
-        <div class="modal-footer">
-            <button class="btn btn-primary" ng-click="ok()">Insert new OP Slot</button>
-            <button class="btn btn-warning" ng-click="cancel()">Cancel</button>
-        </div>
-    </script>
-
     <button class="btn btn-default" ng-click="open()" ng-hide="globals.currentUser == null || globals.currentUser.role != 'Hospital'"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span>
         Add new op slot
+    </button>
+</div>
+
+<!-- Modals for patient reservation //-->
+<div ng-controller="NewPatientReservationCtrl">
+    <button class="btn btn-default" ng-click="open()" ng-hide="globals.currentUser == null || globals.currentUser.role != 'Doctor'"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span>
+        Add new Patient Reservation
     </button>
 </div>
 
@@ -198,6 +155,13 @@
                         <span class="glyphicon glyphicon-remove" aria-hidden="true"></span> Remove Slot
                     </button>
                 </span>
+
+                <span ng-show="tmp.freeSlot && globals.currentUser.role[0] == 'Doctor'">
+                    <button type="button" class="btn btn-default btn-xs" ng-click="removeReservation(tmp.id)">
+                        <span class="glyphicon glyphicon-remove" aria-hidden="true"></span> Remove Reservation
+                    </button>
+                </span>
+
         </td>
     </tr>
 </table>

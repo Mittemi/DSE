@@ -1,0 +1,46 @@
+<div class="modal-header">
+    <h3 class="modal-title">Insert new OP Slot</h3>
+</div>
+
+
+<form class="modal-body form-group">
+    <div class="form-group">
+        <label for="data.opType">Typ</label>
+        <input class="form-control" id="data.opType" placeholder="Type of operation" ng-model="data.opType">
+    </div>
+    <div class="form-group">
+        <label for="opDate">OP Slot Date</label>
+
+        <div class="input-group" id="opDate">
+            <input type="text" class="form-control" datepicker-popup="{{format}}" ng-model="dt" is-open="opened"
+                   datepicker-options="dateOptions" ng-required="true" close-text="Close"/>
+              <span class="input-group-btn">
+                <button type="button" class="btn btn-default" ng-click="open($event)"><i
+                        class="glyphicon glyphicon-calendar"></i></button>
+              </span>
+        </div>
+    </div>
+    <div class="row">
+        <div class="form-group col-sm-6">
+            <label for="newOpStart">Start Time</label>
+
+            <timepicker ng-model="startingTime" id="newOpStart" ng-change="changed()" hour-step="hstep"
+                        minute-step="mstep" show-meridian="ismeridian"></timepicker>
+        </div>
+
+        <div class="form-group col-sm-6">
+            <label for="newOpEnd">End Time</label>
+
+            <timepicker ng-model="endingTime" id="newOpEnd" ng-change="changed()" hour-step="hstep"
+                        minute-step="mstep"
+                        show-meridian="ismeridian"></timepicker>
+        </div>
+    </div>
+</form>
+</div>
+
+
+<div class="modal-footer">
+    <button class="btn btn-primary" ng-click="ok()">Insert new OP Slot</button>
+    <button class="btn btn-warning" ng-click="cancel()">Cancel</button>
+</div>
