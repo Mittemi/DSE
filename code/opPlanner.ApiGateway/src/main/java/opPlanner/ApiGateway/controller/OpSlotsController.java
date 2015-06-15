@@ -85,7 +85,7 @@ public class OpSlotsController {
     /* fallback Hystrix */
     public String indexFallback(Authentication auth, String from, String to, HttpServletResponse response) {
         response.setStatus(HttpServletResponse.SC_SERVICE_UNAVAILABLE);
-        return "Service currently down! Try again later...";
+        return "[ ]";
     }
 
     @PreAuthorize("hasRole('Hospital')")

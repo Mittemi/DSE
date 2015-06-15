@@ -21,11 +21,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private OpPlannerProperties plannerProperties;
 
-    //@Autowired
-    //public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
-
-    //}
-
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         //TODO: enable CSRF

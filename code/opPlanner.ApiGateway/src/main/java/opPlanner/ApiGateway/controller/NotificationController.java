@@ -40,7 +40,7 @@ public class NotificationController {
     /* Hystrix Fallback */
     public String indexFallback(Authentication auth, HttpServletResponse response) {
         response.setStatus(HttpServletResponse.SC_SERVICE_UNAVAILABLE);
-        return "Notification Service currently not available!";
+        return "[ ]";
     }
 
     @RequestMapping(value = "/delete/{id}", method = RequestMethod.DELETE)

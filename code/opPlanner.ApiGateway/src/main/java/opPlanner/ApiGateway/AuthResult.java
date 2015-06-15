@@ -1,7 +1,7 @@
 package opPlanner.ApiGateway;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 
 /**
  * Created by Michael on 28.04.2015.
