@@ -1,6 +1,15 @@
 <h1>OP Slots <span ng-hide="globals.currentUser.role[0] != 'Hospital'">- {{oplist[0].hospitalName}}</span></h1>
 
 
+
+<div class="btn-group" style="float:right;">
+    <label class="btn btn-default" ng-model="radioModel" btn-radio="'All'">All</label>
+    <label class="btn btn-success" ng-model="radioModel" btn-radio="'Free'" uncheckable>Only Free</label>
+</div>
+
+
+
+
 <div ng-controller="NewSlotCtrl">
     <script type="text/ng-template" id="myModalContent.html">
         <div class="modal-header">
@@ -147,7 +156,7 @@
             </div>
         </td>
 
-        <td ng-hide="globals.currentUser == null">
+        <td ng-hide="globals.currentUser == null || globals.currentUser.role[0] == 'Patient'">
             <!-- Patient select button -->
             <div class="btn-group" dropdown is-open="status.isopenPatient">
                 <button type="button" class="btn btn dropdown-toggle" dropdown-toggle ng-disabled="disabled">
@@ -172,7 +181,7 @@
     </tr>
 
 
-    <tr ng-repeat="tmp in oplist | filter: selectedKH | filter: selectedType | orderBy:'slotStart':false"
+    <tr ng-repeat="tmp in oplist | filter: selectedKH | filter: selectedType | filter:{ radioModel : tmp.freeSlot} | orderBy:'slotStart':false"
         ng-class="{true:'success', false:'danger'}[tmp.freeSlot]">
 
 
@@ -182,7 +191,7 @@
         <td>{{tmp.type}}</td>
         <td>{{tmp.doctorName}} <span ng-hide="globals.currentUser == null">(ID: {{tmp.doctorId}}) </span></td>
         <td ng-hide="globals.currentUser.role[0] == 'Hospital'">{{tmp.hospitalName}}</td>
-        <td ng-hide="globals.currentUser == null">{{tmp.patientName}} (ID: {{tmp.patientId}})</td>
+        <td ng-hide="globals.currentUser == null || globals.currentUser.role[0] == 'Patient'">{{tmp.patientName}} (ID: {{tmp.patientId}})</td>
         <td>
                 <span ng-show="tmp.freeSlot && globals.currentUser.role[0] == 'Hospital'">
                     <button type="button" class="btn btn-default btn-xs" ng-click="removeOpSlot(tmp.id)">

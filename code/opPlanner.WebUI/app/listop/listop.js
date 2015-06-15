@@ -54,6 +54,20 @@ angular.module('myApp.listop', ['ngRoute'])
 
 
             /**
+             * Controlling over type radio button
+             */
+            $scope.singleModel = 1;
+
+            $scope.radioModel = 'All';
+
+            $scope.checkModel = {
+                All: false,
+                Free: true
+
+            };
+
+
+            /**
              * Requests op slot list from server and adds from and to parameters to the requests
              * Afterwards the list will be refreshed
              */
