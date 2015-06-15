@@ -48,7 +48,8 @@ angular.module('myApp.listop', ['ngRoute'])
                         $scope.getListFromServer();
                     })
                     .error(function (data, status, headers, config) {
-                        alert("Error while trying to delete opSlot. \nPlease check server connection.");
+                        //alert("Error while trying to delete opSlot. \nPlease check server connection.");
+                        $scope.getListFromServer();
                     });
             };
 
@@ -56,7 +57,7 @@ angular.module('myApp.listop', ['ngRoute'])
              * Deletes a reservation
              * @param id
              */
-            $scope.removeOpSlot = function (id) {
+            $scope.removeReservation = function (id) {
 
                 $http.delete('http://localhost:8080/opslots/reservation/' + id)
                     .success(function (data, status, headers, config) {
@@ -431,20 +432,22 @@ angular.module('myApp.listop', ['ngRoute'])
         start.setHours($scope.startingTime.getHours());
         start.setMinutes($scope.startingTime.getMinutes());
 
+
         var end = $scope.dt;
         start.setHours($scope.endingTime.getHours());
         start.setMinutes($scope.endingTime.getMinutes());
 
 
 
-        var json = '{"type" : "' + $scope.data.opType + '", "slotStart" : ' + start.getTime() + ', "slotEnd" : ' + end.getTime() + ' }';
+        var json = '{"type" : "' + $scope.data.opType + '", "slotStart" : "' + moment(start).format("YYYY-MM-DDTHH:MM:ss.SSSZZ") + '", "slotEnd" : "' + moment(end).format("YYYY-MM-DDTHH:MM:ss.SSSZZ") + '" }';
         $http.put('http://localhost:8080/opslots/create', json)
             .success(function (data, status, headers, config) {
+                $scope.getListFromServer();
             })
             .error(function (data, status, headers, config) {
-                alert("Error while creating new Operation Slot. \nPlease check connection to server.")
+                $scope.getListFromServer();
             });
-        $scope.getListFromServer();
+
     };
 
     $scope.ok = function () {
