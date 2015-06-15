@@ -48,10 +48,7 @@
           <!--<li ng-class="getClass('/home')"><a href="/#/home">Übersicht <span class="sr-only">(current)</span></a></li>-->
 
           <li ng-class="getClass('/listop')"><a href="/#/listop"><span class="glyphicon glyphicon-calendar" aria-hidden="true"></span> OP Slots<span ng-show="globals.currentUser != null && globals.currentUser.role[0] == 'Hospital'">-Management</span> </a></li>
-          <li ng-class="getClass('/listslot')" ng-show="globals.currentUser.role[0] == 'Doctor'"><a href="/#/listslot"> <span class="glyphicon glyphicon-hand-down" aria-hidden="true"></span>  My Appointments</a></li>
-
-
-
+ 
 
       </ul>
       <ul class="nav navbar-nav navbar-right">
