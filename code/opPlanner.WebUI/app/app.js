@@ -31,7 +31,7 @@ angular.module('myApp', [
       })
     .otherwise(
     {
-        redirectTo: '/home'
+        redirectTo: '/#/listop'
     });
 })
 
@@ -42,9 +42,6 @@ angular.module('myApp', [
             error(function(data, status, headers, config) {
                 alert("Error while trying to communicate with APIGateway \nPlease check connection.")
             });
-
-
-
 
 
         // keep user logged in after page refresh
