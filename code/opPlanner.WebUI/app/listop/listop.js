@@ -74,12 +74,11 @@ angular.module('myApp.listop', ['ngRoute'])
              */
             $scope.singleModel = 1;
 
-            $scope.radioModel = 'All';
+            $scope.radioModel = undefined;
 
             $scope.checkModel = {
-                All: false,
-                Free: true
-
+                All: undefined,
+                Free: false
             };
 
 

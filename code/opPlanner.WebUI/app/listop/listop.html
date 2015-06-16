@@ -3,8 +3,8 @@
 
 
 <div class="btn-group" style="float:right;">
-    <label class="btn btn-default" ng-model="radioModel" btn-radio="'All'">All</label>
-    <label class="btn btn-success" ng-model="radioModel" btn-radio="'Free'" uncheckable>Only Free</label>
+    <label class="btn btn-default" ng-model="radioModel" btn-radio="undefined">All</label>
+    <label class="btn btn-success" ng-model="radioModel" btn-radio="true" uncheckable>Only Free</label>
 </div>
 
 
@@ -138,7 +138,7 @@
     </tr>
 
 
-    <tr ng-repeat="tmp in oplist | filter: selectedKH | filter: selectedType | filter:{ radioModel : tmp.freeSlot} | orderBy:'slotStart':false"
+    <tr ng-repeat="tmp in oplist | filter: selectedKH | filter: selectedType | filter:{freeSlot:radioModel} | orderBy:'slotStart':false"
         ng-class="{true:'success', false:'danger'}[tmp.freeSlot]">
 
 
