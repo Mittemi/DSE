@@ -26,7 +26,7 @@
 <br/>
 <table class="table table-striped">
     <tr id="descriptionColumn">
-        <td>
+        <td class="col-md-1">
             <div ng-controller="DatepickerCtrl">
                 <p class="input-group">
                     <input type="text" class="form-control" datepicker-popup="{{format}}" ng-model="dt" is-open="opened"
@@ -39,19 +39,19 @@
                 </p>
             </div>
         </td>
-        <td>
+        <td class="col-md-1">
             <div ng-controller="StartTimePickerCtrl" class="timePickers">
                 <timepicker ng-model="mytime" ng-change="changed()" hour-step="hstep" minute-step="mstep"
                             show-meridian="ismeridian" arrowkeys="false"></timepicker>
             </div>
         </td>
-        <td>
+        <td class="col-md-1">
             <div ng-controller="EndTimePickerCtrl" class="timePickers">
                 <timepicker ng-model="mytime" ng-change="changed()" hour-step="hstep" minute-step="mstep"
                             show-meridian="ismeridian" arrowkeys="false"></timepicker>
             </div>
         </td>
-        <td>
+        <td class="col-md-2">
             <!-- Type Selector button -->
             <div class="btn-group" dropdown is-open="status.isopenType">
                 <button type="button" class="btn btn dropdown-toggle" dropdown-toggle ng-disabled="disabled">
@@ -73,7 +73,7 @@
         </td>
 
 
-        <td>
+        <td class="col-md-2">
             <!-- Doctor Selector button -->
             <div class="btn-group" dropdown is-open="status.isopenDoctor">
                 <button type="button" class="btn btn dropdown-toggle" dropdown-toggle ng-disabled="disabled">
@@ -93,7 +93,7 @@
             </div>
         </td>
 
-        <td ng-hide="globals.currentUser.role[0] == 'Hospital'">
+        <td ng-hide="globals.currentUser.role[0] == 'Hospital'" class="col-md-2">
             <!-- Hospital select button button -->
             <div class="btn-group" dropdown is-open="status.isopenHospital">
                 <button type="button" class="btn btn dropdown-toggle" dropdown-toggle ng-disabled="disabled">
@@ -113,7 +113,7 @@
             </div>
         </td>
 
-        <td ng-hide="globals.currentUser == null || globals.currentUser.role[0] == 'Patient'">
+        <td ng-hide="globals.currentUser == null || globals.currentUser.role[0] == 'Patient'" class="col-md-2">
             <!-- Patient select button -->
             <div class="btn-group" dropdown is-open="status.isopenPatient">
                 <button type="button" class="btn btn dropdown-toggle" dropdown-toggle ng-disabled="disabled">
@@ -134,7 +134,7 @@
             </div>
         </td>
 
-        <td>&nbsp;</td>
+        <td class="col-md-1">&nbsp;</td>
     </tr>
 
 
@@ -142,9 +142,9 @@
         ng-class="{true:'success', false:'danger'}[tmp.freeSlot]">
 
 
-        <td>{{formatDate(tmp.slotStart,"DD.MM.YYYY")}}</td>
-        <td>{{formatDate(tmp.slotStart,"HH:MM")}}</td>
-        <td>{{formatDate(tmp.slotEnd,"HH:MM")}}</td>
+        <td class="text-center">{{formatDate(tmp.slotStart,"DD.MM.YYYY")}}</td>
+        <td class="text-center">{{formatDate(tmp.slotStart,"HH:MM")}}</td>
+        <td class="text-center">{{formatDate(tmp.slotEnd,"HH:MM")}}</td>
         <td>{{tmp.type}}</td>
         <td>{{tmp.doctorName}} <span ng-hide="globals.currentUser == null">(ID: {{tmp.doctorId}}) </span></td>
         <td ng-hide="globals.currentUser.role[0] == 'Hospital'">{{tmp.hospitalName}}</td>
