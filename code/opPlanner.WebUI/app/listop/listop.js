@@ -88,17 +88,17 @@ angular.module('myApp.listop', ['ngRoute'])
              * Afterwards the list will be refreshed
              */
             $rootScope.getListFromServer = function () {
-                var params = "?";
-                if ($rootScope.startInformation != null) {
-                    params += "from=" + $rootScope.startInformation.format("YYYY-MM-DD HH:mm");
+                var params = "";
+                if ($rootScope.startInformation != null || $rootScope.endInformation != null) {
+                    if ($rootScope.startInformation == null) {
+                        $rootScope.startInformation = moment().hour(0).minute(0);
+                    }
+                    if ($rootScope.endInformation == null) {
+                        $rootScope.endInformation = moment().hour(23).minute(59);
+                    }
+                    params += "?from=" + $rootScope.startInformation.format("YYYY-MM-DD HH:mm");
+                    params += "&to=" + $rootScope.endInformation.format("YYYY-MM-DD HH:mm");
                 }
-                if (params != "?" && $rootScope.startInformation != null) {
-                    params += "&";
-                }
-                if ($rootScope.endInformation != null) {
-                    params += "to=" + $rootScope.endInformation.format("YYYY-MM-DD HH:mm");
-                }
-
                 $http.get('http://localhost:8080/opslots/list' + params).
                     success(function (data, status, headers, config) {
                         $scope.oplist = data;
@@ -106,6 +106,7 @@ angular.module('myApp.listop', ['ngRoute'])
                     error(function (data, status, headers, config) {
                         alert("Error while getting Server data. \nPlease check connection.")
                     });
+
             };
 
             /**
@@ -125,7 +126,9 @@ angular.module('myApp.listop', ['ngRoute'])
         $scope.today();
 
         $scope.clear = function () {
-            $scope.dt = null;
+            $rootScope.startInformation = null;
+            $rootScope.endInformation = null;
+            $rootScope.getListFromServer();
         };
 
         $scope.toggleMin = function () {
@@ -144,7 +147,7 @@ angular.module('myApp.listop', ['ngRoute'])
             startingDay: 1
         };
 
-        $scope.formats = ['dd.MM.yy'];
+        $scope.formats = ['dd.MM.'];
         $scope.format = $scope.formats[0];
 
         var tomorrow = new Date();
