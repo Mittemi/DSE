@@ -2,10 +2,18 @@
 
 
 <table class="table table-striped">
+    <tr>
+        <th class="col-md-1">Creation Date</th>
+        <th class="col-md-1">E-Mail Address</th>
+        <th class="col-md-1">Subject</th>
+        <th class="col-md-7">Message</th>
+    </tr>
 
     <tr ng-repeat="tmp in notificationlist">
-        <td ng-repeat="(key,value) in tmp">
-            {{key}} ; {{value}}
-        </td>
+        <td>{{tmp.creationDate}}</td>
+        <td>{{tmp.eMail}}</td>
+        <td>{{tmp.subject}}</td>
+        <td>{{tmp.message}}</td>
+
     </tr>
 </table>
