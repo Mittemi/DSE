@@ -31,7 +31,7 @@ angular.module('myApp', [
       })
     .otherwise(
     {
-        redirectTo: '/#/listop'
+        redirectTo: '/listop'
     });
 })
 

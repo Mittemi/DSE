@@ -581,14 +581,15 @@ angular.module('myApp.listop', ['ngRoute'])
             start.setHours(23);
             start.setMinutes(59);
 
-            var insertMessage = {"patientId": $scope.data.patientId , "preferredStart" : moment(start).format("YYYY-MM-DD hh:mm"), "preferredEnd" : moment(end).format("YYYY-MM-DD hh:mm"), "preferredPerimeter" : $scope.data.preferredPerimeter , "opSlotType" : $scope.data.opSlotType};
+            var insertMessage = {"patientId": $scope.data.patientId , "preferredStart" : moment(start).format("YYYY-MM-DD hh:mm"), "preferredEnd" : moment(end).format("YYYY-MM-DD hh:mm"), "preferredPerimeter" : parseInt($scope.data.preferredPerimeter) , "opSlotType" : $scope.data.opSlotType};
             $http.post('http://localhost:8080/opslots/reservation', insertMessage)
                 .success(function (data, status, headers, config) {
+                    $scope.getListFromServer();
                 })
                 .error(function (data, status, headers, config) {
                     alert("Error while creating new Operation Slot. \nPlease check connection to server.")
                 });
-            $scope.getListFromServer();
+
         };
 
         $scope.ok = function () {

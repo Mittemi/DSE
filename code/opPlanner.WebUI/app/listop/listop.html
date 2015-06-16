@@ -156,7 +156,7 @@
                     </button>
                 </span>
 
-                <span ng-show="tmp.freeSlot && globals.currentUser.role[0] == 'Doctor'">
+                <span ng-show="!tmp.freeSlot && globals.currentUser.role[0] == 'Doctor'">
                     <button type="button" class="btn btn-default btn-xs" ng-click="removeReservation(tmp.id)">
                         <span class="glyphicon glyphicon-remove" aria-hidden="true"></span> Remove Reservation
                     </button>
