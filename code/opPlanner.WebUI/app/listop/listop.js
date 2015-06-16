@@ -90,13 +90,13 @@ angular.module('myApp.listop', ['ngRoute'])
             $rootScope.getListFromServer = function () {
                 var params = "?";
                 if ($rootScope.startInformation != null) {
-                    params += "from=" + $rootScope.startInformation.format("YYYY-MM-DD hh:mm");
+                    params += "from=" + $rootScope.startInformation.format("YYYY-MM-DD HH:mm");
                 }
                 if (params != "?" && $rootScope.startInformation != null) {
                     params += "&";
                 }
                 if ($rootScope.endInformation != null) {
-                    params += "to=" + $rootScope.endInformation.format("YYYY-MM-DD hh:mm");
+                    params += "to=" + $rootScope.endInformation.format("YYYY-MM-DD HH:mm");
                 }
 
                 $http.get('http://localhost:8080/opslots/list' + params).
@@ -144,7 +144,7 @@ angular.module('myApp.listop', ['ngRoute'])
             startingDay: 1
         };
 
-        $scope.formats = ['dd.MM.yyyy'];
+        $scope.formats = ['dd.MM.yy'];
         $scope.format = $scope.formats[0];
 
         var tomorrow = new Date();
@@ -437,7 +437,7 @@ angular.module('myApp.listop', ['ngRoute'])
         end.setMinutes($scope.endingTime.getMinutes());
 
 
-        var insertMessage = {"type": $scope.data.opType , "slotStart" : moment(start).format("YYYY-MM-DDThh:mm:ss.SSSZZ"), "slotEnd" : moment(end).format("YYYY-MM-DDThh:mm:ss.SSSZZ") };
+        var insertMessage = {"type": $scope.data.opType , "slotStart" : moment(start).format("YYYY-MM-DDTHH:mm:ss.SSSZZ"), "slotEnd" : moment(end).format("YYYY-MM-DDTHH:mm:ss.SSSZZ") };
         $http.put('http://localhost:8080/opslots/create', insertMessage)
             .success(function (data, status, headers, config) {
                 $scope.getListFromServer();
@@ -574,14 +574,12 @@ angular.module('myApp.listop', ['ngRoute'])
         $scope.newReservation = function () {
 
             var start = $scope.dt;
-            start.setHours(0);
-            start.setMinutes(0);
+            start.setHours(0,0,0);
 
             var end = $scope.dt2;
-            start.setHours(23);
-            start.setMinutes(59);
+            start.setHours(23,59,59);
 
-            var insertMessage = {"patientId": $scope.data.patientId , "preferredStart" : moment(start).format("YYYY-MM-DD hh:mm"), "preferredEnd" : moment(end).format("YYYY-MM-DD hh:mm"), "preferredPerimeter" : parseInt($scope.data.preferredPerimeter) , "opSlotType" : $scope.data.opSlotType};
+            var insertMessage = {"patientId": $scope.data.patientId , "preferredStart" : moment(start).format("YYYY-MM-DD HH:mm"), "preferredEnd" : moment(end).format("YYYY-MM-DD HH:mm"), "preferredPerimeter" : parseInt($scope.data.preferredPerimeter) , "opSlotType" : $scope.data.opSlotType};
             $http.post('http://localhost:8080/opslots/reservation', insertMessage)
                 .success(function (data, status, headers, config) {
                     $scope.getListFromServer();
