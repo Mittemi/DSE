@@ -82,6 +82,12 @@ public class NotificationTests {
         int countWithNewNotification = repository.findByEMailOrderByCreationDateDesc("u2@dse.at").size();
 
         assertTrue(countWithoutNewNotification < countWithNewNotification);
+    }
+
+    @Test
+    public void testPermission() {
+
+        int countWithNewNotification = repository.findByEMailOrderByCreationDateDesc("u2@dse.at").size();
 
         List<Notification> notifications = controller.index("u2@dse.at");
 
