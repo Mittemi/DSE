@@ -7,4 +7,4 @@ echo "rebuilt app Dockerfile"
 gradle build -x test
 docker build -t notifier .
 
-docker run -d -p 9003:8080  --name notifier notifier
+docker run -d -p 9003:8080  --name notifier notifier --link klinisys:klinisys --link opmatcher:opmatcher --link reservation:reservation --link apigateway:apigateway
