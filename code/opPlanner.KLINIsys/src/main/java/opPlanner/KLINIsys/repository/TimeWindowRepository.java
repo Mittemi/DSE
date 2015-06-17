@@ -15,11 +15,11 @@ import java.util.List;
  */
 public interface TimeWindowRepository extends CrudRepository<TimeWindow, Long> {
 
-    @Query("select w from TimeWindow w where (w.doctor.eMail = :email and w.slotStart >= :from and w.slotEnd <= :to)")
-    List<TimeWindow> findByDoctorAndTimeWindow(@Param("email")String eMail,
-                                           @Param("from")@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm") Date dateFrom,
-                                           @Param("to")@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm") Date dateTo);
+    @Query("select w from TimeWindow w where (w.doctor.eMail = :email and w.slotStart >= :dateFrom and w.slotEnd <= :dateTo)")
+    List<TimeWindow> findByDoctorAndTimeWindow(@Param("email")String email,
+                                           @Param("dateFrom")@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm") Date dateFrom,
+                                           @Param("dateTo")@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm") Date dateTo);
 
-    List<TimeWindow> findByDoctor_EMail(@Param("email")String eMail);
+    List<TimeWindow> findByDoctor_EMail(@Param("email")String email);
 
 }

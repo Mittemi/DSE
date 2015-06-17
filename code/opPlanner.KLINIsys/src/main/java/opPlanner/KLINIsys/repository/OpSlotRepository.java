@@ -10,6 +10,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Repository;
 
+import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
@@ -22,9 +23,12 @@ public interface OpSlotRepository extends CrudRepository<OpSlot, Long> {
     List<OpSlot> findByHospital_EMail(@Param("type") String eMail);
 
     @Query("select s from OpSlot s where (s.id in (:slotIds))")
-    List<OpSlot> findByIdIn(@Param("slotIds") List<Long> slotIds);
+    List<OpSlot> findByIdIn(@Param("slotIds") Collection<Long> slotIds);
 
     // used for op slots listing
-    @Query("select s from OpSlot s where (:hospital is null or s.hospital = :hospital) and (:start is null or s.slotStart >= :start) and (:end is null or s.slotEnd <= :end)")
-    List<OpSlot> findByHospitalAndTimeWindow(@Param("hospital") Hospital hospital, @Param("start") Date start, @Param("end") Date end);
+    @Query("select s from OpSlot s where (s.hospital.id = :id) and (s.slotStart >= :start) and (s.slotEnd <= :ending)")
+    List<OpSlot> findByHospitalAndTimeWindow(@Param("id") Long id, @Param("start") Date start, @Param("ending") Date ending);
+
+    @Query("select s from OpSlot s where (s.slotStart >= :start) and (s.slotEnd <= :ending)")
+    List<OpSlot> findByTimeWindow(@Param("start") Date start, @Param("ending") Date ending);
 }

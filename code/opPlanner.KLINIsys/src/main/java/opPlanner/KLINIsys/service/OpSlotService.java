@@ -61,11 +61,19 @@ public class OpSlotService {
 
         if (from != null)
             System.out.println("From: " + from);
+        else
+            from = new Date();
         if (to != null)
             System.out.println("To: " + to);
+        else
+        {
+            GregorianCalendar gc = new GregorianCalendar();
+            gc.add(Calendar.YEAR, 1);
+            to = gc.getTime();
+        }
 
         if (type == null) {      //public
-            List<OpSlot> opSlots = opSlotRepository.findByHospitalAndTimeWindow(null, from, to);        // hospital is optional therefore use null to get the unfiltered list
+            List<OpSlot> opSlots = opSlotRepository.findByTimeWindow(from, to);        // hospital is optional therefore use null to get the unfiltered list
 
             // get all reservations for the supplied list of ids
             Map<Long, ReservationDto> reservationInfos = getReservationDetails(opSlots.stream().map(x -> x.getId()).collect(Collectors.toList()));
@@ -87,16 +95,18 @@ public class OpSlotService {
 
             if(type.equals(Hospital.class)) {
                 // hospital is optional therefore use null to get the unfiltered list
-                opSlots = opSlotRepository.findByHospitalAndTimeWindow(hospital, from, to);
+                opSlots = opSlotRepository.findByHospitalAndTimeWindow(hospital.getId(), from, to);
                 List<Long> slotIds = opSlots.stream().map(x -> x.getId()).collect(Collectors.toList());
                 reservationInfos = getReservationDetails(slotIds);
             } else if(type.equals(Patient.class)) {
 
                 reservationInfos = getReservationDetailsByKey("patientId", patient.geteMail(), from, to);
-                opSlots = opSlotRepository.findByIdIn(new LinkedList<>(reservationInfos.keySet()));
+                LinkedList<Long> slotIds = new LinkedList<>(reservationInfos.keySet());
+                opSlots = slotIds.size() > 0 ? opSlotRepository.findByIdIn(slotIds) : new LinkedList<>();
             } else if(type.equals(Doctor.class)) {
                 reservationInfos = getReservationDetailsByKey("doctorId", doctor.geteMail(), from, to);
-                opSlots = opSlotRepository.findByIdIn(new LinkedList<>(reservationInfos.keySet()));
+                LinkedList<Long> slotIds = new LinkedList<>(reservationInfos.keySet());
+                opSlots = slotIds.size() > 0 ? opSlotRepository.findByIdIn(slotIds) : new LinkedList<>();
             }
 
             final Map<Long, ReservationDto> finalReservationInfos = reservationInfos;
@@ -119,6 +129,7 @@ public class OpSlotService {
      */
     private void fillPatientInfos(List<ExtendedOpSlotListDTO> result) {
         List<String> patientMails = result.stream().filter(x->x.getPatientName() != null).map(x->x.getPatientName()).collect(Collectors.toList());
+        if(patientMails.size() == 0)    return;
 
         final Map<String, Patient> patients = patientRepository.findByeMailIn(patientMails).stream().collect(Collectors.toMap(Patient::geteMail, x -> x));
 
@@ -137,6 +148,8 @@ public class OpSlotService {
      */
     private void fillDoctorInfos(List<?extends OpSlotListDTO> result) {
         List<String> doctorMails = result.stream().filter(x->x.getDoctorName() != null).map(x->x.getDoctorName()).collect(Collectors.toList());
+        if(doctorMails.size() == 0) return;
+
         final Map<String, Doctor> doctors = doctorRepository.findByeMailIn(doctorMails).stream().collect(Collectors.toMap(Doctor::geteMail, x->x));
 
         result.stream().forEach(x -> {

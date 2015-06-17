@@ -2,6 +2,7 @@ package opPlanner.ApiGateway.controller;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
+import com.netflix.hystrix.contrib.javanica.annotation.HystrixProperty;
 import com.sun.javafx.fxml.builder.URLBuilder;
 import opPlanner.Shared.OpPlannerProperties;
 import opPlanner.ApiGateway.Constants;
@@ -44,7 +45,7 @@ public class OpSlotsController {
     }
 
     @RequestMapping(value = "/list", method = RequestMethod.GET, produces = "application/json")
-    @HystrixCommand(fallbackMethod = "indexFallback", groupKey = Constants.GROUP_KEY_KLINISYS)
+    @HystrixCommand(fallbackMethod = "indexFallback", threadPoolProperties = { @HystrixProperty(name = "execution.isolation.thread.timeoutInMilliseconds", value = "3000"), @HystrixProperty(name = "", value = "0")}, groupKey = Constants.GROUP_KEY_KLINISYS)
     public String index(Authentication auth, @RequestParam(value = "from", required = false) String from, @RequestParam(value = "to", required = false) String to, HttpServletResponse response) {
 
         Map<String, Object> param = new HashMap<>();

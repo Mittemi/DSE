@@ -22,6 +22,6 @@ public interface LoginUserRepository<T extends LoginUser> extends CrudRepository
     @Query("select u from #{#entityName} as u where u.eMail = :email")
     T findByEmail(@Param("email")String eMail);
 
-    @Query("select u from #{#entityName} as u where u.eMail in (:email)")
-    List<T> findByeMailIn(@Param("email")List<String> emails);
+    @Query("select u from #{#entityName} as u where u.eMail in (:emails)")
+    List<T> findByeMailIn(@Param("emails")List<String> emails);
 }
