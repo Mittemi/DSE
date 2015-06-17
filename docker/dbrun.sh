@@ -12,4 +12,6 @@ echo "remove previous postgres container if exists..."
 docker rm -f postgres
 
 ## Start postgres db ##
-docker run --name postgres -v /psql -p 5432:5432 -d -e "POSTGRES_PASSWORD=passme" postgres
+docker run --name postgres -v /psql -p 5432:5432 -d -e "POSTGRES_PASSWORD=passme" postgres 
+docker exec -it postgres psql -h localhost -U postgres --command "CREATE DATABASE klinisys"
+

@@ -204,7 +204,7 @@ public class DemoDataHelper {
         opSlot2.setHospital(hospital1);             //SMZ Ost
         opSlot2.setSlotStart(from2.getTime());      //120min slot
         opSlot2.setSlotEnd(to2.getTime());
-        opSlot2.setType("Orthop‰die");
+        opSlot2.setType("Orthop√§die");
         opSlotRepository.save(opSlot2);
 
         OpSlot opSlot3 = new OpSlot();
@@ -239,7 +239,7 @@ public class DemoDataHelper {
         opSlot7.setHospital(hospital4);             //Rudolfinerhaus
         opSlot7.setSlotStart(from1.getTime());      //60min slot
         opSlot7.setSlotEnd(to1.getTime());
-        opSlot7.setType("Orthop‰die");
+        opSlot7.setType("Orthop√§die");
         opSlotRepository.save(opSlot7);
 
         OpSlot opSlot8 = new OpSlot();
