@@ -39,12 +39,14 @@ public class DemoController {
     @RequestMapping(value = "/demo", method = RequestMethod.GET, produces = "application/json")
     public String createDemoData() {
 
-        Doctor doctor = DemoDataHelper.createDoctor(doctorRepository, timeWindowRepository, authService);
+        /*Doctor doctor = DemoDataHelper.createDoctor(doctorRepository, timeWindowRepository, authService);
         Hospital hospital = DemoDataHelper.createHospital(hospitalRepository, authService);
         Patient patient = DemoDataHelper.createPatient(patientRepository,authService);
         OpSlot opSlot = DemoDataHelper.createOpSlot(opSlotRepository,doctor,hospital);
 
-        DemoDataHelper.createMoreHospitalsWithOPSlots(hospitalRepository,opSlotRepository,authService);
+        DemoDataHelper.createMoreHospitalsWithOPSlots(hospitalRepository,opSlotRepository,authService);*/
+        DemoDataHelper.createRequirementsTestData(hospitalRepository,opSlotRepository,patientRepository,
+                doctorRepository,timeWindowRepository,authService);
 
         return "Done";
     }

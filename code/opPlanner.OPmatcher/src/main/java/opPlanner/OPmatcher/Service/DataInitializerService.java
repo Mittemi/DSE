@@ -51,6 +51,17 @@ public class DataInitializerService {
     }
 
     /**
+     * initialized could be reset, if it is set to true no further initialization will happen,
+     * if it is set to false, another data initialization might be done in future
+     * @param initialized
+     */
+    public void setInitialized(Boolean initialized) {
+        synchronized (this.initialized) {
+            this.initialized = initialized;
+        }
+    }
+
+    /**
      * indicates whether the data has already been loaded from KLINISys and RESERvation
      * @return
      */

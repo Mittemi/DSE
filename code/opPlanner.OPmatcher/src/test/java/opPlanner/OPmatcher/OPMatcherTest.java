@@ -1,5 +1,6 @@
 package opPlanner.OPmatcher;
 
+import opPlanner.OPmatcher.Service.DataInitializerService;
 import opPlanner.OPmatcher.Service.OPMatcherService;
 import opPlanner.OPmatcher.controller.OPMatcherController;
 import opPlanner.OPmatcher.dto.Reservation;
@@ -36,6 +37,9 @@ public class OPMatcherTest {
 	@Autowired
 	OPMatcherController opMatcher;
 
+	@Autowired
+	DataInitializerService dataInitializerService;
+
 	private static final Point AKHWIEN = new Point(48.220589, 16.346794);
 	private static final Point AKHLINZ = new Point(48.302743, 14.305328);
 	private static final Point LKHGRAZ = new Point(47.081800, 15.466207);
@@ -51,6 +55,9 @@ public class OPMatcherTest {
 
 	@Before
 	public void initTestData() {
+		repo.deleteAll();
+		//ignore further data retrieving from KLINISys and Reservation during the data initialization process
+		dataInitializerService.setInitialized(true);
 		from1 = new GregorianCalendar();
 		from1.set(2015, 05, 23, 11, 00);
 		from2 = new GregorianCalendar();
