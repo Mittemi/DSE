@@ -1,6 +1,8 @@
 package opPlanner.ApiGateway.controller;
 
 import opPlanner.ApiGateway.AuthResult;
+import opPlanner.Shared.OpPlannerProperties;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
@@ -18,8 +20,13 @@ import java.util.stream.Collectors;
 @RequestMapping("/account")
 public class AccountController {
 
+    @Autowired
+    private OpPlannerProperties config;
+
     @RequestMapping(value = "/details", method = RequestMethod.GET, produces = "application/json")
     public AuthResult details(Authentication auth) {
+
+        System.out.println("IP: " + this.config.getKlinisys().getIpOrHostname());
 
         if(auth == null || !auth.isAuthenticated()) {
             return new AuthResult(false);

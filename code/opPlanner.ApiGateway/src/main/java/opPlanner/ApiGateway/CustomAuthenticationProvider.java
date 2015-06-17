@@ -93,6 +93,7 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
         params.put("password", password);
 
         String url = config.getKlinisys().buildUrl("/auth/{user}/password/{password}");
+        System.out.println("Call: " + url);
         AuthResult result  = restClient.getForObject(url, AuthResult.class, params);
         return result;
     }
