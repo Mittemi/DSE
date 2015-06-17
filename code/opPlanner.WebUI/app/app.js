@@ -38,7 +38,7 @@ angular.module('myApp', [
 .run(['$rootScope', '$location', '$cookieStore', '$http',
     function ($rootScope, $location, $cookieStore, $http) {
         // check server connection
-        $http.get('http://localhost:8080/').
+        $http.get('http://'+$location.host()+':8080/').
             error(function(data, status, headers, config) {
                 alert("Error while trying to communicate with APIGateway \nPlease check connection.")
             });

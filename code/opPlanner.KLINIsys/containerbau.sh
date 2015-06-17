@@ -7,4 +7,4 @@ echo "rebuilt app Dockerfile"
 gradle build -x test
 docker build -t klinisys .
 
-docker run -d -p 9000:8080  --name klinisys klinisys --link notifier:notifier --link opmatcher:opmatcher --link reservation:reservation --link apigateway:apigateway
+docker run -d -p 9000:8080  --name klinisys klinisys
