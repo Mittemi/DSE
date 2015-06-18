@@ -466,8 +466,8 @@ angular.module('myApp.listop', ['ngRoute'])
 
             var insertMessage = {
                 "type": $scope.data.opType,
-                "slotStart": moment(start).format("YYYY-MM-DDTHH:mm:ss.SSSZZ"),
-                "slotEnd": moment(end).format("YYYY-MM-DDTHH:mm:ss.SSSZZ")
+                "slotStart": moment(start).format("YYYY-MM-DDTHH:mm:ss"),
+                "slotEnd": moment(end).format("YYYY-MM-DDTHH:mm:ss")
             };
             $http.put('http://' + $location.host() + ':8080/opslots/create', insertMessage)
                 .success(function (data, status, headers, config) {
