@@ -1,12 +1,16 @@
 'use strict';
   
 angular.module('Authentication')
-  
+
+
 .controller('LoginController',
     ['$scope', '$rootScope', '$location', 'AuthenticationService',
     function ($scope, $rootScope, $location, AuthenticationService) {
         AuthenticationService.ClearCredentials();
-  
+
+        /**
+         * Performs a new Login for given username and password scope
+         */
         $scope.login = function () {
             $scope.dataLoading = true;
             AuthenticationService.Login($scope.username, $scope.password,
@@ -25,6 +29,7 @@ angular.module('Authentication')
             });
         };
     }])
+
 
 .controller('LogoutController',
     ['$scope', '$rootScope', '$location', 'AuthenticationService',

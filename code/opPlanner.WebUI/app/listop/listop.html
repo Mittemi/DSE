@@ -1,7 +1,7 @@
 <h1>OP Slots <span ng-hide="globals.currentUser.role[0] != 'Hospital'">- {{oplist[0].hospitalName}}</span></h1>
 
 
-
+<!-- Button for filtering already taken op slots //-->
 <div class="btn-group" style="float:right;">
     <label class="btn btn-default" ng-model="radioModel" btn-radio="undefined">All</label>
     <label class="btn btn-success" ng-model="radioModel" btn-radio="true" uncheckable>Only Free</label>
@@ -23,8 +23,10 @@
 </div>
 
 
+
 <br/>
 <table class="table table-striped">
+    <!-- Column with titles and filtering dropdown menues //-->
     <tr id="descriptionColumn">
         <td class="col-md-1">
             <div ng-controller="DatepickerCtrl">
@@ -71,8 +73,6 @@
                 </ul>
             </div>
         </td>
-
-
         <td class="col-md-2">
             <!-- Doctor Selector button -->
             <div class="btn-group" dropdown is-open="status.isopenDoctor">
@@ -137,11 +137,9 @@
         <td class="col-md-1">&nbsp;</td>
     </tr>
 
-
+    <!-- OP Slot Values //-->
     <tr ng-repeat="tmp in oplist | filter: selectedKH | filter: selectedType | filter:{freeSlot:radioModel} | orderBy:'slotStart':false"
         ng-class="{true:'success', false:'danger'}[tmp.freeSlot]">
-
-
         <td class="text-center">{{formatDate(tmp.slotStart,"DD.MM.YYYY")}}</td>
         <td class="text-center">{{formatDate(tmp.slotStart,"HH:MM")}}</td>
         <td class="text-center">{{formatDate(tmp.slotEnd,"HH:MM")}}</td>

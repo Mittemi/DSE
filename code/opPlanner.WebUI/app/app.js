@@ -9,9 +9,8 @@ angular.module('myApp', [
     'ngRoute',
     'Authentication',
     'ngCookies',
-    'myApp.listop',
     'myApp.notifications',
-    'myApp.slot',
+    'myApp.listop',
     'myApp.home',
     'myApp.version',
     'ui.bootstrap.datetimepicker',
@@ -64,18 +63,6 @@ angular.module('myApp', [
                 return ""
             }
         };
-
-
-        /**
-         * Forces Login before entering any other page -> because of
-         */
-        /*
-            $rootScope.$on('$locationChangeStart', function (event, next, current) {
-            // redirect to login page if not logged in
-            if ($location.path() !== '/login' && !$rootScope.globals.currentUser) {
-                $location.path('/login');
-            }
-        });*/
     }
 ]);
 

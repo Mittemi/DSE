@@ -6,14 +6,14 @@
 <form class="modal-body form-group">
     <div class="form-group">
         <label for="data.opType">Typ</label>
-        <input class="form-control" id="data.opType" placeholder="Type of operation" ng-model="data.opType">
+        <input class="form-control" id="data.opType" placeholder="Type of operation" ng-model="data.opType" required>
     </div>
     <div class="form-group">
         <label for="opDate">OP Slot Date</label>
 
         <div class="input-group" id="opDate">
             <input type="text" class="form-control" datepicker-popup="{{format}}" ng-model="dt" is-open="opened"
-                   datepicker-options="dateOptions" ng-required="true" close-text="Close"/>
+                   datepicker-options="dateOptions" ng-required="true" close-text="Close" required/>
               <span class="input-group-btn">
                 <button type="button" class="btn btn-default" ng-click="open($event)"><i
                         class="glyphicon glyphicon-calendar"></i></button>

@@ -7,6 +7,13 @@ angular.module('Authentication')
     function (Base64, $http, $cookieStore, $rootScope, $timeout, $location) {
         var service = {};
 
+        /**
+         * Sends login request to server and response the result
+         * @param username plain text
+         * @param password plain text
+         * @param callback
+         * @constructor
+         */
         service.Login = function (username, password, callback) {
 
             var authdata = Base64.encode(username + ':' + password);
@@ -19,7 +26,14 @@ angular.module('Authentication')
                     callback(response);
             });
         };
-  
+
+        /**
+         * Save credentials into rootScope (global Cookie)
+         * @param username
+         * @param password
+         * @param role
+         * @constructor
+         */
         service.SetCredentials = function (username, password, role) {
             var authdata = Base64.encode(username + ':' + password);
   
@@ -35,6 +49,10 @@ angular.module('Authentication')
             $cookieStore.put('globals', $rootScope.globals);
         };
 
+        /**
+         * Removes all login information from rootscope and deletes the cookie
+         * @constructor
+         */
         service.ClearCredentials = function () {
             $rootScope.globals = {};
             $cookieStore.remove('globals');
@@ -43,7 +61,10 @@ angular.module('Authentication')
   
         return service;
     }])
-  
+
+/**
+ * Base64 Helper Method for wrapping Username and Passwort to Authorization HTTP Header
+ */
 .factory('Base64', function () {
     /* jshint ignore:start */
   
