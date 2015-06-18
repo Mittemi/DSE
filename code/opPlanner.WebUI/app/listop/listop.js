@@ -28,7 +28,7 @@ angular.module('myApp.listop', ['ngRoute'])
                 $scope.selectedPatient = tmp;
             };
 
-            $http.get('http://localhost:8080/opslots/list').
+            $http.get('http://'+$location.host()+':8080/opslots/list').
                 success(function (data, status, headers, config) {
                     $scope.oplist = data;
                 }).
@@ -43,7 +43,7 @@ angular.module('myApp.listop', ['ngRoute'])
              */
             $scope.removeOpSlot = function (id) {
 
-                $http.delete('http://localhost:8080/opslots/' + id)
+                $http.delete('http://'+$location.host()+':8080/opslots/' + id)
                     .success(function (data, status, headers, config) {
                         $scope.getListFromServer();
                     })
@@ -59,7 +59,7 @@ angular.module('myApp.listop', ['ngRoute'])
              */
             $scope.removeReservation = function (id) {
 
-                $http.delete('http://localhost:8080/opslots/reservation/' + id)
+                $http.delete('http://'+$location.host()+':8080/opslots/reservation/' + id)
                     .success(function (data, status, headers, config) {
                         $scope.getListFromServer();
                     })
@@ -98,7 +98,7 @@ angular.module('myApp.listop', ['ngRoute'])
                     params += "?from=" + $rootScope.startInformation.format("YYYY-MM-DD HH:mm");
                     params += "&to=" + $rootScope.endInformation.format("YYYY-MM-DD HH:mm");
                 }
-                $http.get('http://localhost:8080/opslots/list' + params).
+                $http.get('http://'+$location.host()+':8080/opslots/list' + params).
                     success(function (data, status, headers, config) {
                         $scope.oplist = data;
                     }).
@@ -333,7 +333,7 @@ angular.module('myApp.listop', ['ngRoute'])
 // Please note that $modalInstance represents a modal window (instance) dependency.
 // It is not the same as the $modal service used above.
 
-.controller('ModalInstanceCtrl', function ($scope, $modalInstance,$http, items) {
+.controller('ModalInstanceCtrl', function ($scope, $modalInstance,$http,$location, items) {
 
     $scope.items = items;
     $scope.selected = {
@@ -440,7 +440,7 @@ angular.module('myApp.listop', ['ngRoute'])
 
 
         var insertMessage = {"type": $scope.data.opType , "slotStart" : moment(start).format("YYYY-MM-DDTHH:mm:ss.SSSZZ"), "slotEnd" : moment(end).format("YYYY-MM-DDTHH:mm:ss.SSSZZ") };
-        $http.put('http://localhost:8080/opslots/create', insertMessage)
+        $http.put('http://'+$location.host()+':8080/opslots/create', insertMessage)
             .success(function (data, status, headers, config) {
                 $scope.getListFromServer();
             })
@@ -499,7 +499,7 @@ angular.module('myApp.listop', ['ngRoute'])
 // Please note that $modalInstance represents a modal window (instance) dependency.
 // It is not the same as the $modal service used above.
 
-    .controller('PatientModalInstanceCtrl', function ($scope, $modalInstance,$http, items) {
+    .controller('PatientModalInstanceCtrl', function ($scope, $modalInstance,$http, items,$location) {
 
         $scope.items = items;
         $scope.selected = {
@@ -582,7 +582,7 @@ angular.module('myApp.listop', ['ngRoute'])
             start.setHours(23,59,59);
 
             var insertMessage = {"patientId": $scope.data.patientId , "preferredStart" : moment(start).format("YYYY-MM-DD HH:mm"), "preferredEnd" : moment(end).format("YYYY-MM-DD HH:mm"), "preferredPerimeter" : parseInt($scope.data.preferredPerimeter) , "opSlotType" : $scope.data.opSlotType};
-            $http.post('http://localhost:8080/opslots/reservation', insertMessage)
+            $http.post('http://'+$location.host()+':8080/opslots/reservation', insertMessage)
                 .success(function (data, status, headers, config) {
                     $scope.getListFromServer();
                 })

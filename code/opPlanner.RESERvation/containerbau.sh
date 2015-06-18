@@ -10,11 +10,12 @@ pattern="s/127.0.0.1/$1/g"
 echo "Pattern: $pattern"
 cp src/main/resources/reservation.yml src/main/resources/reservation_tmp.yml
 cat src/main/resources/reservation.yml | \
-sed -e $pattern > src/main/resources/reservation.yml
+sed -e $pattern > tmp
+mv tmp src/main/resources/reservation.yml
 echo "rebuilt app Dockerfile"
 gradle build -x test
 docker build -t reservation .
 echo "HOST_IP=$1"
-docker run -d -p 9002:8080 --name reservation reservation
+docker run -d -p 9002:9002 --name reservation reservation
 rm src/main/resources/reservation.yml
 mv src/main/resources/reservation_tmp.yml src/main/resources/reservation.yml 

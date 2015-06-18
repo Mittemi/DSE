@@ -12,7 +12,7 @@ angular.module('myApp.notifications', ['ngRoute'])
 .controller('notificationsCtrl', ['$scope','$http','$location',
   function($scope,$http,$location) {
 
-    $http.get('http://localhost:8080/notification/list').
+    $http.get('http://'+$location.host()+':8080/notification/list').
         success(function(data, status, headers, config) {
           $scope.notificationlist = data;
         }).
