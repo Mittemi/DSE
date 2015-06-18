@@ -26,6 +26,7 @@ To start the application simple call the shell-script in the main directory.
 
 
 ```sh
+$ sh startDB.sh
 $ sh startDocker.sh <IP-Address of Docker host>
 ```
 After initializing all containers the web-application can be opened on Docker's IP Address on Port 80
@@ -34,6 +35,7 @@ After initializing all containers the web-application can be opened on Docker's 
 For initializing Demo Data simple call the generating Web-Script on Docker's IP on port 9000
 ```sh
 $ wget http://<IP-Address of Docker host>:9000/demo
+$ wget http://<IP-Address of Docker host>:9001/demo
 ```
 ### Troubleshooting
 There are some complications on certain Command Line Tools while using Microsoft Windows.  

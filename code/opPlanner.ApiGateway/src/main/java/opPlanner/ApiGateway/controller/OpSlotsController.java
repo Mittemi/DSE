@@ -136,7 +136,7 @@ public class OpSlotsController {
             // gets notification anyway
             if(!e.getStatusCode().equals(HttpStatus.NOT_FOUND))
                 throw e;
-            response.setStatus(e.getStatusCode().value());
+            response.setStatus(HttpStatus.OK.value());
         }
     }
 

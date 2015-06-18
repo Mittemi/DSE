@@ -7,13 +7,11 @@ fi
 echo -e "\n\n###################################################"
 echo -e "## DSE - Distributed Systems Engineering SS 2015 ##"
 echo -e "###################################################"
-cd docker
-echo -e "\n\n\n##### Starting postgres and mongo db #####\n"
-sh dbrun.sh $1
-cd ..
 cd code/
 cd opPlanner.KLINIsys/
 echo -e "\n\n\n##### Starting KliniSys #####\n"
+sleep 5
+docker exec -it postgres psql -h localhost -U postgres --command "CREATE DATABASE klinisys"
 sh containerbau.sh $1
 cd ..
 cd opPlanner.RESERvation/
