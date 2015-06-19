@@ -467,26 +467,19 @@ angular.module('myApp.listop', ['ngRoute'])
 
         $scope.ismeridian = false;
 
-        $scope.update = function () {
-            var d = new Date();
-            d.setHours(14);
-            d.setMinutes(0);
-            $scope.startingTime = d;
-        };
+
 
         /**
          * Creates a new OP Slot and sends request to server
          */
         $scope.newOpSlot = function () {
 
-            var start = $scope.dt;
-            start.setHours($scope.startingTime.getHours());
-            start.setMinutes($scope.startingTime.getMinutes());
-
-            var end = $scope.dt2;
-            end.setHours($scope.endingTime.getHours());
-            end.setMinutes($scope.endingTime.getMinutes());
-
+            var start = moment($scope.dt);
+            start.hours($scope.startingTime.getHours());
+            start.minutes($scope.startingTime.getMinutes());
+            var end = moment($scope.dt);
+            end.hours($scope.endingTime.getHours());
+            end.minutes($scope.endingTime.getMinutes());
 
             var insertMessage = {
                 "type": $scope.data.opType,
@@ -634,7 +627,7 @@ angular.module('myApp.listop', ['ngRoute'])
             start.setHours(0, 0, 0);
 
             var end = $scope.dt2;
-            start.setHours(23, 59, 59);
+            end.setHours(23, 59, 59);
 
             var insertMessage = {
                 "patientId": $scope.data.patientId,
