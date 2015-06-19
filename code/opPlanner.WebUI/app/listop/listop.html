@@ -28,7 +28,7 @@
 <table class="table table-striped">
     <!-- Column with titles and filtering dropdown menues //-->
     <tr id="descriptionColumn">
-        <td class="col-md-1">
+        <td class="col-md-1">Start:
             <div ng-controller="DatepickerCtrl">
                 <p class="input-group">
                     <input type="text" class="form-control" datepicker-popup="{{format}}" ng-model="dt" is-open="opened"
@@ -45,6 +45,19 @@
             <div ng-controller="StartTimePickerCtrl" class="timePickers">
                 <timepicker ng-model="mytime" ng-change="changed()" hour-step="hstep" minute-step="mstep"
                             show-meridian="ismeridian" arrowkeys="false"></timepicker>
+            </div>
+        </td>
+        <td class="col-md-1">Ende:
+            <div ng-controller="DatepickerCtrl">
+                <p class="input-group">
+                    <input type="text" class="form-control" datepicker-popup="{{format}}" ng-model="dt2" is-open="opened"
+                           min-date="'2015-05-01'" max-date="'maxDate'" datepicker-options="dateOptions"
+                           ng-required="true" close-text="Close" ng-change="changed2()"/>
+                  <span class="input-group-btn">
+                        <button type="button" class="btn btn-default" ng-click="open($event)"><i
+                                class="glyphicon glyphicon-calendar"></i></button>
+                  </span>
+                </p>
             </div>
         </td>
         <td class="col-md-1">
@@ -137,11 +150,14 @@
         <td class="col-md-1">&nbsp;</td>
     </tr>
 
+
+
     <!-- OP Slot Values //-->
     <tr ng-repeat="tmp in oplist | filter: selectedKH | filter: selectedType | filter:{freeSlot:radioModel} | orderBy:'slotStart':false"
         ng-class="{true:'success', false:'danger'}[tmp.freeSlot]">
         <td class="text-center">{{formatDate(tmp.slotStart,"DD.MM.YYYY")}}</td>
         <td class="text-center">{{formatDate(tmp.slotStart,"HH:mm")}}</td>
+        <td class="text-center">{{formatDate(tmp.slotEnd,"DD.MM.YYYY")}}</td>
         <td class="text-center">{{formatDate(tmp.slotEnd,"HH:mm")}}</td>
         <td>{{tmp.type}}</td>
         <td>{{tmp.doctorName}} <span ng-hide="globals.currentUser == null">(ID: {{tmp.doctorId}}) </span></td>

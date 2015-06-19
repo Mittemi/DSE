@@ -132,6 +132,7 @@ angular.module('myApp.listop', ['ngRoute'])
 
         $scope.today = function () {
             $scope.dt = null;
+            $scope.dt2 = null;
         };
         $scope.today();
 
@@ -196,7 +197,7 @@ angular.module('myApp.listop', ['ngRoute'])
         };
 
         /**
-         * Events on changing date
+         * Events on changing start date
          */
         $scope.changed = function () {
             if ($scope.dt == null) {
@@ -205,26 +206,42 @@ angular.module('myApp.listop', ['ngRoute'])
                 $rootScope.getListFromServer();
                 return;
             }
-            $log.log('Date changed to: ' + moment($scope.dt.getTime()).format("DD.MM.YYYY"));
+            if($scope.dt2 == null){
+                $scope.dt2 = $scope.dt;
+            }
+            $log.log('StartDate changed to: ' + moment($scope.dt.getTime()).format("DD.MM.YYYY"));
 
             if ($rootScope.startInformation == null) {
                 $rootScope.startInformation = moment();
                 $rootScope.startInformation.hour(0);
                 $rootScope.startInformation.minute(0);
-
             }
             $rootScope.startInformation.date(moment($scope.dt.getTime()).date());
             $rootScope.startInformation.month(moment($scope.dt.getTime()).month());
             $rootScope.startInformation.year(moment($scope.dt.getTime()).year());
+
+            $rootScope.getListFromServer();
+        };
+
+
+        /**
+         * Events on changing end date
+         */
+        $scope.changed2 = function(){
+            if($rootScope.startInformation == null){
+                $rootScope.startInformation = moment();
+            }
+            $log.log('EndDate changed to: ' + moment($scope.dt2.getTime()).format("DD.MM.YYYY"));
 
             if ($rootScope.endInformation == null) {
                 $rootScope.endInformation = moment();
                 $rootScope.endInformation.hour(23);
                 $rootScope.endInformation.minute(59);
             }
-            $rootScope.endInformation.date(moment($scope.dt.getTime()).date());
-            $rootScope.endInformation.month(moment($scope.dt.getTime()).month());
-            $rootScope.endInformation.year(moment($scope.dt.getTime()).year());
+            $rootScope.endInformation.date(moment($scope.dt2.getTime()).date());
+            $rootScope.endInformation.month(moment($scope.dt2.getTime()).month());
+            $rootScope.endInformation.year(moment($scope.dt2.getTime()).year());
+
             $rootScope.getListFromServer();
         };
 
@@ -261,6 +278,7 @@ angular.module('myApp.listop', ['ngRoute'])
             $log.log('Time changed to: ' + $scope.mytime);
             if ($rootScope.startInformation == null) {
                 $rootScope.startInformation = moment();
+                $log.log("Reset startInformation");
             }
             $rootScope.startInformation.hour($scope.mytime.getHours());
             $rootScope.startInformation.minute($scope.mytime.getMinutes());
