@@ -384,9 +384,9 @@ public class OpSlotService {
 
         String url = config.getOpMatcher().buildUrl("addOPSlotById/" + opSlot.getId());
 
-        AsyncRestTemplate asyncRestTemplate = new AsyncRestTemplate();
+        //AsyncRestTemplate asyncRestTemplate = new AsyncRestTemplate();
 
-        asyncRestTemplate.getForEntity(url, String.class);
+        restTemplate.getForEntity(url, String.class);
         System.out.println("Create slot notification sent");
     }
 
