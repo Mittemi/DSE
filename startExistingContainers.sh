@@ -2,6 +2,7 @@ docker start mongo
 docker start postgres
 echo "Wait a few seconds for docker and postgres"
 sleep 5
+docker exec -it postgres psql -h localhost -U postgres --command "CREATE DATABASE klinisys"
 docker start klinisys
 echo "Wait a few seconds for klinisys to start"
 sleep 20
