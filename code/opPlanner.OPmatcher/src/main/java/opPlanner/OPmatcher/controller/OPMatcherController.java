@@ -69,6 +69,11 @@ public class OPMatcherController {
         OPSlot chosenSlot = null;
         try {
             chosenSlot = opMatcherService.findFreeSlot(preferredPerimeter, preferredTimeWindow, opSlotType, doctorId, patientId);
+            if(chosenSlot == null) {
+                System.out.println("No slot found");
+            } else {
+                System.out.println("Slot found");
+            }
         } catch (OPMatcherServicesNotAvailableException e) {
             System.out.println(e.getMessage());
             return new ResponseEntity<OPSlot>(chosenSlot, HttpStatus.INTERNAL_SERVER_ERROR);
@@ -93,8 +98,8 @@ public class OPMatcherController {
      */
     @RequestMapping(value = "/addOPSlotById/{opSlotId}", method = RequestMethod.GET, produces = "application/json")
     public ResponseEntity<String> addFreeOPSlotById(@PathVariable("opSlotId")String opSlotId) {
-        System.out.println("Add OpSlot requeste for id: " + opSlotId);
-       OPSlot opSlot = opMatcherService.addFreeOPSlotById(opSlotId);
+        System.out.println("Add OpSlot requested for id: " + opSlotId);
+        OPSlot opSlot = opMatcherService.addFreeOPSlotById(opSlotId);
         if (opSlot == null) {
             return new ResponseEntity<String>("no op slot with id " + opSlotId + " could have been found/added.",
                     HttpStatus.NOT_FOUND);

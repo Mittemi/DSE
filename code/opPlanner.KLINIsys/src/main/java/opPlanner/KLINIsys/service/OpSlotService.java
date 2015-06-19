@@ -18,6 +18,7 @@ import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.AsyncRestTemplate;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.client.HttpServerErrorException;
 
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -397,7 +398,12 @@ public class OpSlotService {
     private boolean sendSlotDeletingNotification(OpSlot opSlot) {
 
         String url = config.getOpMatcher().buildUrl("delete/" + opSlot.getId());
-        ResponseEntity<String> responseEntity = restTemplate.exchange(url, HttpMethod.DELETE, null, String.class);
+        ResponseEntity<String> responseEntity = null;
+        try {
+             responseEntity = restTemplate.exchange(url, HttpMethod.DELETE, null, String.class);
+        }catch(HttpServerErrorException e) {
+            return false;
+        }
 
         System.out.println("Delete slot notification sent");
         return responseEntity.getStatusCode() == HttpStatus.OK;

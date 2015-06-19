@@ -137,6 +137,7 @@ public class OPMatcherService {
                 }
                 //opSlot did not fit with the doctors' free slots
                 if (!slotOK) {
+                    System.out.println("Doctor is not working! Slot: " + currentSlot);
                     iter.remove();
                 }
                 slotOK = false; //reset
@@ -165,8 +166,10 @@ public class OPMatcherService {
         if(exist) {
             System.out.println("Slot removed " + opSlotId);
             repo.delete(opSlotId);
+        } else {
+            System.out.println("Unmanaged slot -> continue");  
         }
-        return exist;
+        return true;
     }
 
 

@@ -118,10 +118,12 @@ public class ReservationController {
             response = restClient.getForEntity(url, OPSlot.class, params);
         } catch (HttpServerErrorException e) {
             sendReservationFailureMessage("reservation", patientId, doctorId, preferredStart, preferredEnd);
+            System.out.println("OPMatcher doesn't work properly!");
             return new ResponseEntity<String>("OP Matcher does not work properly: \n" + e.getMessage(), HttpStatus
                     .NOT_FOUND);
         } catch (ResourceAccessException e) {
             sendReservationFailureMessage("reservation", patientId, doctorId, preferredStart, preferredEnd);
+            System.out.println("OPMatcher not accessible!");
             return new ResponseEntity<String>("OP Matcher is not accessible: \n" + e.getMessage(), HttpStatus
                     .NOT_FOUND);
         }
@@ -129,6 +131,7 @@ public class ReservationController {
         if (opSlot == null) {
             //send a success message to all involved parties (doctor, patient)
             sendReservationFailureMessage("reservation", patientId, doctorId, preferredStart, preferredEnd);
+            System.out.println("No slot found!");
             return new ResponseEntity<String>("no op slot could be found", HttpStatus.NOT_FOUND);
         }
 
