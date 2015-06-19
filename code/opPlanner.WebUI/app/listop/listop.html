@@ -141,8 +141,8 @@
     <tr ng-repeat="tmp in oplist | filter: selectedKH | filter: selectedType | filter:{freeSlot:radioModel} | orderBy:'slotStart':false"
         ng-class="{true:'success', false:'danger'}[tmp.freeSlot]">
         <td class="text-center">{{formatDate(tmp.slotStart,"DD.MM.YYYY")}}</td>
-        <td class="text-center">{{formatDate(tmp.slotStart,"HH:MM")}}</td>
-        <td class="text-center">{{formatDate(tmp.slotEnd,"HH:MM")}}</td>
+        <td class="text-center">{{formatDate(tmp.slotStart,"HH:mm")}}</td>
+        <td class="text-center">{{formatDate(tmp.slotEnd,"HH:mm")}}</td>
         <td>{{tmp.type}}</td>
         <td>{{tmp.doctorName}} <span ng-hide="globals.currentUser == null">(ID: {{tmp.doctorId}}) </span></td>
         <td ng-hide="globals.currentUser.role[0] == 'Hospital'">{{tmp.hospitalName}}</td>
