@@ -103,8 +103,6 @@ public class DemoDataHelper {
         TimeWindow partTimeWorkSchedule2 = new TimeWindow(twfrom2.getTime(), twto2.getTime());
 
 
-
-
         //create doctors
         Doctor doctor1 = new Doctor();
         doctor1.setName("Dr. Albert Aufschneider");
