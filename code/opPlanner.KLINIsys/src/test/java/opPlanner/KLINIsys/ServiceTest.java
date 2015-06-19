@@ -6,13 +6,16 @@ import opPlanner.KLINIsys.model.Hospital;
 import opPlanner.KLINIsys.model.Patient;
 import opPlanner.KLINIsys.repository.*;
 import opPlanner.KLINIsys.service.AuthService;
+import opPlanner.Shared.OpPlannerProperties;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.SpringApplicationConfiguration;
+import org.springframework.boot.test.WebIntegrationTest;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.client.RestTemplate;
 
 import java.util.Arrays;
 import java.util.List;
@@ -25,12 +28,12 @@ import static org.junit.Assert.*;
 @RunWith(SpringJUnit4ClassRunner.class)
 @Transactional
 @SpringApplicationConfiguration(classes = Application.class)
-//@ActiveProfiles("unit-test")
+@WebIntegrationTest({"server.port=0", "management.port=0"})
 public class ServiceTest {
 
 
     /* IMPORTANT REQUIREMENT:
-        These tests require the RESERVATION system to be accessible. They do not depend on the actual data retrieving from the RESERVATION system.
+        These tests require the NOTIFICATION system to be accessible. They do not depend on the actual data retrieving from the NOTIFICATION system.
      */
 
     @Autowired
@@ -56,6 +59,15 @@ public class ServiceTest {
     private Doctor doctor;
 
     private Patient patient;
+
+    @Autowired
+    OpPlannerProperties config;
+
+    @Test
+    public void testNotifierAvailable() {
+        RestTemplate restTemplate = new RestTemplate();
+        restTemplate.getForObject(config.getNotifier().buildUrl("/"), String.class,new Object());
+    }
 
 
     @Before

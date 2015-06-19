@@ -59,12 +59,15 @@ public class OpSlotService {
      */
     public List<?extends OpSlotListDTO> getFilteredOpSlots(Class<?> type, Doctor doctor, Patient patient, Hospital hospital, Date from, Date to) {
 
-        if (from != null)
+        if (from != null) {
             System.out.println("From: " + from);
-        else
+        }
+        else {
             from = new Date();
-        if (to != null)
+        }
+        if (to != null) {
             System.out.println("To: " + to);
+        }
         else
         {
             GregorianCalendar gc = new GregorianCalendar();

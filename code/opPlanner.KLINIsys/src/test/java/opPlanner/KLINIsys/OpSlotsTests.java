@@ -9,15 +9,20 @@ import opPlanner.KLINIsys.model.Patient;
 import opPlanner.KLINIsys.repository.*;
 import opPlanner.KLINIsys.service.AuthService;
 import opPlanner.KLINIsys.service.OpSlotService;
+import opPlanner.Shared.OpPlannerProperties;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.SpringApplicationConfiguration;
+import org.springframework.boot.test.WebIntegrationTest;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.client.RestTemplate;
 
+import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 
 import static org.junit.Assert.*;
@@ -28,11 +33,22 @@ import static org.junit.Assert.*;
 @RunWith(SpringJUnit4ClassRunner.class)
 @Transactional
 @SpringApplicationConfiguration(classes = Application.class)
+@WebIntegrationTest({"server.port=0", "management.port=0"})
 public class OpSlotsTests {
 
     /* IMPORTANT REQUIREMENT:
         These tests require the RESERVATION system to be accessible. They do not depend on the actual data retrieving from the RESERVATION system.
      */
+
+    @Autowired
+    OpPlannerProperties config;
+
+    @Test
+    public void testReservationAvailable() {
+        RestTemplate restTemplate = new RestTemplate();
+        restTemplate.getForObject(config.getReservation().buildUrl("/"), String.class,new Object());
+    }
+
 
     @Autowired
     private AuthService authService;
@@ -100,7 +116,7 @@ public class OpSlotsTests {
 
     @Test
     public void testServicePublic() {
-        List<?extends OpSlotListDTO> opSlots = opSlotService.getFilteredOpSlots(null, null,null,null,null,null);
+        List<?extends OpSlotListDTO> opSlots = opSlotService.getFilteredOpSlots(null, null,null,null,new Date(0),null);
 
         assertNotNull(opSlots);
         assertEquals(opSlots.size(), 10);
@@ -111,21 +127,22 @@ public class OpSlotsTests {
 
     @Test
     public void testServiceHospital() {
-        List<?extends OpSlotListDTO> opSlots = opSlotService.getFilteredOpSlots(Hospital.class, null,null,hospital,null,null);
+
+        List<?extends OpSlotListDTO> opSlots = opSlotService.getFilteredOpSlots(Hospital.class, null,null,hospital,new Date(0),null);
 
         assertNotNull(opSlots);
         assertEquals(opSlots.size(), 10);
 
         hospital = hospitalRepository.findByEmail("h2@dse.at");
 
-        opSlots = opSlotService.getFilteredOpSlots(Hospital.class, null,null,hospital,null,null);
+        opSlots = opSlotService.getFilteredOpSlots(Hospital.class, null,null,hospital,new Date(0),null);
         assertNotNull(opSlots);
         assertEquals(opSlots.size(), 0);
     }
 
     @Test
     public void testServiceDoctor() {
-        List<?extends OpSlotListDTO> opSlots = opSlotService.getFilteredOpSlots(Doctor.class, doctor,null,null,null,null);
+        List<?extends OpSlotListDTO> opSlots = opSlotService.getFilteredOpSlots(Doctor.class, doctor,null,null,new Date(0),null);
 
         assertNotNull(opSlots);
 
@@ -145,7 +162,9 @@ public class OpSlotsTests {
 
     @Test
     public void testServiceBasicDateFiltering() {
-        List<?extends OpSlotListDTO> opSlots = opSlotService.getFilteredOpSlots(null, null,null,null,null, new Date());
+        GregorianCalendar gc = new GregorianCalendar();
+        gc.add(Calendar.YEAR, -1);
+        List<?extends OpSlotListDTO> opSlots = opSlotService.getFilteredOpSlots(null, null,null,null,gc.getTime(), new Date());
         assertNotNull(opSlots);
         assertEquals(opSlots.size(), 10);   //later therefore we still get all slots
 
@@ -157,7 +176,7 @@ public class OpSlotsTests {
         assertNotNull(opSlots);
         assertEquals(opSlots.size(), 0);   //from = MAX
 
-        opSlots = opSlotService.getFilteredOpSlots(null, null,null,null, null,new Date(0));
+        opSlots = opSlotService.getFilteredOpSlots(null, null,null,null, gc.getTime(),new Date(0));
         assertNotNull(opSlots);
         assertEquals(opSlots.size(), 0);   //to = 0
     }

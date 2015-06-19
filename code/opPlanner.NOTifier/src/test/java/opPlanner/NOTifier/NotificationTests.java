@@ -7,6 +7,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.SpringApplicationConfiguration;
+import org.springframework.boot.test.WebIntegrationTest;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.util.Date;
@@ -19,6 +20,7 @@ import static org.junit.Assert.*;
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = Application.class)
+@WebIntegrationTest({"server.port=0", "management.port=0"})
 public class NotificationTests {
 
     @Autowired
@@ -87,18 +89,28 @@ public class NotificationTests {
     @Test
     public void testPermission() {
 
-        int countWithNewNotification = repository.findByEMailOrderByCreationDateDesc("u2@dse.at").size();
+        Notification notification = new Notification();
+        notification.seteMail("u1@dse.at");
+        notification.setMessage("This is a demo notification for the unit test");
+        notification.setSubject("Unit-Test");
+        notification.setCreationDate(new Date());
+        notification.setSubject("Unit-Test 2");
 
-        List<Notification> notifications = controller.index("u2@dse.at");
+        repository.save(notification);
+
+        int countWithNewNotification = repository.findByEMailOrderByCreationDateDesc("u1@dse.at").size();
+
+
+        List<Notification> notifications = controller.index("u1@dse.at");
 
         assertEquals(countWithNewNotification, notifications.size());
 
         controller.delete(notifications.get(0).getId(),"User has no permission to do delete this one");
 
-        assertEquals(notifications.size(), controller.index("u2@dse.at").size());
+        assertEquals(notifications.size(), controller.index("u1@dse.at").size());
 
-        controller.delete(notifications.get(0).getId(),"u2@dse.at");
+        controller.delete(notifications.get(0).getId(),"u1@dse.at");
 
-        assertEquals(notifications.size() - 1, controller.index("u2@dse.at").size());
+        assertEquals(notifications.size() - 1, controller.index("u1@dse.at").size());
     }
 }
