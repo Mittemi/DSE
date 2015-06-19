@@ -483,7 +483,7 @@ angular.module('myApp.listop', ['ngRoute'])
             start.setHours($scope.startingTime.getHours());
             start.setMinutes($scope.startingTime.getMinutes());
 
-            var end = $scope.dt;
+            var end = $scope.dt2;
             end.setHours($scope.endingTime.getHours());
             end.setMinutes($scope.endingTime.getMinutes());
 
