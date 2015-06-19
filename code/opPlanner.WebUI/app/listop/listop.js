@@ -55,7 +55,7 @@ angular.module('myApp.listop', ['ngRoute'])
                         $scope.getListFromServer();
                     })
                     .error(function (data, status, headers, config) {
-                        //alert("Error while trying to delete opSlot. \nPlease check server connection.");
+                        alert("Error while trying to delete opSlot. \nPlease check server connection.");
                         $scope.getListFromServer();
                     });
             };
@@ -143,6 +143,8 @@ angular.module('myApp.listop', ['ngRoute'])
             $rootScope.startInformation = null;
             $rootScope.endInformation = null;
             $rootScope.getListFromServer();
+            $scope.dt = null;
+            $scope.dt2 = null;
         };
 
         $scope.toggleMin = function () {
@@ -206,9 +208,6 @@ angular.module('myApp.listop', ['ngRoute'])
                 $rootScope.getListFromServer();
                 return;
             }
-            if($scope.dt2 == null){
-                $scope.dt2 = $scope.dt;
-            }
             $log.log('StartDate changed to: ' + moment($scope.dt.getTime()).format("DD.MM.YYYY"));
 
             if ($rootScope.startInformation == null) {
@@ -219,6 +218,13 @@ angular.module('myApp.listop', ['ngRoute'])
             $rootScope.startInformation.date(moment($scope.dt.getTime()).date());
             $rootScope.startInformation.month(moment($scope.dt.getTime()).month());
             $rootScope.startInformation.year(moment($scope.dt.getTime()).year());
+
+            if($scope.dt2 == null || $scope.dt2.valueOf() < $scope.dt.valueOf()){
+            $rootScope.endInformation = moment();
+                $rootScope.endInformation.date(moment($scope.dt.getTime()).date());
+                $rootScope.endInformation.month(moment($scope.dt.getTime()).month());
+                $rootScope.endInformation.year(moment($scope.dt.getTime()).year() + 1);
+            }
 
             $rootScope.getListFromServer();
         };
