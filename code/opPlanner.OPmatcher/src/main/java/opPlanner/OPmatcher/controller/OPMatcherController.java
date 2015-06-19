@@ -93,6 +93,7 @@ public class OPMatcherController {
      */
     @RequestMapping(value = "/addOPSlotById/{opSlotId}", method = RequestMethod.GET, produces = "application/json")
     public ResponseEntity<String> addFreeOPSlotById(@PathVariable("opSlotId")String opSlotId) {
+        System.out.println("Add OpSlot requeste for id: " + opSlotId);
        OPSlot opSlot = opMatcherService.addFreeOPSlotById(opSlotId);
         if (opSlot == null) {
             return new ResponseEntity<String>("no op slot with id " + opSlotId + " could have been found/added.",

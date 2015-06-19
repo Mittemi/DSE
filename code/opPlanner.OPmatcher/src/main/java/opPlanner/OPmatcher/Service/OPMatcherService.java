@@ -163,6 +163,7 @@ public class OPMatcherService {
         boolean exist = repo.exists(opSlotId);
 
         if(exist) {
+            System.out.println("Slot removed " + opSlotId);
             repo.delete(opSlotId);
         }
         return exist;
@@ -289,6 +290,7 @@ public class OPMatcherService {
 
         OPSlot opSlot = restClient.getForObject(url, OPSlot.class, params);
         if (opSlot != null) {
+            System.out.println("Slot added " + opSlotId);
             repo.save(opSlot);
         }
         return opSlot;

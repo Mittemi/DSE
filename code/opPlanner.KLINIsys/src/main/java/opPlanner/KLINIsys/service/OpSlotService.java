@@ -16,6 +16,7 @@ import opPlanner.Shared.OpPlannerProperties;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.AsyncRestTemplate;
 import org.springframework.web.client.RestTemplate;
 
 import java.text.SimpleDateFormat;
@@ -294,11 +295,16 @@ public class OpSlotService {
     public boolean deleteSlot(String email, Long id) {
         OpSlot slot = opSlotRepository.findOne(id);
 
-        if(slot == null)    return false;
+        if(slot == null) {
+            System.out.println("Slot not found!");
+            return false;
+        }
 
         // check permissions
-        if(!slot.getHospital().geteMail().equals(email))
+        if(!slot.getHospital().geteMail().equals(email)) {
+            System.out.println("No permission to delete this slot.");
             return false;
+        }
 
         Map<Long, ReservationDto> reservationDetails = getReservationDetails(Arrays.asList(new Long[]{id}));
 
@@ -308,12 +314,16 @@ public class OpSlotService {
             // delete the slot from the opmatcher if it is still managed by the opmatcher --> no reservation
             boolean resultOpMatcher = sendSlotDeletingNotification(slot);
 
-            if(!resultOpMatcher)    return false;
+            if(!resultOpMatcher)  {
+                System.out.println("OpMatcher returned invalid status code, can't delete slot.");
+                return false;
+            }
 
             opSlotRepository.delete(slot);
             // notification ??
             return true;
         }
+        System.out.println("Existing reserveration, can't delete slot.");
         return false;
     }
 
@@ -336,20 +346,28 @@ public class OpSlotService {
         opSlot.setHospital(hospital);
 
         // date required and start < end
-        if(opSlot.getSlotStart() == null ||opSlot.getSlotEnd() == null ||opSlot.getSlotStart().after(opSlot.getSlotEnd()))
+        if(opSlot.getSlotStart() == null ||opSlot.getSlotEnd() == null ||opSlot.getSlotStart().after(opSlot.getSlotEnd())) {
+            System.out.println("Invalid slot: can't create due to validation error");
             return;
+        }
 
         //future slots only
-        if(opSlot.getSlotStart().before(new Date()))
+        if(opSlot.getSlotStart().before(new Date())) {
+            System.out.println("Invalid slot: can't create slot in the past");
             return;
+        }
 
         // type required
-        if(opSlot.getType() == null)
+        if(opSlot.getType() == null) {
+            System.out.println("Slot type required");
             return;
+        }
 
         // hospital required
-        if(opSlot.getHospital() == null)
+        if(opSlot.getHospital() == null) {
+            System.out.println("Hospital required");
             return;
+        }
 
         opSlotRepository.save(opSlot);
 
@@ -365,7 +383,9 @@ public class OpSlotService {
 
         String url = config.getOpMatcher().buildUrl("addOPSlotById/" + opSlot.getId());
 
-        restTemplate.getForObject(url, String.class);
+        AsyncRestTemplate asyncRestTemplate = new AsyncRestTemplate();
+
+        asyncRestTemplate.getForEntity(url, String.class);
         System.out.println("Create slot notification sent");
     }
 
