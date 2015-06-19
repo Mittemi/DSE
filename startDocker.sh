@@ -26,6 +26,8 @@ cd opPlanner.NOTifier/
 echo -e "\n\n\n##### Starting Notifier #####\n"
 sh containerbau.sh $1
 cd ..
+echo -e "\n\n#### KLINISYS insert demo DATA #####\n"
+curl "http://$1:9000/demo"
 cd opPlanner.OPmatcher/
 echo -e "\n\n\n##### Starting OP Matcher #####\n"
 sh containerbau.sh $1
