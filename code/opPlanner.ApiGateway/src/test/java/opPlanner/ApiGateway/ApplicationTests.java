@@ -81,7 +81,13 @@ public class ApplicationTests {
 		assertTrue(result.contains("false"));
 	}
 
-
+	@Test(expected = HttpServerErrorException.class)
+	public void testFailsIfReservationIsRunning() {
+		//if this test fails, the reservation system is accessable. therefore the results of the following test is useless!
+		// stop the other services or make sure they are not accessible
+		RestTemplate restTemplate = new RestTemplate();
+		restTemplate.getForObject(config.getReservation().buildUrl("/"), String.class, new Object());
+	}
 
 	@Test(expected = HttpServerErrorException.class)
 	public void testHystrixTimeoutAndPublicAccess() throws URISyntaxException {
