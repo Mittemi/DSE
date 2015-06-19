@@ -54,6 +54,14 @@ public class OPMatcherController {
 
     /**
      * Tries to find an op slot in a given time range and with a specified geo location
+     *
+     * NOTE THAT:
+     *
+     * we won't check if the patient is free in between the supplied time range.
+     * this would simply make no sense, as usually an op comes with some time to recover afterwards
+     *
+     * The patient has to know when he has time and needs to tell the doctor!
+     *
      * @param preferredPerimeter
      * @param preferredTimeWindow
      * @param opSlotType
