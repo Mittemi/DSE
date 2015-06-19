@@ -52,8 +52,7 @@ public class OpSlotsController {
 
 
     @RequestMapping(value = "/list", method = RequestMethod.GET, produces = "application/json")
-    @HystrixCommand(fallbackMethod = "indexFallback", commandProperties = { @HystrixProperty(name = "execution.isolation.thread" +
-            ".timeoutInMilliseconds", value = "3000")}, groupKey = Constants.GROUP_KEY_KLINISYS_LIST)
+    @HystrixCommand(fallbackMethod = "indexFallback", commandProperties = { @HystrixProperty(name = "execution.isolation.thread.timeoutInMilliseconds", value = "3000")}, groupKey = Constants.GROUP_KEY_KLINISYS_LIST)
     public String index(Authentication auth, @RequestParam(value = "from", required = false) String from, @RequestParam(value = "to", required = false) String to, HttpServletResponse response) {
 
         Map<String, Object> param = new HashMap<>();
@@ -98,7 +97,7 @@ public class OpSlotsController {
     }
 
     @PreAuthorize("hasRole('Hospital')")
-    @HystrixCommand(fallbackMethod = "createFallback", groupKey = Constants.GROUP_KEY_KLINISYS_CREATE)
+    @HystrixCommand(fallbackMethod = "createFallback", commandProperties = { @HystrixProperty(name = "execution.isolation.thread.timeoutInMilliseconds", value = "3000")}, groupKey = Constants.GROUP_KEY_KLINISYS_CREATE)
     @RequestMapping(value = "/create", method = RequestMethod.PUT, consumes = "application/json")
     public void create(Authentication auth, @RequestBody Object requestBody, HttpServletResponse response) {
 
@@ -117,7 +116,7 @@ public class OpSlotsController {
 
 
     @PreAuthorize("hasRole('Hospital')")
-    @HystrixCommand(fallbackMethod = "deleteOpSlotFallback", groupKey = Constants.GROUP_KEY_KLINISYS_OPSLOT_DELETE)
+    @HystrixCommand(fallbackMethod = "deleteOpSlotFallback",commandProperties = { @HystrixProperty(name = "execution.isolation.thread.timeoutInMilliseconds", value = "3000")}, groupKey = Constants.GROUP_KEY_KLINISYS_OPSLOT_DELETE)
     @RequestMapping(value = "/{id}", method = RequestMethod.DELETE, produces = org.springframework.http.MediaType.APPLICATION_JSON_VALUE)
     public void deleteOpSlot(Authentication auth, @PathVariable("id") Integer slotId, HttpServletResponse response){
 
@@ -132,7 +131,7 @@ public class OpSlotsController {
     }
 
     @PreAuthorize("hasRole('Doctor')")
-    @HystrixCommand(fallbackMethod = "createReservationFallback", groupKey = Constants.GROUP_KEY_RESERVATION_CREATE)
+    @HystrixCommand(fallbackMethod = "createReservationFallback",commandProperties = { @HystrixProperty(name = "execution.isolation.thread.timeoutInMilliseconds", value = "3000")}, groupKey = Constants.GROUP_KEY_RESERVATION_CREATE)
     @RequestMapping(value = "/reservation", method = RequestMethod.POST)
     public void createReservation(Authentication auth, @RequestBody LinkedHashMap<String, Object> map, HttpServletResponse response) {
 
@@ -149,7 +148,7 @@ public class OpSlotsController {
 
 
     @PreAuthorize("hasRole('Doctor')")
-    @HystrixCommand(fallbackMethod = "deleteReservationFallback", groupKey = Constants.GROUP_KEY_RESERVATION_DELETE)
+    @HystrixCommand(fallbackMethod = "deleteReservationFallback",commandProperties = { @HystrixProperty(name = "execution.isolation.thread.timeoutInMilliseconds", value = "3000")}, groupKey = Constants.GROUP_KEY_RESERVATION_DELETE)
     @RequestMapping(value = "/reservation/{id}", method = RequestMethod.DELETE, produces = org.springframework.http.MediaType.APPLICATION_JSON_VALUE)
     public void deleteReservation(Authentication auth, @PathVariable("id") Integer slotId, HttpServletResponse response) {
         Map<String, Object> params = new HashMap<>();
