@@ -7,13 +7,16 @@ import com.sun.javafx.fxml.builder.URLBuilder;
 import opPlanner.Shared.OpPlannerProperties;
 import opPlanner.ApiGateway.Constants;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.task.AsyncTaskExecutor;
 import org.springframework.http.*;
+import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.util.MultiValueMap;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.AsyncRestTemplate;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
@@ -35,6 +38,8 @@ import java.util.Map;
 @RequestMapping("/opslots")
 public class OpSlotsController {
 
+    private AsyncRestTemplate asyncClient;
+
     private RestTemplate client;
 
     @Autowired
@@ -42,10 +47,13 @@ public class OpSlotsController {
 
     public OpSlotsController() {
         client = new RestTemplate();
+        asyncClient = new AsyncRestTemplate();
     }
 
+
     @RequestMapping(value = "/list", method = RequestMethod.GET, produces = "application/json")
-    @HystrixCommand(fallbackMethod = "indexFallback", threadPoolProperties = { @HystrixProperty(name = "execution.isolation.thread.timeoutInMilliseconds", value = "3000"), @HystrixProperty(name = "", value = "0")}, groupKey = Constants.GROUP_KEY_KLINISYS)
+    @HystrixCommand(fallbackMethod = "indexFallback", commandProperties = { @HystrixProperty(name = "execution.isolation.thread" +
+            ".timeoutInMilliseconds", value = "3000")}, groupKey = Constants.GROUP_KEY_KLINISYS_LIST)
     public String index(Authentication auth, @RequestParam(value = "from", required = false) String from, @RequestParam(value = "to", required = false) String to, HttpServletResponse response) {
 
         Map<String, Object> param = new HashMap<>();
@@ -55,7 +63,8 @@ public class OpSlotsController {
         }
 
         String url = null;
-        System.out.print("OpSlot-List -- From: " + (from != null ? from : "null") + ", TO: " + (to != null ? to : "null"));
+        System.out.println("OpSlot-List -- From: " + (from != null ? from : "null") + ", TO: " + (to != null ? to :
+                "null"));
         if (auth != null && auth.isAuthenticated()) {
 
             param.put("mail", auth.getPrincipal());
@@ -84,11 +93,12 @@ public class OpSlotsController {
     /* fallback Hystrix */
     public String indexFallback(Authentication auth, String from, String to, HttpServletResponse response) {
         response.setStatus(HttpServletResponse.SC_SERVICE_UNAVAILABLE);
+        System.out.println("used index fallback");
         return "[ ]";
     }
 
     @PreAuthorize("hasRole('Hospital')")
-    @HystrixCommand(fallbackMethod = "createFallback", groupKey = Constants.GROUP_KEY_KLINISYS)
+    @HystrixCommand(fallbackMethod = "createFallback", groupKey = Constants.GROUP_KEY_KLINISYS_CREATE)
     @RequestMapping(value = "/create", method = RequestMethod.PUT, consumes = "application/json")
     public void create(Authentication auth, @RequestBody Object requestBody, HttpServletResponse response) {
 
@@ -107,7 +117,7 @@ public class OpSlotsController {
 
 
     @PreAuthorize("hasRole('Hospital')")
-    @HystrixCommand(fallbackMethod = "deleteOpSlotFallback", groupKey = Constants.GROUP_KEY_KLINISYS)
+    @HystrixCommand(fallbackMethod = "deleteOpSlotFallback", groupKey = Constants.GROUP_KEY_KLINISYS_OPSLOT_DELETE)
     @RequestMapping(value = "/{id}", method = RequestMethod.DELETE, produces = org.springframework.http.MediaType.APPLICATION_JSON_VALUE)
     public void deleteOpSlot(Authentication auth, @PathVariable("id") Integer slotId, HttpServletResponse response){
 
@@ -122,22 +132,14 @@ public class OpSlotsController {
     }
 
     @PreAuthorize("hasRole('Doctor')")
-    @HystrixCommand(fallbackMethod = "createReservationFallback", groupKey = Constants.GROUP_KEY_RESERVATION)
+    @HystrixCommand(fallbackMethod = "createReservationFallback", groupKey = Constants.GROUP_KEY_RESERVATION_CREATE)
     @RequestMapping(value = "/reservation", method = RequestMethod.POST)
     public void createReservation(Authentication auth, @RequestBody LinkedHashMap<String, Object> map, HttpServletResponse response) {
 
         map.put("doctorId", auth.getPrincipal());
         String reservationURI = config.getReservation().buildUrl("reservation/reserve?preferredStart={preferredStart}&preferredEnd={preferredEnd}&preferredPerimeter={preferredPerimeter}&opSlotType={opSlotType}&patientId={patientId}&doctorId={doctorId}");
-
-        try {
-            ResponseEntity responseEntity = client.postForEntity(reservationURI, null, ResponseEntity.class, map);
-        }catch(HttpClientErrorException e) {
-            // client doesn't care about 404 status code used by the server
-            // gets notification anyway
-            if(!e.getStatusCode().equals(HttpStatus.NOT_FOUND))
-                throw e;
-            response.setStatus(HttpStatus.OK.value());
-        }
+        asyncClient.postForEntity(reservationURI, null, ResponseEntity.class, map);
+        response.setStatus(HttpStatus.OK.value());
     }
 
     /* fallback Hystrix */
@@ -147,7 +149,7 @@ public class OpSlotsController {
 
 
     @PreAuthorize("hasRole('Doctor')")
-    @HystrixCommand(fallbackMethod = "deleteReservationFallback", groupKey = Constants.GROUP_KEY_RESERVATION)
+    @HystrixCommand(fallbackMethod = "deleteReservationFallback", groupKey = Constants.GROUP_KEY_RESERVATION_DELETE)
     @RequestMapping(value = "/reservation/{id}", method = RequestMethod.DELETE, produces = org.springframework.http.MediaType.APPLICATION_JSON_VALUE)
     public void deleteReservation(Authentication auth, @PathVariable("id") Integer slotId, HttpServletResponse response) {
         Map<String, Object> params = new HashMap<>();
@@ -155,7 +157,6 @@ public class OpSlotsController {
         params.put("doctorId", auth.getPrincipal());
         client.delete(config.getReservation().buildUrl
                 ("reservation/cancelByOpSlotId?opSlotId={slotId}&doctorId={doctorId}"), params);
-    //todo test this
         System.out.println("Reservation: OK" + slotId);
     }
 
@@ -163,4 +164,5 @@ public class OpSlotsController {
     public void deleteReservationFallback(Authentication auth, Integer slotId, HttpServletResponse response) {
         response.setStatus(HttpServletResponse.SC_SERVICE_UNAVAILABLE);
     }
+
 }

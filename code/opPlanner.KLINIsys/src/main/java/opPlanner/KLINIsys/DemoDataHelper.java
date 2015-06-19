@@ -98,12 +98,9 @@ public class DemoDataHelper {
 
         TimeWindow fullTimeWorkSchedule1 = new TimeWindow(twfrom1.getTime(), twto1.getTime());
         TimeWindow partTimeWorkSchedule1 = new TimeWindow(twfrom2.getTime(), twto2.getTime());
-        timeWindowRepository.save(fullTimeWorkSchedule1);
-        timeWindowRepository.save(partTimeWorkSchedule1);
+
         TimeWindow fullTimeWorkSchedule2 = new TimeWindow(twfrom1.getTime(), twto1.getTime());
         TimeWindow partTimeWorkSchedule2 = new TimeWindow(twfrom2.getTime(), twto2.getTime());
-        timeWindowRepository.save(fullTimeWorkSchedule2);
-        timeWindowRepository.save(partTimeWorkSchedule2);
 
 
         //create doctors
@@ -112,28 +109,37 @@ public class DemoDataHelper {
         doctor1.seteMail("aufschneider@dse.at");
         doctor1.setPassword(authService.encodePassword("password"));
         doctor1.getWorkSchedule().add(fullTimeWorkSchedule1);
+        fullTimeWorkSchedule1.setDoctor(doctor1);
         doctorRepository.save(doctor1);
+        timeWindowRepository.save(fullTimeWorkSchedule1);
+
 
         Doctor doctor2 = new Doctor();
         doctor2.setName("Dr. Emily Ehmoser");
         doctor2.seteMail("ehmoser@dse.at");
         doctor2.setPassword(authService.encodePassword("password"));
         doctor2.getWorkSchedule().add(fullTimeWorkSchedule2);
+        fullTimeWorkSchedule2.setDoctor(doctor2);
         doctorRepository.save(doctor2);
+        timeWindowRepository.save(fullTimeWorkSchedule2);
 
         Doctor doctor3 = new Doctor();
         doctor3.setName("Dr. Adam Augfehler");
         doctor3.seteMail("augfehler@dse.at");
         doctor3.setPassword(authService.encodePassword("password"));
         doctor3.getWorkSchedule().add(partTimeWorkSchedule1);
+        partTimeWorkSchedule1.setDoctor(doctor3);
         doctorRepository.save(doctor3);
+        timeWindowRepository.save(partTimeWorkSchedule1);
 
         Doctor doctor4 = new Doctor();
         doctor4.setName("Dr. Maria Morks");
         doctor4.seteMail("morks@dse.at");
         doctor4.setPassword(authService.encodePassword("password"));
         doctor4.getWorkSchedule().add(partTimeWorkSchedule2);
+        partTimeWorkSchedule2.setDoctor(doctor4);
         doctorRepository.save(doctor4);
+        timeWindowRepository.save(partTimeWorkSchedule2);
 
         //create hospitals
 
@@ -204,7 +210,7 @@ public class DemoDataHelper {
         opSlot2.setHospital(hospital1);             //SMZ Ost
         opSlot2.setSlotStart(from2.getTime());      //120min slot
         opSlot2.setSlotEnd(to2.getTime());
-        opSlot2.setType("Orthopädie");
+        opSlot2.setType("Orthopaedie");
         opSlotRepository.save(opSlot2);
 
         OpSlot opSlot3 = new OpSlot();
@@ -239,7 +245,7 @@ public class DemoDataHelper {
         opSlot7.setHospital(hospital4);             //Rudolfinerhaus
         opSlot7.setSlotStart(from1.getTime());      //60min slot
         opSlot7.setSlotEnd(to1.getTime());
-        opSlot7.setType("Orthopädie");
+        opSlot7.setType("Orthopaedie");
         opSlotRepository.save(opSlot7);
 
         OpSlot opSlot8 = new OpSlot();

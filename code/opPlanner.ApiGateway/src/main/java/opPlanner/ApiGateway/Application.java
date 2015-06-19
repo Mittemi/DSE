@@ -16,11 +16,6 @@ import org.springframework.context.annotation.ComponentScan;
 @EnableConfigurationProperties({  OpPlannerProperties.class})
 public class Application {
 
-    @Bean
-    public HystrixCommandAspect hystrixAspect() {
-        return new HystrixCommandAspect();
-    }
-
     public static void main(String[] args) {
         SpringApplication.run(Application.class, args);
     }
