@@ -15,6 +15,7 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.test.context.support.WithSecurityContextTestExecutionListener;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.support.DependencyInjectionTestExecutionListener;
@@ -33,6 +34,7 @@ import static org.junit.Assert.assertTrue;
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = Application.class)
 @WebIntegrationTest({"server.port=0", "management.port=0"})
+@ActiveProfiles({"unit-test"})
 //@TestExecutionListeners(inheritListeners = false, listeners = {DependencyInjectionTestExecutionListener.class, DirtiesContextTestExecutionListener.class, WithSecurityContextTestExecutionListener.class})
 public class ApplicationTests {
 
@@ -81,12 +83,23 @@ public class ApplicationTests {
 		assertTrue(result.contains("false"));
 	}
 
-	@Test(expected = HttpServerErrorException.class)
-	public void testFailsIfReservationIsRunning() {
-		//if this test fails, the reservation system is accessable. therefore the results of the following test is useless!
+	@Test
+	public void testFailsIfReservationOrKlinisysIsRunning() {
+		//if this test fails, the reservation system or klinisys is accessable. therefore the results of the following test is useless!
 		// stop the other services or make sure they are not accessible
 		RestTemplate restTemplate = new RestTemplate();
-		restTemplate.getForObject(config.getReservation().buildUrl("/"), String.class, new Object());
+		try {
+			restTemplate.getForObject(config.getReservation().buildUrl("/"), String.class, new Object());
+			assertTrue("Reservation is running", true);
+		}catch(Exception ex) {
+		}
+
+		try{
+			restTemplate.getForObject(config.getKlinisys().buildUrl("/"), String.class, new Object());
+			assertTrue("Klinisys is running", true);
+		}catch (Exception ex){
+
+		}
 	}
 
 	@Test(expected = HttpServerErrorException.class)

@@ -35,9 +35,9 @@ dependencies {
     compile('com.netflix.hystrix:hystrix-javanica:1.4.3')
     testCompile("org.springframework.boot:spring-boot-starter-test")
     testCompile("org.springframework.security:spring-security-test:4.0.1.RELEASE")
-    testCompile('junit:junit:4.10')
+    testCompile('junit:junit:4.12')
     testCompile 'com.jayway.restassured:rest-assured:2.4.1'
-    testCompile 'org.hamcrest:hamcrest-core:1.2.1'
+    //testCompile 'org.hamcrest:hamcrest-core:1.3'
 }
 
 
